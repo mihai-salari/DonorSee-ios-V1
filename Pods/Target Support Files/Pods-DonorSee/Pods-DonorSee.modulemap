@@ -1,0 +1,6 @@
+framework module Pods_DonorSee {
+  umbrella header "Pods-DonorSee-umbrella.h"
+
+  export *
+  module * { export * }
+}

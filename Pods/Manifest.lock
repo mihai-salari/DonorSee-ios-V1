@@ -1,0 +1,84 @@
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - ALCameraViewController (1.2.1)
+  - BLKFlexibleHeightBar (1.0.2)
+  - Bolts (1.8.4):
+    - Bolts/AppLinks (= 1.8.4)
+    - Bolts/Tasks (= 1.8.4)
+  - Bolts/AppLinks (1.8.4):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.8.4)
+  - Branch (0.12.5):
+    - Branch/Core (= 0.12.5)
+    - Branch/without-IDFA (= 0.12.5)
+  - Branch/Core (0.12.5)
+  - Branch/without-IDFA (0.12.5)
+  - CircleProgressView (1.0.11)
+  - FastEasyMapping (1.0.2)
+  - FBSDKCoreKit (4.14.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.14.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.14.0):
+    - FBSDKCoreKit
+  - MBProgressHUD (0.9.2)
+  - SDWebImage (3.8.1):
+    - SDWebImage/Core (= 3.8.1)
+  - SDWebImage/Core (3.8.1)
+  - Stripe (8.0.4)
+  - SVProgressHUD (2.0.3)
+  - SVPullToRefresh (0.4.1)
+  - SWTableViewCell (0.3.7)
+
+DEPENDENCIES:
+  - AFNetworking (~> 3.0)
+  - ALCameraViewController
+  - BLKFlexibleHeightBar
+  - Branch
+  - CircleProgressView
+  - FastEasyMapping (~> 1.0)
+  - FBSDKCoreKit
+  - FBSDKLoginKit
+  - FBSDKShareKit
+  - MBProgressHUD (~> 0.9.2)
+  - SDWebImage (~> 3.7)
+  - Stripe
+  - SVProgressHUD
+  - SVPullToRefresh
+  - SWTableViewCell (~> 0.3.7)
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  ALCameraViewController: 51c3617ad4f955106e4bf3a34578433cfff1ec99
+  BLKFlexibleHeightBar: b27572a69633d8e33f1f2bbc486b04d8e86f742d
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  Branch: 42307809efa9f23a55f40d8375ef8193bfe62b7c
+  CircleProgressView: 3e7e26454ad9a93e310fe9cd612af6d779deb0c1
+  FastEasyMapping: 77d566a817ca73304af3e7fbed130850238f1cb4
+  FBSDKCoreKit: 6e020b5db0b5bd1e01f5fb0902131befd129a502
+  FBSDKLoginKit: da563567a108050ef83739c8c8c001ee9e25fa13
+  FBSDKShareKit: e8e5d4ccef69b41132fe33acda26db1e33143e33
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  SDWebImage: 35f9627a3e44b4f292a8a8ce6a531fa488239b91
+  Stripe: c3e325e0309dcdcb478191dbd298082823a210c1
+  SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
+  SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
+  SWTableViewCell: 2a94aadc9d47b2b611fa064566bf57948b95b579
+
+PODFILE CHECKSUM: 17feee58d8d9e3e6d9dce537509c6f3c4ac46f3f
+
+COCOAPODS: 1.0.1
