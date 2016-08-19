@@ -86,7 +86,8 @@
                                      
                                      [SVProgressHUD dismiss];
                                      
-                                     User* u = [[User alloc] initUserWithDictionary: dicUser];
+                                     FEMMapping *mapping = [DSMappingProvider userMapping];
+                                     User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:mapping];
                                      
 //                                     u.user_id = 16;
 //                                     u.email = @"gglyer@yahoo.com";

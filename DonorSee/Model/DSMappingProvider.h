@@ -2,7 +2,8 @@
 //  DSMappingProvider.h
 //  DonorSee
 //
-//  Copyright © 2016 DonorSee. All rights reserved.
+//  Created by Keval on 13/08/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,4 +14,6 @@
 + (FEMObjectMapping *) userMapping;
 + (FEMObjectMapping *) projectsMapping;
 + (FEMObjectMapping *) eventMapping;
++ (FEMObjectMapping *) notificationMapping;
++ (FEMObjectMapping *)eventMappingForNotification;
 @end

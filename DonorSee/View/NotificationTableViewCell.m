@@ -53,6 +53,24 @@
     ivAvatar.layer.cornerRadius = ivAvatar.frame.size.width / 2.0;
 }
 
+- (void) setEventNotification:(Event *)event {
+    currentEvent = event;
+    
+    lbTime.text = [AppEngine dataTimeStringFromDate:event.created_at];
+    
+    NSString* avatar = event.creator.avatar;
+    [ivAvatar sd_setImageWithURL: [NSURL URLWithString: avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
+    
+    if ([event.type isEqualToString:@"fund"]) {
+        [ivAvatar sd_setImageWithURL: [NSURL URLWithString: event.recipient.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
+    }
+    
+    viReadState.hidden = event.is_read;
+    
+    lbMessage.text = [NotificationTableViewCell getNotificationMessage:event];
+    
+}
+
 - (void) setNotificationNew: (Notification *) n
 {
     currentNotificaion = n;
@@ -96,47 +114,53 @@
     return message;
 }
 
-- (void) setNotification: (Activity *) a
-{
-    currentActivity = a;
-    [self initUI];
-    
-    _actionBtn.tag = 11;
-    
-    NSString* avatar = a.user_avatar;
-    lbTime.text = [AppEngine dateTimeStringFromTimestap: a.register_date];
-    
-    [ivAvatar sd_setImageWithURL: [NSURL URLWithString: avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
-    viReadState.hidden = a.is_read;
-    
-    lbMessage.text = [NotificationTableViewCell getNotificationMessage: a];
-    [lbMessage sizeThatFits:CGSizeMake(279, CGFLOAT_MAX)];
-    
-    viTime.frame = CGRectMake(viTime.frame.origin.x, lbMessage.frame.origin.y + lbMessage.frame.size.height + 1.0, viTime.frame.size.width, viTime.frame.size.height);
-}
+//- (void) setNotification: (Activity *) a
+//{
+//    currentActivity = a;
+//    [self initUI];
+//    
+//    _actionBtn.tag = 11;
+//    
+//    NSString* avatar = a.user_avatar;
+//    lbTime.text = [AppEngine dateTimeStringFromTimestap: a.register_date];
+//    
+//    [ivAvatar sd_setImageWithURL: [NSURL URLWithString: avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
+//    viReadState.hidden = a.is_read;
+//    
+//    lbMessage.text = [NotificationTableViewCell getNotificationMessage: a];
+//    [lbMessage sizeThatFits:CGSizeMake(279, CGFLOAT_MAX)];
+//    
+//    viTime.frame = CGRectMake(viTime.frame.origin.x, lbMessage.frame.origin.y + lbMessage.frame.size.height + 1.0, viTime.frame.size.width, viTime.frame.size.height);
+//}
 
-+ (NSString*) getNotificationMessage: (Activity*) a
++ (NSString*) getNotificationMessage: (Event *) a
 {
     //Message.
-    NSString* filterUsername = [a.user_name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
+    NSString* filterUsername = [a.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
     NSString* message;
-    if(a.type == ACTIVITY_DONATED)
+    
+    if([a.type isEqualToString:@"give"])
     {
-        message = [NSString stringWithFormat: @"!%@ gave !$%d to this project", filterUsername, a.amount];
+        
+        message = [NSString stringWithFormat: @"!%@ gave !$%d to this project", filterUsername, a.gift_amount_cents/100];
     }
-    else if(a.type == ACTIVITY_FULL_DONATED)
+    else if([a.type isEqualToString:@"fund"])
     {
+        filterUsername = [a.recipient.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
         message = [NSString stringWithFormat: @"!%@ project got totaly funded!", filterUsername];
     }
-    else if(a.type == ACTIVITY_FOLLOW_MESSAGE)
+    else if([a.type isEqualToString:@"update"])
     {
         message = [NSString stringWithFormat: @"!%@ posted a follow up message to your project.", filterUsername];
     }
-    
+    else if([a.type isEqualToString:@"follow"])
+    {
+        message = [NSString stringWithFormat: @"!%@ started following you.", filterUsername];
+    }
     return message;
 }
 
-+ (CGFloat) getHeight: (Activity*) a
++ (CGFloat) getHeight: (Event*) a
 {
     float fw = 220.0;
     if(IS_IPHONE_5)
@@ -150,14 +174,15 @@
     
     float fy = 18.0;
     NSString* message = [NotificationTableViewCell getNotificationMessage: a];
-    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString: message
-                                                                         attributes:@{NSFontAttributeName: [UIFont fontWithName: FONT_LIGHT size: 14.0]}];
-    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(fw, 50000)
-                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                               context:nil];
-    CGSize size = rect.size;
-    fy += size.height + 30.0;
-    
+    if (message != nil) {
+        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString: message
+                                                                             attributes:@{NSFontAttributeName: [UIFont fontWithName: FONT_LIGHT size: 14.0]}];
+        CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(fw, 50000)
+                                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                                   context:nil];
+        CGSize size = rect.size;
+        fy += size.height + 30.0;
+    }
     return fy;
 }
 
@@ -174,35 +199,26 @@
     }
     
     float fy = 18.0;
-    NSString* message = n.message;
-    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString: message
-                                                                         attributes:@{NSFontAttributeName: [UIFont fontWithName: FONT_LIGHT size: 14.0]}];
-    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(fw, 50000)
-                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                               context:nil];
-    CGSize size = rect.size;
-    fy += size.height + 30.0;
+    if (n.message != nil) {
+        NSString* message = n.message;
+        NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString: message
+                                                                             attributes:@{NSFontAttributeName: [UIFont fontWithName: FONT_LIGHT size: 14.0]}];
+        CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(fw, 50000)
+                                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                                   context:nil];
+        CGSize size = rect.size;
+        fy += size.height + 30.0;
+    }
     
     return fy;
 }
 
 - (IBAction) actionCell:(id)sender
 {
-    int tag = [(UIButton *)sender tag];
-    
-    if (tag == 11) {
-        if ([self.delegate respondsToSelector:@selector(selectedNotification:cell:)])
-        {
-            [self.delegate selectedNotification: currentActivity cell: self];
-        }
-    } else {
-        if ([self.delegate respondsToSelector:@selector(selectedNotificationNew:cell:)])
-        {
-            [self.delegate selectedNotificationNew: currentNotificaion cell: self];
-        }
+    if ([self.delegate respondsToSelector:@selector(selectedNotification:cell:)])
+    {
+        [self.delegate selectedNotification: currentEvent cell: self];
     }
-    
-
 }
 
 @end

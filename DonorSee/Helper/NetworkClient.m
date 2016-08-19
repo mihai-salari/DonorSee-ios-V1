@@ -91,12 +91,21 @@
                                        last_name, @"last_name",
                                        email, @"email",
                                        password, @"password",
-                                       avatar, @"photo_url",
                                        nil];
+    
+    if (![avatar isEqualToString:@""]) {
+        [parameters setValue:avatar forKey:@"photo_url"];
+    }
     
     [self PostRequest: @"users"
            parameters: parameters
               success:^(id responseObject) {
+                  
+                  if ([responseObject objectForKey:@"token"]) {
+                      NSString *token = [responseObject objectForKey:@"token"];
+                      [[NSUserDefaults standardUserDefaults] setValue:token forKey:@"api_token"];
+                      [[NSUserDefaults standardUserDefaults] synchronize];
+                  }
                   
                   NSDictionary* dicUser = responseObject[@"user"];
                   success(dicUser);
@@ -129,9 +138,6 @@
                   
                   if ([responseObject objectForKey:@"user"]) {
                       NSDictionary* dicUser = responseObject[@"user"];
-                      
-                      //User *_user = [[User alloc] initWithJSONDict:dicUser];
-                      
                       success(dicUser);
                   } else {
                       failure(@"User UnAuthorised");
@@ -153,74 +159,60 @@
                success: (void (^)(NSDictionary *dicUser))success
                failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString* name = [NSString stringWithFormat: @"%@ %@", firstName, lastName];
+    
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",
-                                       name, @"name",
+                                       firstName, @"first_name",
+                                       lastName, @"last_name",
                                        nil];
+    
+    //[NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",
+    
+    
     
     if(avatar != nil)
     {
-        [parameters setObject: avatar forKey: @"avatar"];
+        [parameters setObject: avatar forKey: @"photo_url"];
     }
     
-    if(!isFBUser)
-    {
-        [parameters setObject: oldPassword forKey: @"old_password"];
-        [parameters setObject: newPassword forKey: @"new_password"];
+    if (![newPassword isEqualToString:@""]) {
+        [parameters setObject: newPassword forKey: @"password"];
     }
     
-    [self PostRequest: @"user_api/update_profile.php"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSDictionary* dicUser = responseObject[@"user"];
-                      success(dicUser);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
-                  
-              } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
-              }];
+    [self PATCH:[NSString stringWithFormat:@"users/%i",[AppEngine sharedInstance].currentUser.user_id] parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success(responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
 }
 
 - (void) loginWithFB: (NSString*) fbid
-                name: (NSString*) name
+           firstName: (NSString*) firstName
+            lastName: (NSString*) lastName
                email: (NSString*) email
              success: (void (^)(NSDictionary *dicUser))success
              failure: (void (^)(NSString *errorMessage))failure
 {
     NSString* avatar = [NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", fbid];
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       fbid, @"fb_id",
-                                       name, @"name",
-                                       email, @"email",
-                                       avatar, @"avatar",
-                                       [AppEngine getValidString: [AppEngine sharedInstance].currentDeviceToken], @"device_token",
-                                       nil];
+
+    NSDictionary *parameters = @{@"fb_id":fbid, @"first_name":firstName, @"last_name":lastName, @"email":email, @"photo_url":avatar};
     
-    [self PostRequest: @"user_api/login_facebook.php"
+    
+    [self PostRequest: @"login/facebook"
            parameters: parameters
               success:^(id responseObject) {
                   
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
+                  if ([responseObject objectForKey:@"token"]) {
+                      NSString *token = [responseObject objectForKey:@"token"];
+                      [[NSUserDefaults standardUserDefaults] setValue:token forKey:@"api_token"];
+                      [[NSUserDefaults standardUserDefaults] synchronize];
+                  }
+                  
+                  if ([responseObject objectForKey:@"user"]) {
                       NSDictionary* dicUser = responseObject[@"user"];
                       success(dicUser);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
+                  } else {
+                      failure(@"User UnAuthorised");
                   }
                   
               } failure:^(NSError *error) {
@@ -272,25 +264,11 @@
              success: (void (^)(NSDictionary *dicUser))success
              failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: user_id], @"user_id",
-                                       nil];
-    
-    [self PostRequest: @"user_api/get_my_info.php"
-           parameters: parameters
+    [self GETRequest: [NSString stringWithFormat:@"users/%i", user_id]
+           parameters: nil
               success:^(id responseObject) {
                   
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSDictionary* dicUser = responseObject[@"user"];
-                      success(dicUser);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
+                  success(responseObject);
                   
               } failure:^(NSError *error) {
                   
@@ -369,28 +347,19 @@
               failure: (void (^)(NSString *errorMessage))failure
 {
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: user_id], @"user_id",
+                                       [NSNumber numberWithInt: user_id], @"owner_id",
                                        [NSNumber numberWithInt: offset], @"offset",
                                        [NSNumber numberWithInt: limit], @"limit",
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"current_user_id",
                                        nil];
     
-    [self PostRequest: @"feed_api/get_user_feed.php"
+    [self GETRequest: @"projects"
            parameters: parameters
               success:^(id responseObject) {
                   
                   NSLog(@"response = %@", responseObject);
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSArray* arrFeeds = responseObject[@"data"][@"feeds"];
-                      success(arrFeeds);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
+                  FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                  NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                  success(arrFeeds);
                   
               } failure:^(NSError *error) {
                   
@@ -480,13 +449,17 @@
             failure: (void (^)(NSString *errorMessage))failure;
 {
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: user_id], @"user_id",
+                                       [NSNumber numberWithInt: user_id], @"owner_id",
                                        nil];
     
-    [self PostRequest: @"feed_api/get_my_feed.php"
+    [self GETRequest: @"projects"
            parameters: parameters
               success:^(id responseObject) {
                   
+                  FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                  NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                  success(arrFeeds);
+                  /*
                   NSLog(@"response = %@", responseObject);
                   int status = [responseObject[@"success"] boolValue];
                   if(status)
@@ -498,7 +471,7 @@
                   {
                       NSString* message = responseObject[@"message"];
                       failure(message);
-                  }
+                  }*/
                   
               } failure:^(NSError *error) {
                   
@@ -510,14 +483,14 @@
                 success: (void (^)(NSArray *arrFeed))success
                 failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: user_id], @"user_id",
-                                       nil];
     
-    [self PostRequest: @"feed_api/get_funded_feed.php"
-           parameters: parameters
+    [self GETRequest: @"projects/personal"
+           parameters: nil
               success:^(id responseObject) {
-                  
+                  FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                  NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                  success(arrFeeds);
+                  /*
                   NSLog(@"response = %@", responseObject);
                   int status = [responseObject[@"success"] boolValue];
                   if(status)
@@ -532,7 +505,7 @@
                   {
                       NSString* message = responseObject[@"message"];
                       failure(message);
-                  }
+                  }*/
                   
               } failure:^(NSError *error) {
                   
@@ -606,6 +579,45 @@
                   failure(MSG_DISCONNECT_INTERNET);
               }];
 }
+
+- (void) getUserSavedCards:(int) user_id
+                   success: (void (^)(NSArray* cards))success
+                   failure: (void (^)(NSString *errorMessage))failure
+{
+    
+    [self GETRequest:[NSString stringWithFormat:@"users/%i/cards", user_id] parameters:nil success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
+}
+
+- (void) saveUserCard:(int) user_id
+         stripe_token: (NSString *) stripe_token
+              success: (void (^)(NSDictionary* cardInfo))success
+              failure: (void (^)(NSString *errorMessage))failure
+{
+    [self PostRequest:[NSString stringWithFormat:@"users/%i/cards", user_id] parameters:@{@"token":stripe_token} success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+}
+
+- (void) createGift: (NSString *) feed_id
+             amount: (int) amount
+            success: (void (^)(NSDictionary* dicDonate))success
+            failure: (void (^)(NSString *errorMessage))failure
+{
+    [self PostRequest:[NSString stringWithFormat:@"projects/%@/gifts", feed_id] parameters:@{@"amount_cents":[NSNumber numberWithInt:amount*100]} success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+}
+#pragma mark -
+#pragma mark Stripe Connect API Related.
 
 - (void) postStripeDonate: (int) user_id
                   feed_id: (NSString*) feed_id
@@ -811,23 +823,12 @@
 
 - (void) readActivity: (int) activity_id
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: activity_id], @"activity_id",
-                                       nil];
-    
-    [self PostRequest: @"activity_api/read_activity.php"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                  }
-                  
-              } failure:^(NSError *error) {
-                  
-              }];
-
+    NSString *path = [NSString stringWithFormat:@"users/%i/notifications/%i", [AppEngine sharedInstance].currentUser.user_id, activity_id];
+    [self PATCH:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //NSLog(@"responseObject %@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+         //NSLog(@"error %@", error);
+    }];
 }
 
 - (void) readNotification: (int) notification_id
@@ -884,28 +885,16 @@
 - (void) getMyActivities: (void (^)(NSArray* arrActivities))success
                  failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",
-                                       nil];
+    NSString *path = [NSString stringWithFormat:@"users/%i/notifications", [AppEngine sharedInstance].currentUser.user_id];
     
-    [self PostRequest: @"activity_api/get_my_activity.php"
-           parameters: parameters
+    [self GETRequest: path
+           parameters: nil
               success:^(id responseObject) {
                   
-                  int status = [responseObject[@"success"] boolValue];
+                  FEMMapping *mapping = [DSMappingProvider eventMappingForNotification];
                   NSMutableArray* arrActivityResults = [[NSMutableArray alloc] init];
-                  if(status && responseObject[@"activities"] != [NSNull null])
-                  {
-                      NSArray* arrActivites = responseObject[@"activities"];
-                      if(arrActivites != nil)
-                      {
-                          for(NSDictionary* dicItem in arrActivites)
-                          {
-                              Activity* a = [[Activity alloc] initActivityWithDictionary: dicItem];
-                              [arrActivityResults addObject: a];
-                          }
-                      }
-                  }
+                  NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                  [arrActivityResults addObjectsFromArray:arrFeeds];
                   success(arrActivityResults);
                   
               } failure:^(NSError *error) {
@@ -919,12 +908,10 @@
                       success: (void (^)(NSArray* arrActivities, Feed* feed))success
                       failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       f.feed_id, @"project",
-                                       nil];
+    NSString *path = [NSString stringWithFormat:@"projects/%@/timeline", f.feed_id];
     
-    [self GETRequest: @"events"
-           parameters: parameters
+    [self GETRequest: path
+           parameters: nil
               success:^(id responseObject) {
                   
                   //NSLog(@"responseObject %@", responseObject);
@@ -1018,36 +1005,25 @@
             success: (void (^)(User* followerUser, User* followingUser))success
             failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: follower_id], @"follower_id",
-                                       [NSNumber numberWithInt: following_id], @"following_id",
-                                       nil];
+
+    NSString *path = [NSString stringWithFormat:@"users/%d/followers", following_id];
     
-    [self PostRequest: @"follow_api/follow_user.php"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  BOOL status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSDictionary* dicFollower = responseObject[@"follower_user"];
-                      NSDictionary* dicFollowing = responseObject[@"following_user"];
-                      
-                      User* followerUser = [[User alloc] initUserWithDictionary: dicFollower];
-                      User* followingUser = [[User alloc] initUserWithDictionary: dicFollowing];
-                      
-                      success(followerUser, followingUser);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
-                  
-              } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
-              }];
+    [self POST:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success(nil, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSInteger statusCode = 0;
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+            statusCode = httpResponse.statusCode;
+        }
+        
+        if (statusCode == 201) {
+            success(nil,nil);
+            return;
+        }
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
 }
 
 
@@ -1056,13 +1032,33 @@
               success: (void (^)(User* followerUser, User* followingUser))success
               failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: follower_id], @"follower_id",
-                                       [NSNumber numberWithInt: following_id], @"following_id",
-                                       nil];
+
+    NSString *path = [NSString stringWithFormat:@"users/%d/followers", following_id];
     
-    [self PostRequest: @"follow_api/unfollow_user.php"
-           parameters: parameters
+    [self DELETE:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        //NSLog(@"responseObject %@", responseObject);
+        success(nil,nil);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"Error %@", error);
+        NSInteger statusCode = 0;
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+            statusCode = httpResponse.statusCode;
+        }
+        
+        if (statusCode == 204) {
+            success(nil,nil);
+            return;
+        }
+        
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    /*
+    [self PostRequest: path
+           parameters: nil
               success:^(id responseObject) {
                   
                   BOOL status = [responseObject[@"success"] boolValue];
@@ -1086,6 +1082,8 @@
                   
                   failure(MSG_DISCONNECT_INTERNET);
               }];
+     
+     */
 }
 
 #pragma Follow Messages.
@@ -1227,10 +1225,10 @@
 
 - (void) getUserFollowStatus:(int) selectedUser_id
                      user_id:(int) user_id
-                     success: (void (^)(NSDictionary *followStatus))success
+                     success: (void (^)(NSArray *followStatus))success
                      failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *path = [NSString stringWithFormat:@"follow_api/is_follow.php?user_id=%i&logged_user_id=%i",selectedUser_id, user_id];
+    NSString *path = [NSString stringWithFormat:@"users/%d/following", selectedUser_id];
     
     [self GETRequest:path parameters:nil success:^(id responseObject) {
         success(responseObject);

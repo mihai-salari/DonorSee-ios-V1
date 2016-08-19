@@ -1630,7 +1630,7 @@
                                         <color key="textColor" red="0.63529411764705879" green="0.63529411764705879" blue="0.63529411764705879" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="16" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbD-7S-B1z">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbD-7S-B1z">
                                         <rect key="frame" x="56" y="45" width="36" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.63529411759999999" green="0.63529411759999999" blue="0.63529411759999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -2149,6 +2149,82 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORe-uw-RfL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2149.5" y="2652.5"/>
+        </scene>
+        <!--Stripe Signup View Controller-->
+        <scene sceneID="obf-8V-Dv4">
+            <objects>
+                <viewController storyboardIdentifier="stripeSignup" id="fil-xk-zj7" customClass="StripeSignupViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ip1-lq-ths"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Ar-oh-Vby"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3cT-hK-MYi">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2FP-h2-hJJ" userLabel="View - Top">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DonorSee" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibd-6K-aRh">
+                                        <rect key="frame" x="0.0" y="20" width="375" height="40"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qa8-M4-8eo">
+                                        <rect key="frame" x="0.0" y="20" width="40" height="40"/>
+                                        <state key="normal" image="btn_back.png"/>
+                                        <connections>
+                                            <action selector="onDismissViewController:" destination="fil-xk-zj7" eventType="touchUpInside" id="yJZ-y4-JQC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.078431372550000003" green="0.45882352939999999" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="4KS-i5-SLz"/>
+                                    <constraint firstItem="ibd-6K-aRh" firstAttribute="leading" secondItem="2FP-h2-hJJ" secondAttribute="leading" id="5ih-k4-4Zi"/>
+                                    <constraint firstAttribute="trailing" secondItem="ibd-6K-aRh" secondAttribute="trailing" id="6Ea-0T-NnR"/>
+                                    <constraint firstItem="ibd-6K-aRh" firstAttribute="top" secondItem="2FP-h2-hJJ" secondAttribute="top" constant="20" id="ATE-LT-9Op"/>
+                                    <constraint firstAttribute="bottom" secondItem="ibd-6K-aRh" secondAttribute="bottom" id="XsB-7f-aSE"/>
+                                    <constraint firstAttribute="trailing" secondItem="ibd-6K-aRh" secondAttribute="trailing" id="Z0f-BY-EEc"/>
+                                    <constraint firstAttribute="bottom" secondItem="ibd-6K-aRh" secondAttribute="bottom" id="ZJA-qW-AnN"/>
+                                    <constraint firstItem="ibd-6K-aRh" firstAttribute="leading" secondItem="2FP-h2-hJJ" secondAttribute="leading" id="ct8-xA-bk4"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="XsB-7f-aSE"/>
+                                        <exclude reference="Z0f-BY-EEc"/>
+                                        <exclude reference="ct8-xA-bk4"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oCa-Jd-fmb">
+                                <rect key="frame" x="0.0" y="61" width="375" height="606"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="fil-xk-zj7" id="FXf-0o-oVd"/>
+                                </connections>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="oCa-Jd-fmb" firstAttribute="top" secondItem="2FP-h2-hJJ" secondAttribute="bottom" constant="1" id="PVW-o1-1iU"/>
+                            <constraint firstItem="oCa-Jd-fmb" firstAttribute="leading" secondItem="3cT-hK-MYi" secondAttribute="leading" id="YeX-IT-wz2"/>
+                            <constraint firstAttribute="trailing" secondItem="2FP-h2-hJJ" secondAttribute="trailing" id="bQC-gR-Tcm"/>
+                            <constraint firstItem="9Ar-oh-Vby" firstAttribute="top" secondItem="oCa-Jd-fmb" secondAttribute="bottom" id="era-dR-vmE"/>
+                            <constraint firstItem="2FP-h2-hJJ" firstAttribute="top" secondItem="3cT-hK-MYi" secondAttribute="top" id="kTJ-Uw-YCK"/>
+                            <constraint firstAttribute="trailing" secondItem="oCa-Jd-fmb" secondAttribute="trailing" id="saE-tP-spc"/>
+                            <constraint firstItem="2FP-h2-hJJ" firstAttribute="leading" secondItem="3cT-hK-MYi" secondAttribute="leading" id="vEd-AO-KaQ"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="webview" destination="oCa-Jd-fmb" id="mfN-H6-Gd0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="men-Xz-beB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2758.5" y="999.5"/>
         </scene>
         <!--Withdraw View Controller-->
         <scene sceneID="WOC-P4-GWa">

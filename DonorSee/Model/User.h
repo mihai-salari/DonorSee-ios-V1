@@ -32,6 +32,10 @@
 @property (nonatomic, strong) NSString * last_name;
 @property (nonatomic, strong) NSString * updated_at;
 
+@property (nonatomic, readwrite) BOOL   stripe_customer;
+@property (nonatomic, readwrite) BOOL   stripe_connected;
+
+
 - (id) initUserWithDictionary: (NSDictionary*) dicUser;
 - (id) initUserWithManagedObject: (NSManagedObject*) objUser;
 

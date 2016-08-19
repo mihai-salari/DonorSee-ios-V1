@@ -205,9 +205,9 @@
     }
     
     lbDonatedCount.text = [NSString stringWithFormat: @"%d %@", selectedFeed.donated_count, giftTitle];
-    lbRaisedAmount.text = [NSString stringWithFormat: @"$%d RAISED", selectedFeed.donated_amount];
+    lbRaisedAmount.text = [NSString stringWithFormat: @"$%d RAISED", selectedFeed.donated_amount/100];
     
-    NSURL* urlPhoto = [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: selectedFeed.photo]];
+    NSURL* urlPhoto = [NSURL URLWithString: selectedFeed.photo];
     [ivFeed sd_setImageWithURL: urlPhoto];
     
     lbDescription.text = selectedFeed.feed_description;
@@ -217,7 +217,7 @@
     [lbMaxPrice setMinimumScaleFactor:7.0/[UIFont labelFontSize]];
 
     lbMaxPrice.text = [NSString stringWithFormat: @"$%d", selectedFeed.pre_amount];
-    float progress = (float)selectedFeed.donated_amount / (float)selectedFeed.pre_amount;
+    float progress = (float)(selectedFeed.donated_amount/100) / (float)(selectedFeed.pre_amount /100);
     if(progress > 1) progress = 1;
     progressView.progress = progress;
     
@@ -246,7 +246,7 @@
         lbGiveTitle.hidden = NO;
         [btGive setTitle: @"" forState: UIControlStateNormal];
         lbGiveTitle.text = @"LEFT";
-        lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (selectedFeed.pre_amount - selectedFeed.donated_amount)];
+        lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (selectedFeed.pre_amount/100 - selectedFeed.donated_amount/100)];
     }
     
     [tbActivity reloadData];
@@ -698,7 +698,7 @@
         UIAlertAction* yesAction = [UIAlertAction actionWithTitle: @"Yes"
                                                             style: UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * _Nonnull action) {
-                                                              
+                                                              return;
                                                               [SVProgressHUD showWithStatus: @"Removing..." maskType: SVProgressHUDMaskTypeClear];
                                                               [[NetworkClient sharedClient] removeFeed: selectedFeed
                                                                                                user_id: [AppEngine sharedInstance].currentUser.user_id
@@ -911,10 +911,10 @@
     
     id stripe_user_id = [selectedFeed stripe_user_id];
     
-    if( stripe_user_id && ![stripe_user_id isKindOfClass:[NSNull class]] && !([stripe_user_id length]<=0)) {
+    //if( stripe_user_id && ![stripe_user_id isKindOfClass:[NSNull class]] && !([stripe_user_id length]<=0)) {
         message = @"Please select an option to pay";
         btnTitle = @"PayPal";
-    }
+   // }
     
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Payment Details" message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -925,15 +925,15 @@
         
     }];
     
-    /*
     
-    if( stripe_user_id && ![stripe_user_id isKindOfClass:[NSNull class]] && !([stripe_user_id length]<=0)) {
+    
+    //if( stripe_user_id && ![stripe_user_id isKindOfClass:[NSNull class]] && !([stripe_user_id length]<=0)) {
          UIAlertAction *stripeAction = [UIAlertAction actionWithTitle:@"Credit/Debit Card" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
              [self payWithStripe];
          }];
          [alert addAction:stripeAction];
         
-    }*/
+    //}
     
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:^{
@@ -1133,6 +1133,21 @@
         
         [SVProgressHUD showWithStatus: @"Processing..." maskType: SVProgressHUDMaskTypeClear];
         
+        [[NetworkClient sharedClient] createGift:selectedFeed.feed_id amount:amount success:^(NSDictionary *dicDonate) {
+            [SVProgressHUD dismiss];
+            [[NSNotificationCenter defaultCenter] postNotificationName: NOTI_UPDATE_FUNDED_FEED object: selectedFeed];
+            
+            [self updateFeedInfo];
+            [self loadActivities];
+            
+            tfAmount.text = @"";
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+            [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
+        }];
+        
+        /*
+        
         // Testing
         NSString *sourceId = selectedFeed.stripe_user_id;
         
@@ -1163,8 +1178,9 @@
                                                } failure:^(NSString *errorMessage) {
                                                    [SVProgressHUD dismiss];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
-                                               }];
+                                               }];*/
     }];
+         
     
 }
 

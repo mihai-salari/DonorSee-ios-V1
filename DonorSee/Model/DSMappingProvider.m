@@ -2,11 +2,13 @@
 //  DSMappingProvider.m
 //  DonorSee
 //
-//  Copyright © 2016 DonorSee. All rights reserved.
+//  Created by Keval on 13/08/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import "DSMappingProvider.h"
 #import "Event.h"
+#import "Notification.h"
 
 @implementation DSMappingProvider
 
@@ -51,11 +53,11 @@
 + (FEMObjectMapping *) userMapping {
     FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[User class]];
     
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"user_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"user_id" toKeyPath:@"id"]];
     
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"avatar" toKeyPath:@"photo_url"]];
     
-    [mapping addAttributesFromArray:@[@"first_name", @"last_name", @"email"]];
+    [mapping addAttributesFromArray:@[@"first_name", @"last_name", @"email", @"stripe_connected", @"stripe_customer", @"fb_id"]];
     
     FEMAttribute *nameAttribute = [[FEMAttribute alloc] initWithProperty:@"name" keyPath:nil map:^id _Nullable(id  _Nonnull value) {
         if ([value isKindOfClass:[NSDictionary class]]) {
@@ -75,11 +77,16 @@
 + (FEMObjectMapping *) projectsMapping {
     
     FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Feed class]];
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"feed_id" toKeyPath:@"id"]];
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"owner_id" toKeyPath:@"owner_id"]];
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"pre_amount" toKeyPath:@"goal_amount_cents"]];
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"is_gave" toKeyPath:@"user.is_giver"]];
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"is_follower" toKeyPath:@"user.is_follower"]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"feed_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"owner_id" toKeyPath:@"owner_id"]];    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"pre_amount" toKeyPath:@"goal_amount_cents"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"donated_amount" toKeyPath:@"stats.amount_raised_cents"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"donated_user_count" toKeyPath:@"stats.giver_count"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"donated_count" toKeyPath:@"stats.gift_count"]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_gave" toKeyPath:@"user.is_giver"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_follower" toKeyPath:@"user.is_follower"]];
     
     //String
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"feed_description" toKeyPath:@"description"]];
@@ -97,13 +104,14 @@
 + (FEMObjectMapping *)eventMapping {
     FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Event class]];
     
-    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToIntNumberProperty:@"event_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"event_id" toKeyPath:@"id"]];
     // Date
     [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"created_at"]];
     [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"updated_at" toKeyPath:@"updated_at"]];
     
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"type" toKeyPath:@"type"]];
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"message" toKeyPath:@"message"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_read" toKeyPath:@"is_read"]];
     
     [mapping addRelationshipMapping:[self userMapping] forProperty:@"creator" keyPath:@"creator"];
     [mapping addRelationshipMapping:[self userMapping] forProperty:@"recipient" keyPath:@"recipient"];
@@ -112,5 +120,43 @@
     
     return mapping;
 }
+
++ (FEMObjectMapping *)eventMappingForNotification {
+    FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Event class]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"event_id" toKeyPath:@"id"]];
+    // Date
+    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"created_at"]];
+    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"updated_at" toKeyPath:@"updated_at"]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"type" toKeyPath:@"type"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"message" toKeyPath:@"message"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_read" toKeyPath:@"is_read"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"gift_amount_cents" toKeyPath:@"gift.amount_cents"]];
+    
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"creator" keyPath:@"user"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"recipient" keyPath:@"recipient"];
+    
+    [mapping addRelationshipMapping:[self projectsMapping] forProperty:@"feed" keyPath:@"project"];
+    
+    return mapping;
+}
+
+
+
+
++ (FEMObjectMapping *)notificationMapping {
+    FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Notification class]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"notification_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"message" toKeyPath:@"message"]];
+    
+    [mapping addAttributesFromArray:@[@"type", @"message"]];
+    
+    [mapping addRelationshipMapping:[self projectsMapping] forProperty:@"feed" keyPath:@"project"];
+    
+    return mapping;
+}
+
 
 @end

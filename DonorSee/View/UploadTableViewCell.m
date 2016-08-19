@@ -116,7 +116,7 @@
 //        btSmall2.hidden = YES;
     }
 
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: f.photo]]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.photo]];
     [lbDescription setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range)
      {
          if(hotWord == STTweetCustom)

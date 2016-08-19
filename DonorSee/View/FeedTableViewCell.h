@@ -26,6 +26,8 @@
 @property (nonatomic, retain) id   delegate;
 
 - (void) setDonateFeed: (Feed*) f isDetail: (BOOL) isDetail;
+- (void) updateFollowStatusWithUser:(User *)selectedUser;
+- (void) updateFollowStatus:(BOOL) followed;
 + (CGFloat) getHeight;
 
 @end

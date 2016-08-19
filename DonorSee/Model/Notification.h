@@ -2,7 +2,8 @@
 //  Notification.h
 //  DonorSee
 //
-//  Copyright © 2016 DonorSee. All rights reserved.
+//  Created by Keval on 30/06/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,10 +19,13 @@
 @property (nonatomic, retain) NSString  *user_avatar;
 @property (nonatomic, assign) int       register_date;
 @property (nonatomic, assign) int       user_id;
-@property (nonatomic, assign) int           type;
+@property (nonatomic, assign) int       type;
 @property (nonatomic, assign) NSDate    *date;
 
 @property (nonatomic, retain) Feed          *feed;
+@property (nonatomic, retain) User          *user;
+@property (nonatomic, retain) User          *recipient;
+
 
 - (id) initWithDictionary: (NSDictionary*) dicItem;
 

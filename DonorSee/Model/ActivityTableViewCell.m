@@ -67,6 +67,7 @@
     lbTime.text = [AppEngine dataTimeStringFromDate:event.created_at];
     [ivAvatar sd_setImageWithURL: [NSURL URLWithString: avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
     
+    lbFollowMessage.text = @"";
     NSString* message = @"";
     if ([event.type isEqualToString:@"update"]) {
         NSString* filterUsername = [event.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
@@ -82,41 +83,22 @@
         CGRect frm = lbFollowMessage.frame;
         frm.size.width = 245;
         lbFollowMessage.frame = frm;
-        /*
-        viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x,
-                                            lbFollowMessage.frame.origin.y + lbFollowMessage.frame.size.height + 10.0,
-                                            viPhotoContainer.frame.size.width,
-                                            viPhotoContainer.frame.size.height);
         
-        viPhotoContainer.hidden = NO;
-        for(UIView* v in viPhotoContainer.subviews)
-        {
-            [v removeFromSuperview];
-        }
-        
-        if(activity.followMessage.arrPhotos != nil && [activity.followMessage.arrPhotos count] > 0)
-        {
-            float fx = 0;
-            float fy = 0;
-            float fw = viPhotoContainer.frame.size.width;
-            float fOffset = 10.0;
-            
-            for(NSString* photoKey in activity.followMessage.arrPhotos)
-            {
-                UIImageView* ivCell = [[UIImageView alloc] initWithFrame: CGRectMake(fx, fy, fw, fw)];
-                ivCell.backgroundColor = [UIColor lightGrayColor];
-                ivCell.layer.masksToBounds = YES;
-                ivCell.layer.cornerRadius = 10.0;
-                ivCell.contentMode = UIViewContentModeScaleAspectFill;
-                [ivCell sd_setImageWithURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: photoKey]]];
-                [viPhotoContainer addSubview: ivCell];
-                
-                fy += fw + fOffset;
-            }
-            
-            viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x, viPhotoContainer.frame.origin.y, viPhotoContainer.frame.size.width, fy);
-        }*/
     }
+    
+    if ([event.type isEqualToString:@"give"]) {
+        NSString* filterUsername = [event.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
+        message = [NSString stringWithFormat: @"!%@ gave to this project", filterUsername];
+    }
+    
+    if ([event.type isEqualToString:@"fund"]) {
+        NSString* filterUsername = [event.recipient.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
+        message = [NSString stringWithFormat: @"!%@ project got totally funded", filterUsername];
+        
+        [ivAvatar sd_setImageWithURL: [NSURL URLWithString: event.recipient.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
+    }
+    
+    
     lbMessage.text = message;
     [self layoutIfNeeded];
 }
@@ -264,7 +246,7 @@
         
         return fy;
     }
-    return 100;
+    return 75;
 }
 
 + (CGFloat) getHeight: (Activity*) a

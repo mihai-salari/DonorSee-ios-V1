@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "CustomSTTweetLabel.h"
 #import "Notification.h"
+#import "Event.h"
 
 @protocol NotificationTableViewCellDelegate <NSObject>
 @optional
 - (void) selectUser: (User*) user;
-- (void) selectedNotification: (Activity*) a cell: (id) cell;
+- (void) selectedNotification: (Event*) a cell: (id) cell;
 - (void) selectedNotificationNew: (Notification*) a cell: (id) cell;
 @end
 
@@ -21,6 +22,7 @@
 {
     Activity                *currentActivity;
     Notification            *currentNotificaion;
+    Event                   *currentEvent;
 }
 
 @property (nonatomic, weak) IBOutlet UIImageView        *ivAvatar;
@@ -33,7 +35,7 @@
 
 - (void) setNotification: (Activity*) a;
 - (void) setNotificationNew: (Notification *) n;
-
-+ (CGFloat) getHeight: (Activity*) a;
+- (void) setEventNotification:(Event *)event;
++ (CGFloat) getHeight: (Event*) a;
 + (CGFloat) getNotificationHeight: (Notification*) n;
 @end

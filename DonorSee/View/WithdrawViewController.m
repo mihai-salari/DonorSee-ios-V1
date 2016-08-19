@@ -8,6 +8,9 @@
 
 #import "WithdrawViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "FEMMapping.h"
+#import "DSMappingProvider.h"
+#import "FEMDeserializer.h"
 
 @interface WithdrawViewController () <UITextFieldDelegate, MFMailComposeViewControllerDelegate>
 {
@@ -51,7 +54,8 @@
                                       success:^(NSDictionary *dicUser) {
                                          
                                           [SVProgressHUD dismiss];
-                                          User* u = [[User alloc] initUserWithDictionary: dicUser];
+                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
+                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
                                           [AppEngine sharedInstance].currentUser = u;
                                           
                                           lbTotalAmount.text = [NSString stringWithFormat: @"$%d", (int)u.received_amount];

@@ -51,7 +51,7 @@
     if(progress > 1) progress = 1;
     
     currentFeed = f;
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: f.photo]]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.photo]];
     lbInfo.text = [NSString stringWithFormat: @"%d%@ RAISED", (int)(progress * 100), @"%"];
     tvDescription.text = f.feed_description;
 }

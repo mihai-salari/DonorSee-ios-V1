@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		49ED71A3D06D46BB608AA3A7 /* Pods_DonorSee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */; };
 		9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */; };
+		9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */; };
 		9F6017801D2513A600BA8D59 /* Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F60177F1D2513A600BA8D59 /* Notification.m */; };
 		9F9671411D31439300F756BF /* UITabBarItem+CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9671401D31439300F756BF /* UITabBarItem+CustomBadge.m */; };
 		9FCAE57E1D5F3FDB0004B1D3 /* NSObject+ObjectMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCAE57D1D5F3FDB0004B1D3 /* NSObject+ObjectMap.m */; };
@@ -175,6 +176,8 @@
 		610AE77298E1481F47BB26D0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F2936A71D0BA0AD000A485D /* StripeDonateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StripeDonateViewController.h; sourceTree = "<group>"; };
 		9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StripeDonateViewController.m; sourceTree = "<group>"; };
+		9F42C6A41D65EFB30011C0D8 /* StripeSignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StripeSignupViewController.h; sourceTree = "<group>"; };
+		9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StripeSignupViewController.m; sourceTree = "<group>"; };
 		9F60177E1D2513A600BA8D59 /* Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Notification.h; sourceTree = "<group>"; };
 		9F60177F1D2513A600BA8D59 /* Notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notification.m; sourceTree = "<group>"; };
 		9F96713F1D31439300F756BF /* UITabBarItem+CustomBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITabBarItem+CustomBadge.h"; sourceTree = "<group>"; };
@@ -817,6 +820,8 @@
 			children = (
 				F87AE4411C83D7DA00FE9417 /* UploadViewController.h */,
 				F87AE4421C83D7DA00FE9417 /* UploadViewController.m */,
+				9F42C6A41D65EFB30011C0D8 /* StripeSignupViewController.h */,
+				9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */,
 			);
 			name = Upload;
 			sourceTree = "<group>";
@@ -1128,6 +1133,7 @@
 				F8483B1D1C901BE0003C86E9 /* ShareViewController.m in Sources */,
 				F8AFB4A51CB7AB3E0060FAA1 /* SignUpViewController.m in Sources */,
 				F87AE41F1C83739C00FE9417 /* main.m in Sources */,
+				9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1283,7 +1289,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8215460e-7c02-41e2-b77c-c467365190a8";
+				PROVISIONING_PROFILE = "ba2bd690-9cca-44ea-be29-157d7a54720f";
 			};
 			name = Debug;
 		};
@@ -1337,7 +1343,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8215460e-7c02-41e2-b77c-c467365190a8";
+				PROVISIONING_PROFILE = "ba2bd690-9cca-44ea-be29-157d7a54720f";
 			};
 			name = Release;
 		};

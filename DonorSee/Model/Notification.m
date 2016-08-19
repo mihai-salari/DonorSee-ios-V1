@@ -2,7 +2,8 @@
 //  Notification.m
 //  DonorSee
 //
-//  Copyright © 2016 DonorSee. All rights reserved.
+//  Created by Keval on 30/06/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import "Notification.h"

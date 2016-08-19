@@ -44,6 +44,11 @@
                                              selector:@selector(finishedFollowForFeed:)
                                                  name:NOTI_UPDATE_FOLLOW_FEED
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(finishedFollowForFeed:)
+                                                 name:NOTI_UPDATE_FOLLOW_USER
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,6 +63,7 @@
 
 - (void) updateAllCells: (NSNotification*) notification
 {
+    return;
     if([notification.object isKindOfClass: [Feed class]])
     {
         Feed* f = notification.object;
@@ -141,7 +147,8 @@
                                      success:^(User *followerUser, User *followingUser) {
                                          
                                          [SVProgressHUD dismiss];
-                                         followingUser.followed = YES;
+                                         //followingUser.followed = YES;
+                                         user.followed = YES;
                             
                                          [[NSNotificationCenter defaultCenter] postNotificationName: NOTI_UPDATE_FOLLOW_FEED
                                                                                              object: followingUser];
@@ -161,7 +168,7 @@
                                        success:^(User *followerUser, User *followingUser) {
                                          
                                            [SVProgressHUD dismiss];
-                                           followingUser.followed = NO;
+                                           user.followed = NO;
                                            
                                            [[NSNotificationCenter defaultCenter] postNotificationName: NOTI_UPDATE_FOLLOW_FEED
                                                                                                object: followingUser];

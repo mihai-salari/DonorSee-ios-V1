@@ -98,8 +98,8 @@
     
     lbDescription.text = f.feed_description;
     
-    lbMaxPrice.text = [NSString stringWithFormat: @"$%d", f.pre_amount];
-    float progress = (float)f.donated_amount / (float)f.pre_amount;
+    lbMaxPrice.text = [NSString stringWithFormat: @"$%d", f.pre_amount/100];
+    float progress = (float)(f.donated_amount/100) / (float)(f.pre_amount/100);
     if(progress > 1) progress = 1;
     progressView.progress = progress;
     
@@ -121,13 +121,18 @@
         lbGiveTitle.hidden = NO;
         [btGive setTitle: @"" forState: UIControlStateNormal];
         lbGiveTitle.text = @"LEFT";
-        lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (f.pre_amount - f.donated_amount)];
+        if (f.donated_amount == 0) {
+            lbMaxPrice.text = [NSString stringWithFormat: @"$%d", f.pre_amount/100];
+        } else {
+            lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (f.pre_amount/100 - f.donated_amount/100)];
+        }
+        
     }
     
     
     //Heart.
     btHeart.hidden = NO;
-    if([AppEngine sharedInstance].currentUser == nil || currentFeed.post_user_id == [AppEngine sharedInstance].currentUser.user_id)
+    if([AppEngine sharedInstance].currentUser == nil || currentFeed.postUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
     {
         btHeart.hidden = YES;
     }
@@ -146,6 +151,40 @@
     //Gave.
     ivGave.hidden = !currentFeed.is_gave;
 }
+
+- (void) updateFollowStatusWithUser:(User *)selectedUser {
+    //Heart.
+    btHeart.hidden = NO;
+    if([AppEngine sharedInstance].currentUser == nil || selectedUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
+    {
+        btHeart.hidden = YES;
+    }
+    else
+    {
+        
+        UIImage* imgHeart = [UIImage imageNamed: @"heart.png"];
+        if(selectedUser.followed)
+        {
+            imgHeart = [UIImage imageNamed: @"heart_sel.png"];
+            
+        }
+        [btHeart setImage: imgHeart forState: UIControlStateNormal];
+    }
+}
+
+- (void) updateFollowStatus:(BOOL) followed {
+    
+    currentFeed.postUser.followed = followed;
+    
+    UIImage* imgHeart = [UIImage imageNamed: @"heart.png"];
+    if(followed)
+    {
+        imgHeart = [UIImage imageNamed: @"heart_sel.png"];
+        
+    }
+    [btHeart setImage: imgHeart forState: UIControlStateNormal];
+}
+
 
 - (IBAction) actionShare:(id)sender
 {

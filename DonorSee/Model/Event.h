@@ -2,7 +2,8 @@
 //  Event.h
 //  DonorSee
 //
-//  Copyright © 2016 DonorSee. All rights reserved.
+//  Created by Keval on 14/08/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -23,5 +24,8 @@
 @property (nonatomic, strong) User              *recipient;
 
 @property (nonatomic, strong) Feed              *feed;
+
+@property (nonatomic, readwrite) BOOL           is_read;
+@property (nonatomic, assign) int               gift_amount_cents;
 
 @end

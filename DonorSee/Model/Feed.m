@@ -177,8 +177,7 @@
 
 - (DONATED_STATUS) getDonatedStatus
 {
-    NSArray* arrNames = [self getDonatedUsernames];
-    if(arrNames != nil && [arrNames count] > 0)
+    if(self.donated_user_count > 0)
     {
         //Full Donated.
         if(self.donated_amount >= self.pre_amount)
@@ -199,7 +198,7 @@
 
 - (BOOL) isCreatedByCurrentUser
 {
-    if(self.post_user_id == [AppEngine sharedInstance].currentUser.user_id)
+    if(self.postUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
     {
         return YES;
     }

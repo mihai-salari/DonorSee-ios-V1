@@ -124,7 +124,7 @@
                  [SVProgressHUD showWithStatus: @"Sign in with Facebook..."];
                  
                  NSMutableDictionary* parameters = [NSMutableDictionary dictionary];
-                 [parameters setValue:@"id, name, email" forKey:@"fields"];
+                 [parameters setValue:@"id, name, email, first_name, last_name" forKey:@"fields"];
                  
                  [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters: parameters]
                   startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error)
@@ -133,28 +133,27 @@
                       {
                           NSLog(@"fetched user:%@", result);
                           NSString* fbId = [result valueForKey: @"id"];
-                          NSString* name = [result valueForKey: @"name"];
+                          NSString* first_name = [result valueForKey: @"first_name"];
+                          NSString* last_name = [result valueForKey: @"last_name"];
                           NSString* email = [result valueForKey: @"email"];
                           
-                          [[NetworkClient sharedClient] loginWithFB: fbId
-                                                               name: name
-                                                              email: email
-                                                            success:^(NSDictionary *dicUser) {
-                                                                
-                                                                [SVProgressHUD dismiss];
-                                                                User* u = [[User alloc] initUserWithDictionary: dicUser];
-                                                                
-                                                                [[CoreHelper sharedInstance] addUser: u];
-                                                                [[CoreHelper sharedInstance] setCurrentUserId: u.user_id];
-                                                                [AppEngine sharedInstance].currentUser = u;
-                                                                
-                                                                completed();
-                                                                
-                                                            } failure:^(NSString *errorMessage) {
-                                                                
-                                                                [SVProgressHUD dismiss];
-                                                                [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
-                                                            }];
+                          
+                          [[NetworkClient sharedClient] loginWithFB:fbId firstName:first_name lastName:last_name email:email success:^(NSDictionary *dicUser) {
+                              [SVProgressHUD dismiss];
+                              
+                              FEMMapping *mapping = [DSMappingProvider userMapping];
+                              User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:mapping];
+                              
+                              [[CoreHelper sharedInstance] addUser: u];
+                              [[CoreHelper sharedInstance] setCurrentUserId: u.user_id];
+                              [AppEngine sharedInstance].currentUser = u;
+                              
+                              completed();
+                          } failure:^(NSString *errorMessage) {
+                              [SVProgressHUD dismiss];
+                              [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
+                          }];
+                         
                       }
                       else
                       {

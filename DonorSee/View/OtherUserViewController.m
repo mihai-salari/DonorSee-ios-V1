@@ -87,7 +87,6 @@
         //btSettings.hidden = YES;
     }
     
-    
     [self getUserFollowStatus];
     
     
@@ -120,6 +119,7 @@
                                            
                                            if(arrResult != nil)
                                            {
+                                               /*
                                                for(NSDictionary* dicItem in arrResult)
                                                {
                                                    Feed* f = [[Feed alloc] initWithHomeFeed: dicItem];
@@ -131,7 +131,9 @@
                                                    }
                                                    
                                                    [arrItemFeeds addObject: f];
-                                               }
+                                               }*/
+                                               
+                                               [arrItemFeeds addObjectsFromArray:arrResult];
                                                
                                                offset += (int)[arrResult count];
                                                if([arrResult count] > 0)
@@ -168,13 +170,20 @@
 }
 
 - (void) getUserFollowStatus {
-    [[NetworkClient sharedClient] getUserFollowStatus:_selectedUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSDictionary *followStatus) {
+    [[NetworkClient sharedClient] getUserFollowStatus:[AppEngine sharedInstance].currentUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
         
-        if ([followStatus objectForKey:@"success"]) {
-            BOOL status = [[followStatus objectForKey:@"success"] boolValue];
-            _selectedUser.followed = status;
+        if (followStatus.count > 0) {
+            NSPredicate *isCurrentUserFollowingPredicate = [NSPredicate predicateWithFormat:@"id == %d", _selectedUser.user_id];
+            NSArray *filteredList = [followStatus filteredArrayUsingPredicate:isCurrentUserFollowingPredicate];
+            if (filteredList.count > 0) {
+                _selectedUser.followed = YES;
+            } else {
+                _selectedUser.followed = NO;
+            }
             [self updateFollowUI];
+            [tbMain reloadData];
         }
+        lbFollowers.text = [NSString stringWithFormat: @"%d", followStatus.count];
     } failure:^(NSString *errorMessage) {
         
     }];
@@ -227,6 +236,7 @@
     cell.delegate = self;
     Feed* f = [arrItemFeeds objectAtIndex: indexPath.row];
     [cell setDonateFeed: f isDetail: NO];
+    [cell updateFollowStatus:_selectedUser.followed];
     return cell;
 }
 
@@ -285,12 +295,7 @@
 - (void) finishedFollowForFeed: (NSNotification*) notification
 {
     [super finishedFollowForFeed: notification];
-    if([notification.object isKindOfClass: [User class]])
-    {
-        User* user = notification.object;
-        self.selectedUser = user;
-        [self updateFollowUI];
-    }
+    [self getUserFollowStatus];
 }
 
 - (void) updateFollowUI
@@ -306,8 +311,6 @@
         lbFollowStatus.text = @"FOLLOW";
         [btHeart setImage: [UIImage imageNamed: @"heart.png"] forState: UIControlStateNormal];
     }
-    
-    lbFollowers.text = [NSString stringWithFormat: @"%d", self.selectedUser.following];
 }
 
 #pragma mark - Report.

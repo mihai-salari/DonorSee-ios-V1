@@ -2,11 +2,15 @@
 //  StripeDonateViewController.m
 //  DonorSee
 //
-//  Copyright © 2016 DonorSee. All rights reserved.
+//  Created by Keval on 11/06/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import "StripeDonateViewController.h"
 #import <Stripe/Stripe.h>
+#import "FEMMapping.h"
+#import "DSMappingProvider.h"
+#import "FEMDeserializer.h"
 
 @interface StripeDonateViewController ()<STPPaymentCardTextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -85,10 +89,13 @@
 
 
 - (void) getUserInfo {
+    [self getUserStripeSavedCards:@""];
+    return;
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *dicUser) {
                                           
-                                          User* u = [[User alloc] initUserWithDictionary: dicUser];
+                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
+                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
                                           [[CoreHelper sharedInstance] addUser: u];
                                           [AppEngine sharedInstance].currentUser = u;
                                           
@@ -159,6 +166,13 @@
                                                   return;
                                               }
                                               
+                                              [[NetworkClient sharedClient] saveUserCard:[AppEngine sharedInstance].currentUser.user_id stripe_token:token.tokenId success:^(NSDictionary *cardInfo) {
+                                                  //[self getUserStripeSavedCards:@""];
+                                                  [self.delegate paymentViewController:self didCompletedWithToken:token.tokenId];
+                                              } failure:^(NSString *errorMessage) {
+                                                  
+                                              }];
+                                              
                                               //[self createStipeAccount:token];
                                               //[self getUserStripeSavedCards];
                                               //[self getTokenForSavedCard];
@@ -177,6 +191,25 @@
 
 - (void) getUserStripeSavedCards:(NSString *)customerId {
     //
+    
+    [[NetworkClient sharedClient] getUserSavedCards:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *cards) {
+        
+        //NSLog(@"cards %@", cards);
+        
+        if (cards.count > 0) {
+            _cardList = [NSArray arrayWithArray:cards];
+            _savedCardLbl.hidden = NO;
+            _savedCardTableView.hidden = NO;
+            _cardNewCardBtn.hidden = NO;
+            [self updateSelectCard:_selectedIndex];
+            [_savedCardTableView reloadData];
+        }
+        
+    } failure:^(NSString *errorMessage) {
+        
+    }];
+    
+    /*
     [[NetworkClient sharedClient] getUserSavedCardsFromStripe:customerId success:^(NSDictionary *dicDonate) {
         //id = "card_18UW5YDAyu7GKAGHiDgrN7so";
         //NSLog(@"dicDonate %@", dicDonate);
@@ -196,7 +229,7 @@
         
     } failure:^(NSString *errorMessage) {
         
-    }];
+    }];*/
 }
 
 - (void) getTokenForSavedCard {

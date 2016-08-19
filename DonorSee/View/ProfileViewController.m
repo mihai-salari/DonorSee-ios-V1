@@ -16,6 +16,9 @@
 #import "JAmazonS3ClientManager.h"
 #import "AuthView.h"
 #import "DetailFeedViewController.h"
+#import "FEMMapping.h"
+#import "DSMappingProvider.h"
+#import "FEMDeserializer.h"
 
 @interface ProfileViewController() <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, UploadTableViewCellDelegate, SettingsTableViewCellDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate, AuthViewDelegate>
 {
@@ -208,12 +211,14 @@
                                          [arrFunds removeAllObjects];
                                          if(arrFeed != nil && [arrFeed count] > 0)
                                          {
+                                             /*
                                              for(NSDictionary* dicItem in arrFeed)
                                              {
                                                  Feed* f = [[Feed alloc] initWithProfileFeed: dicItem];
                                                  [[CoreHelper sharedInstance] addFeed: f];
                                                  [arrFunds addObject: f];
-                                             }
+                                             }*/
+                                             [arrFunds addObjectsFromArray:arrFeed];
                                              lbNoFunded.hidden = YES;
                                          }
                                          else
@@ -252,6 +257,7 @@
                                          
                                          if(arrFeed != nil && [arrFeed count] > 0)
                                          {
+                                             /*
                                              for(NSDictionary* dicItem in arrFeed)
                                              {
                                                  Feed* f = [[Feed alloc] initWithProfileFeed: dicItem];
@@ -260,7 +266,8 @@
                                                      [[CoreHelper sharedInstance] addFeed: f];
                                                      [arrUploads addObject: f];
                                                  }
-                                             }
+                                             }*/
+                                             [arrUploads addObjectsFromArray:arrFeed];
                                              lbNoUploaded.hidden = YES;
                                          }
                                          else
@@ -849,7 +856,8 @@
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *dicUser) {
                                           
-                                          User* u = [[User alloc] initUserWithDictionary: dicUser];
+                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
+                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
                                           [[CoreHelper sharedInstance] addUser: u];
                                           [AppEngine sharedInstance].currentUser = u;
                                           lbAvailableAmount.text = [NSString stringWithFormat: @"$%0.2f", [AppEngine sharedInstance].currentUser.received_amount];

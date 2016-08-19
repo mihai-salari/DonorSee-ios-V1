@@ -192,7 +192,8 @@
                                               [SVProgressHUD dismiss];
                                               if(dicUser != nil)
                                               {
-                                                  User* u = [[User alloc] initUserWithDictionary: dicUser];
+                                                  FEMMapping *userMapping = [DSMappingProvider userMapping];
+                                                  User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
                                                   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                                                   OtherUserViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"OtherUserViewController"];
                                                   nextView.selectedUser = u;

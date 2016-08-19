@@ -73,7 +73,7 @@
 //                                                    }
         
                                                    [tbMain reloadData];
-        [self loadNotifications];
+        //[self loadNotifications];
         
         
                                                } failure:^(NSString *errorMessage) {
@@ -151,6 +151,9 @@
     
     
     id object = [arrNotifications objectAtIndex:indexPath.row];
+    [cell setEventNotification:object];
+    cell.delegate = self;
+    /*
     NSString *className = NSStringFromClass([object class]);
     if ([className isEqualToString:@"Activity"]) {
         [cell setNotification: [arrNotifications objectAtIndex: indexPath.row]];
@@ -158,41 +161,21 @@
     } else {
         [cell setNotificationNew:[arrNotifications objectAtIndex: indexPath.row]];
         cell.delegate = self;
-    }
+    }*/
 
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id object = [arrNotifications objectAtIndex:indexPath.row];
-    NSString *className = NSStringFromClass([object class]);
-    if ([className isEqualToString:@"Activity"]) {
-        Activity* a = [arrNotifications objectAtIndex: indexPath.row];
-        return [NotificationTableViewCell getHeight: a];
-    } else {
-        Notification* a = [arrNotifications objectAtIndex: indexPath.row];
-        return [NotificationTableViewCell getNotificationHeight: a];
-    }
+    Event* a = [arrNotifications objectAtIndex: indexPath.row];
+    return [NotificationTableViewCell getHeight: a];
 }
 
-- (void) selectedNotification: (Activity*) a cell:(NotificationTableViewCell*) cell
+- (void) selectedNotification: (Event *) a cell:(NotificationTableViewCell*) cell
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];
-    nextView.selectedFeed = a.feed;
-    [self.navigationController pushViewController: nextView animated: YES];
-    
-    //Read Activity.
-    a.is_read = YES;
-    [cell setNotification: a];
-    [[NetworkClient sharedClient] readActivity: a.activity_id];
-}
-
-- (void)selectedNotificationNew:(Notification *)a cell:(id)cell
-{
-    if (a.type == 0) {
-        [[AppDelegate getDelegate] gotoOtherProfile:@{@"user_id":[NSNumber numberWithInteger:a.user_id]}];
+    if ([a.type isEqualToString:@"follow"]) {
+        [[AppDelegate getDelegate] gotoOtherProfile:@{@"user_id":[NSNumber numberWithInteger:a.creator.user_id]}];
     } else {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];
@@ -202,8 +185,25 @@
     
     //Read Activity.
     a.is_read = YES;
-    [cell setNotificationNew:a];
-    [[NetworkClient sharedClient] readNotification: a.notification_id];
+    [cell setEventNotification: a];
+    [[NetworkClient sharedClient] readActivity: a.event_id.intValue];
 }
+
+//- (void)selectedNotificationNew:(Notification *)a cell:(id)cell
+//{
+//    if (a.type == 0) {
+//        [[AppDelegate getDelegate] gotoOtherProfile:@{@"user_id":[NSNumber numberWithInteger:a.user_id]}];
+//    } else {
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//        DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];
+//        nextView.selectedFeed = a.feed;
+//        [self.navigationController pushViewController: nextView animated: YES];
+//    }
+//    
+//    //Read Activity.
+//    a.is_read = YES;
+//    [cell setNotificationNew:a];
+//    [[NetworkClient sharedClient] readNotification: a.notification_id];
+//}
 
 @end

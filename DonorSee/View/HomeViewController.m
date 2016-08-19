@@ -43,6 +43,7 @@
 @property (nonatomic) BLKDelegateSplitter *delegateSplitter;
 @property (nonatomic, weak) IBOutlet UILabel                    *lbEmpty;
 
+@property (nonatomic, strong) NSArray                           *followedUserIds;
 @end
 
 
@@ -59,6 +60,7 @@
     
     arrGlobal = [[NSMutableArray alloc] init];
     arrPersonal = [[NSMutableArray alloc] init];
+    _followedUserIds = @[];
     
     [self.tbMain.infiniteScrollingView setCustomView: viFooter forState:SVInfiniteScrollingStateStopped];
     __weak HomeViewController *weakSelf = self;
@@ -82,6 +84,7 @@
     scrollOffsetPersonal = 0;
     
     [self loadFeedsFromServer: YES];
+    [self getUserFollowStatus];
 }
 
 - (void) initHeaderView
@@ -105,8 +108,31 @@
     self.tbMain.delegate = (id<UITableViewDelegate>)self.delegateSplitter;
 }
 
+- (void) getUserFollowStatus {
+    [[NetworkClient sharedClient] getUserFollowStatus:[AppEngine sharedInstance].currentUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
+        
+        if (followStatus.count > 0) {
+            
+            _followedUserIds = [followStatus valueForKey:@"id"];
+            
+            NSLog(@"_followedUserIds %@", _followedUserIds);
+            
+        }
+        
+        [self.tbMain reloadData];
+        
+    } failure:^(NSString *errorMessage) {
+        
+    }];
+}
+
 - (void) finishedFollowForFeed: (NSNotification*) notification
 {
+    
+    [self getUserFollowStatus];
+    
+    return;
+    
     if([notification.object isKindOfClass: [User class]])
     {
         User* user = notification.object;
@@ -227,6 +253,7 @@
 
 - (void) updateAllCells: (NSNotification*) notification
 {
+    return;
     if([notification.object isKindOfClass: [Feed class]])
     {
         Feed* f = notification.object;
@@ -443,6 +470,7 @@
     }
 }
 
+
 #pragma mark - UITableView.
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -473,6 +501,13 @@
     }
     
     [cell setDonateFeed: f isDetail: NO];
+    
+    [cell updateFollowStatus:NO];
+    int feedId = f.postUser.user_id;
+    if ([_followedUserIds containsObject:[NSNumber numberWithInt:feedId]]) {
+        [cell updateFollowStatus:YES];
+    }
+    
     return cell;
 }
 

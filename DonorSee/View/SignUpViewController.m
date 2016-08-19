@@ -7,6 +7,9 @@
 //
 
 #import "SignUpViewController.h"
+#import "FEMMapping.h"
+#import "DSMappingProvider.h"
+#import "FEMDeserializer.h"
 
 @interface SignUpViewController () <UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
@@ -190,7 +193,8 @@
                                      
                                      [SVProgressHUD dismiss];
                                      
-                                     User* u = [[User alloc] initUserWithDictionary: dicUser];
+                                     FEMMapping *mapping = [DSMappingProvider userMapping];
+                                     User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:mapping];
                                      
                                      [[CoreHelper sharedInstance] addUser: u];
                                      [[CoreHelper sharedInstance] setCurrentUserId: u.user_id];

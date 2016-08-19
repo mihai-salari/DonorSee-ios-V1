@@ -32,7 +32,8 @@
 
 
 - (void) loginWithFB: (NSString*) fbid
-                name: (NSString*) name
+           firstName: (NSString*) firstName
+            lastName: (NSString*) lastName
                email: (NSString*) email
              success: (void (^)(NSDictionary *dicUser))success
              failure: (void (^)(NSString *errorMessage))failure;
@@ -190,7 +191,7 @@
 
 - (void) getUserFollowStatus:(int) selectedUser_id
                      user_id:(int) user_id
-                     success: (void (^)(NSDictionary *followStatus))success
+                     success: (void (^)(NSArray *followStatus))success
                      failure: (void (^)(NSString *errorMessage))failure;
 
 
@@ -199,5 +200,19 @@
                  version:(NSString *)version
                  success: (void (^)(NSDictionary *dicUser))success
                  failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) getUserSavedCards:(int) user_id
+                   success: (void (^)(NSArray* cards))success
+                   failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) saveUserCard:(int) user_id
+         stripe_token: (NSString *) stripe_token
+              success: (void (^)(NSDictionary* cardInfo))success
+              failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) createGift: (NSString *) feed_id
+             amount: (int) amount
+            success: (void (^)(NSDictionary* dicDonate))success
+            failure: (void (^)(NSString *errorMessage))failure;
 
 @end

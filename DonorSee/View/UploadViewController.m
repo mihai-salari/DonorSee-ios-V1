@@ -13,6 +13,10 @@
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
 #import "AuthView.h"
+#import "StripeSignupViewController.h"
+#import "DSMappingProvider.h"
+#import "FEMMapping.h"
+#import "FEMDeserializer.h"
 @import ALCameraViewController;
 
 @interface UploadViewController() <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AuthViewDelegate>
@@ -235,17 +239,25 @@
 }
 
 - (BOOL) isUserConfiguredStripeAccount {
-    return YES;
     
-    NSString *stripe_userid = [[NSUserDefaults standardUserDefaults] valueForKey:@"stripe_userid"];
-    if ([stripe_userid isEqualToString:@"-1"]) {
+    User *u = [AppEngine sharedInstance].currentUser;
+    if (!u.stripe_customer) {
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"Stripe" message: @"To publish new post in DonorSee you need to sign in for a Stripe account initially. The donations will be received under your stripe account." preferredStyle: UIAlertControllerStyleAlert];
         UIAlertAction* okAction = [UIAlertAction actionWithTitle: @"Ok" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(stripeLoginUpdated:) name:@"STRIPE_ACCOUNT_SIGNUP" object:nil];
+            NSString *path = [NSString stringWithFormat:@"%@stripe-connect/auth?id=%i",kAPIBaseURLString, [AppEngine sharedInstance].currentUser.user_id];
             
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", kAPIBaseURLString, @"feed_api/post_stripe.php"]]];
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            StripeSignupViewController *stripeWebView = [storyboard instantiateViewControllerWithIdentifier: @"stripeSignup"];
+            stripeWebView.webUrl = path;
+            
+            stripeWebView.didDismiss = ^(NSString *data) {
+                [self successAuth];
+            };
+            
+            [self presentViewController:stripeWebView animated:YES completion:nil];
+            
         }];
         
         [alert addAction: okAction];
@@ -254,11 +266,6 @@
     }
     
     return YES;
-}
-
-- (void)stripeLoginUpdated:(NSNotification *)notification {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self successAuth];
 }
 
 #pragma mark - Auth.
@@ -270,19 +277,47 @@
     viSignInFB = [[AuthView alloc] initAuthView: rect parentView: self delegate: self];    
     viSignInFB.hidden = YES;
     [self.view addSubview: viSignInFB];
+    
+    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
+                                      success:^(NSDictionary *dicUser) {
+                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
+                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
+                                          [[CoreHelper sharedInstance] addUser: u];
+                                          [AppEngine sharedInstance].currentUser = u;
+                                          
+                                      } failure:^(NSString *errorMessage) {
+                                          
+                                      }];
 }
 
 - (void) successAuth
 {
-    viSignInFB.hidden = YES;
     
-    if ([self isUserConfiguredStripeAccount]) {
-        UIImage* imgPhoto = ivPhoto.image;
-        NSString* feedDescription = tvDescription.text;
-        int amount = [tfPrice.text intValue];
-        
-        [self postFeed: imgPhoto description: feedDescription amount: amount];
-    }
+    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
+                                      success:^(NSDictionary *dicUser) {
+                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
+                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
+                                          [[CoreHelper sharedInstance] addUser: u];
+                                          [AppEngine sharedInstance].currentUser = u;
+                                          
+                                          if (u.stripe_customer) {
+                                              viSignInFB.hidden = YES;
+                                              UIImage* imgPhoto = ivPhoto.image;
+                                              NSString* feedDescription = tvDescription.text;
+                                              int amount = [tfPrice.text intValue];
+                                              
+                                              [self postFeed: imgPhoto description: feedDescription amount: amount];
+                                          } else {
+                                              [self presentViewController: [AppEngine showAlertWithText: @"Stripe account is not connected. Try again."] animated: YES completion: nil];
+                                          }
+                                          
+                                          
+                                      } failure:^(NSString *errorMessage) {
+                                          
+                                      }];
+                                          
+                                          
+    
 }
 
 - (void) failAuth
