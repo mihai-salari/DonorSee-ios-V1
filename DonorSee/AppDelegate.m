@@ -159,7 +159,8 @@
                                                 
                                                 if(dicFeed != nil)
                                                 {
-                                                    Feed* f = [[Feed alloc] initWithHomeFeed: dicFeed];
+                                                    FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                                                    Feed* f = [FEMDeserializer objectFromRepresentation:dicFeed mapping:mapping];
                                                     
                                                     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                                                     DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];

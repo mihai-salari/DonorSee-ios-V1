@@ -34,6 +34,7 @@
 
 @property (nonatomic, readwrite) BOOL   stripe_customer;
 @property (nonatomic, readwrite) BOOL   stripe_connected;
+@property (nonatomic, readwrite) BOOL   can_receive_gifts;
 
 
 - (id) initUserWithDictionary: (NSDictionary*) dicUser;

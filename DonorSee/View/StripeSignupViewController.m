@@ -30,6 +30,7 @@
 }
 
 - (IBAction)onDismissViewController:(id)sender {
+    [SVProgressHUD dismiss];
     [self dismissViewControllerAnimated:YES completion:nil];
     
     if (self.didDismiss)

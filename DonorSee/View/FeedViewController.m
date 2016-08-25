@@ -63,14 +63,14 @@
 
 - (void) updateAllCells: (NSNotification*) notification
 {
-    return;
+    //return;
     if([notification.object isKindOfClass: [Feed class]])
     {
         Feed* f = notification.object;
         int index = 0;
         for(Feed* item in arrItemFeeds)
         {
-            if([item.feed_id isEqualToString: f.feed_id])
+            if([item.feed_id isEqual: f.feed_id])
             {
                 [arrItemFeeds replaceObjectAtIndex: index withObject: f];
                 [self.tbMain reloadData];
@@ -120,6 +120,7 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];
     nextView.selectedFeed = f;
+    nextView.isVisibleFromNotification = YES;
     [self.navigationController pushViewController: nextView animated: YES];
 }
 

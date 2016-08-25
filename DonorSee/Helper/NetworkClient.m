@@ -48,6 +48,10 @@
             success:(nullable void (^)(id responseObject))success
             failure:(nullable void (^)(NSError *error))failure
 {
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+
+    
     [self GET: URLString
    parameters: parameters
      progress:^(NSProgress * _Nonnull downloadProgress) {
@@ -64,6 +68,9 @@
             success:(nullable void (^)(id responseObject))success
             failure:(nullable void (^)(NSError *error))failure
 {
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
     [self POST: URLString
     parameters: parameters
       progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -75,6 +82,21 @@
       } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
           failure(error);
       }];
+}
+
+- (void) DeleteRequest: (NSString *)URLString
+          parameters: (nullable id)parameters
+             success:(nullable void (^)(id responseObject))success
+             failure:(nullable void (^)(NSError *error))failure
+{
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
+    [self DELETE:URLString parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success(responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(error);
+    }];
 }
 
 - (void) signUp: (NSString*) first_name
@@ -146,6 +168,33 @@
                   
               } failure:^(NSError *error) {
                   
+                  NSInteger statusCode = 0;
+                  
+                  NSHTTPURLResponse *httpResponse = error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey];
+
+                  
+                  if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+                      statusCode = httpResponse.statusCode;
+                  }
+                  
+                  if (statusCode == 401) {
+                      
+                      NSData *responseErrorData = (NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+                      NSError* error;
+                      NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseErrorData
+                                                                           options:kNilOptions
+                                                                             error:&error];
+                      
+                      if ([json objectForKey:@"message"] != nil) {
+                          failure([json objectForKey:@"message"]);
+                          return;
+                      }
+                      
+                      
+                      
+                  }
+
+                  
                   failure(MSG_DISCONNECT_INTERNET);
               }];
 }
@@ -159,6 +208,9 @@
                success: (void (^)(NSDictionary *dicUser))success
                failure: (void (^)(NSString *errorMessage))failure
 {
+    
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        firstName, @"first_name",
@@ -283,15 +335,10 @@
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *stripe_user_id = @"";
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"stripe_userid"]) {
-        stripe_user_id = [[NSUserDefaults standardUserDefaults] valueForKey:@"stripe_userid"];
-    }
-    
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        imageURL, @"photo_url",
                                        description, @"description",
-                                       [NSNumber numberWithInt: amount], @"goal_amount_cents",
+                                       [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
                                        nil];
     
     [self PostRequest: @"projects"
@@ -312,26 +359,14 @@
                success: (void (^)(NSDictionary *dicFeed))success
                failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       feed_id, @"feed_id",
-                                       nil];
     
-    [self PostRequest: @"feed_api/get_single_feed.php"
-           parameters: parameters
+    [self GETRequest: [NSString stringWithFormat:@"projects/%@", feed_id]
+           parameters: nil
               success:^(id responseObject) {
                   
                   NSLog(@"response = %@", responseObject);
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSDictionary* dicFeed = responseObject[@"data"][@"feed"];
-                      success(dicFeed);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
+                  
+                  success(responseObject);
                   
               } failure:^(NSError *error) {
                   
@@ -415,10 +450,9 @@
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        [NSNumber numberWithInt: offset], @"offset",
                                        [NSNumber numberWithInt: limit], @"limit",
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"owner_id",
                                        nil];
     
-    [self GETRequest: @"projects"
+    [self GETRequest: @"projects/personal"
            parameters: parameters
               success:^(id responseObject) {
                   
@@ -448,12 +482,8 @@
             success: (void (^)(NSArray *arrFeed))success
             failure: (void (^)(NSString *errorMessage))failure;
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: user_id], @"owner_id",
-                                       nil];
-    
-    [self GETRequest: @"projects"
-           parameters: parameters
+    [self GETRequest: @"projects/personal"
+           parameters: nil
               success:^(id responseObject) {
                   
                   FEMMapping *mapping = [DSMappingProvider projectsMapping];
@@ -484,10 +514,10 @@
                 failure: (void (^)(NSString *errorMessage))failure
 {
     
-    [self GETRequest: @"projects/personal"
+    [self GETRequest: [NSString stringWithFormat:@"users/%i/gifts", user_id]
            parameters: nil
               success:^(id responseObject) {
-                  FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                  FEMMapping *mapping = [DSMappingProvider giftsMapping];
                   NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
                   success(arrFeeds);
                   /*
@@ -518,31 +548,43 @@
             success: (void (^)(void))success
             failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       f.feed_id, @"feed_id",
-                                       [NSNumber numberWithInt: user_id], @"user_id",
-                                       nil];
     
-    [self PostRequest: @"feed_api/delete_feed.php"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  NSLog(@"response = %@", responseObject);
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      success();
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
-                  
-              } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
-              }];
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
+    NSString *path = [NSString stringWithFormat:@"projects/%@", f.feed_id];
+    
+    
+    [self DELETE:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success();
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSInteger statusCode = 0;
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+            statusCode = httpResponse.statusCode;
+        }
+        
+        if (statusCode == 403) {
+        
+            NSData *responseErrorData = (NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+            NSError* error;
+            NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseErrorData
+                                                                 options:kNilOptions
+                                                                   error:&error];
+
+            if ([json objectForKey:@"message"] != nil) {
+                failure([json objectForKey:@"message"]);
+                return;
+            }
+            
+            
+            
+        }
+        
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
 }
 
 #pragma mark - Donate 
@@ -823,6 +865,9 @@
 
 - (void) readActivity: (int) activity_id
 {
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
     NSString *path = [NSString stringWithFormat:@"users/%i/notifications/%i", [AppEngine sharedInstance].currentUser.user_id, activity_id];
     [self PATCH:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         //NSLog(@"responseObject %@", responseObject);
@@ -1008,6 +1053,10 @@
 
     NSString *path = [NSString stringWithFormat:@"users/%d/followers", following_id];
     
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
+    
     [self POST:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success(nil, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -1032,7 +1081,9 @@
               success: (void (^)(User* followerUser, User* followingUser))success
               failure: (void (^)(NSString *errorMessage))failure
 {
-
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
     NSString *path = [NSString stringWithFormat:@"users/%d/followers", following_id];
     
     [self DELETE:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -1094,6 +1145,7 @@
                    success: (void (^)(void))success
                    failure: (void (^)(NSString *errorMessage))failure
 {
+    /*
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        f.feed_id, @"feed_id",
                                        [NSNumber numberWithInt: f.post_user_id], @"receiver_user_id",
@@ -1106,21 +1158,21 @@
         NSString* photos = [arrPhotos componentsJoinedByString: @","];
         [parameters setObject: photos forKey: @"photos"];
     }
+    */
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setValue:message forKey:@"message"];
+    if (arrPhotos.count > 0) {
+        [parameters setValue:arrPhotos forKey:@"photo_urls"];
+    }
     
-    [self PostRequest: @"follow_message_api/post_follow_message.php"
+    
+    NSString *path = [NSString stringWithFormat:@"projects/%@/updates", f.feed_id];
+    
+    [self PostRequest: path
            parameters: parameters
               success:^(id responseObject) {
                   
-                  BOOL status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      success();
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
+                  success();
                   
               } failure:^(NSError *error) {
                   

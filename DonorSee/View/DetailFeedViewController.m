@@ -193,6 +193,10 @@
     //Fill out Info.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateFeedInfo];
+        
+        if (_isVisibleFromNotification) {
+            [self loadFeed];
+        }
     });
 }
 
@@ -272,6 +276,21 @@
     [alert addAction: okAction];
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) loadFeed {
+    
+    [[NetworkClient sharedClient] getSingleFeed:selectedFeed.feed_id success:^(NSDictionary *dicFeed) {
+        
+        FEMMapping *mapping = [DSMappingProvider projectsMapping];
+        self.selectedFeed = [FEMDeserializer objectFromRepresentation:dicFeed mapping:mapping];
+
+        [self updateFeedInfo];
+        
+    } failure:^(NSString *errorMessage) {
+        
+    }];
+    
 }
 
 - (void) loadActivities
@@ -632,7 +651,7 @@
                                                     NSLog(@"imageURL = %@", imageURL);
                                                     if(imageURL != nil)
                                                     {
-                                                        [arrUploadedPhotos addObject: imageURL];
+                                                        [arrUploadedPhotos addObject: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: imageURL]];
                                                         uploadingPhotoIndex ++;
                                                         
                                                         if(uploadingPhotoIndex >= [arrFollowPhotos count])
@@ -698,7 +717,7 @@
         UIAlertAction* yesAction = [UIAlertAction actionWithTitle: @"Yes"
                                                             style: UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * _Nonnull action) {
-                                                              return;
+                                                              
                                                               [SVProgressHUD showWithStatus: @"Removing..." maskType: SVProgressHUDMaskTypeClear];
                                                               [[NetworkClient sharedClient] removeFeed: selectedFeed
                                                                                                user_id: [AppEngine sharedInstance].currentUser.user_id
@@ -887,6 +906,12 @@
 {
     [self hideKeyboard];
     
+    if (!selectedFeed.postUser.can_receive_gifts) {
+        [self presentViewController:[AppEngine showAlertWithText:@"Project owner doesn't have stripe account linked so cant recieve funds as of now"] animated:YES completion:nil];
+        return;
+    }
+    
+    
     float amount = [tfAmount.text floatValue];
     if(amount < MIN_PRICE || amount > MAX_PRICE)
     {
@@ -905,6 +930,9 @@
 }
 
 -(void)showPaymentOption{
+    
+    [self payWithStripe];
+    /*
     
     NSString *message = @"For the moment you need Paypal account to make donation";
     NSString *btnTitle = @"Ok";
@@ -939,7 +967,7 @@
     [self presentViewController:alert animated:YES completion:^{
         printf("test");
     }];
-    
+    */
 }
 
 - (void) payWithStripe
@@ -1135,6 +1163,14 @@
         
         [[NetworkClient sharedClient] createGift:selectedFeed.feed_id amount:amount success:^(NSDictionary *dicDonate) {
             [SVProgressHUD dismiss];
+            
+             int donatedAmount = [dicDonate[@"amount_cents"] intValue];
+             selectedFeed.donated_amount += donatedAmount;
+            selectedFeed.donated_count += 1;
+             selectedFeed.is_gave = YES;
+             [AppEngine sharedInstance].currentUser.pay_amount += donatedAmount;
+            
+            
             [[NSNotificationCenter defaultCenter] postNotificationName: NOTI_UPDATE_FUNDED_FEED object: selectedFeed];
             
             [self updateFeedInfo];

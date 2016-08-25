@@ -37,6 +37,7 @@
     _savedCardTableView.hidden = YES;
     _cardNewCardBtn.hidden = YES;
     _selectedIndex = -1;
+    _saveNewCardBtn.hidden = YES;
     
     self.title = @"Payment";
     NSString *title = [NSString stringWithFormat:@"Pay $%@", _amount];
@@ -55,7 +56,7 @@
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
     
-    [self getUserInfo];
+    //[self getUserInfo];
 }
 
 - (void)didReceiveMemoryWarning {

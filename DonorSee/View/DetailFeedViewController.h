@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) Feed              *selectedFeed;
 @property (nonatomic, assign) BOOL              isFollowMessage;
+@property (nonatomic, readwrite) BOOL           isVisibleFromNotification;
 
 - (void) loadActivities;
 

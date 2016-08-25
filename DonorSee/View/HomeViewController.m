@@ -87,6 +87,15 @@
     [self getUserFollowStatus];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (arrGlobal.count > 0) {
+        [self.tbMain reloadData];
+    }
+}
+
 - (void) initHeaderView
 {
     //Top Bar.
@@ -110,6 +119,8 @@
 
 - (void) getUserFollowStatus {
     [[NetworkClient sharedClient] getUserFollowStatus:[AppEngine sharedInstance].currentUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
+        
+        _followedUserIds = @[];
         
         if (followStatus.count > 0) {
             
@@ -253,14 +264,14 @@
 
 - (void) updateAllCells: (NSNotification*) notification
 {
-    return;
+    //return;
     if([notification.object isKindOfClass: [Feed class]])
     {
         Feed* f = notification.object;
         int index = 0;
         for(Feed* item in arrGlobal)
         {
-            if([item.feed_id isEqualToString: f.feed_id])
+            if([item.feed_id isEqual: f.feed_id])
             {
                 [arrGlobal replaceObjectAtIndex: index withObject: f];
                 break;
@@ -272,7 +283,7 @@
         index = 0;
         for(Feed* item in arrPersonal)
         {
-            if([item.feed_id isEqualToString: f.feed_id])
+            if([item.feed_id isEqual: f.feed_id])
             {
                 [arrPersonal replaceObjectAtIndex: index withObject: f];
                 break;
@@ -450,7 +461,7 @@
         Feed* f = notification.object;
         for(Feed* item in arrGlobal)
         {
-            if([item.feed_id isEqualToString: f.feed_id])
+            if([item.feed_id isEqual: f.feed_id])
             {
                 [arrGlobal removeObject: item];
                 [self.tbMain reloadData];
@@ -460,7 +471,7 @@
         
         for(Feed* item in arrPersonal)
         {
-            if([item.feed_id isEqualToString: f.feed_id])
+            if([item.feed_id isEqual: f.feed_id])
             {
                 [arrPersonal removeObject: item];
                 [self.tbMain reloadData];

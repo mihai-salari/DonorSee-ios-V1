@@ -241,7 +241,7 @@
 - (BOOL) isUserConfiguredStripeAccount {
     
     User *u = [AppEngine sharedInstance].currentUser;
-    if (!u.stripe_customer) {
+    if (!u.can_receive_gifts) {
         
         UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"Stripe" message: @"To publish new post in DonorSee you need to sign in for a Stripe account initially. The donations will be received under your stripe account." preferredStyle: UIAlertControllerStyleAlert];
         UIAlertAction* okAction = [UIAlertAction actionWithTitle: @"Ok" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -300,7 +300,7 @@
                                           [[CoreHelper sharedInstance] addUser: u];
                                           [AppEngine sharedInstance].currentUser = u;
                                           
-                                          if (u.stripe_customer) {
+                                          if (u.can_receive_gifts) {
                                               viSignInFB.hidden = YES;
                                               UIImage* imgPhoto = ivPhoto.image;
                                               NSString* feedDescription = tvDescription.text;

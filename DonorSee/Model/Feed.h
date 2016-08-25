@@ -30,6 +30,7 @@
 @property (nonatomic, assign) BOOL              is_follower;
 @property (nonatomic, strong) NSString          *stripe_user_id;
 
+
 - (id) initWithHomeFeed: (NSDictionary*) dicFeed;
 - (id) initWithDictionary: (NSDictionary*) dicFeed;
 - (id) initWithManagedObject: (NSManagedObject*) objFeed;

@@ -19,6 +19,7 @@
 #import "FEMMapping.h"
 #import "DSMappingProvider.h"
 #import "FEMDeserializer.h"
+#import "Event.h"
 
 @interface ProfileViewController() <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, UploadTableViewCellDelegate, SettingsTableViewCellDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate, AuthViewDelegate>
 {
@@ -587,7 +588,7 @@
     {
         FundedTableViewCell *cell = (FundedTableViewCell*)[tableView dequeueReusableCellWithIdentifier: NSStringFromClass([FundedTableViewCell class]) forIndexPath:indexPath];
         cell.delegate = self;
-        Feed* f = [arrFunds objectAtIndex: indexPath.row];
+        Event* f = [arrFunds objectAtIndex: indexPath.row];
         [cell setDonateFeed: f];
         return cell;
     }

@@ -79,7 +79,7 @@
     lbTime.text = [AppEngine dateTimeStringFromTimestap: n.register_date];
     lbMessage.text = [NotificationTableViewCell getMessages:n];
     [lbMessage sizeThatFits:CGSizeMake(279, CGFLOAT_MAX)];
-    viReadState.hidden = n.is_read;
+    viReadState.hidden = !n.is_read;
     _actionBtn.tag = 12;
     
     NSString* avatar = n.user_avatar;

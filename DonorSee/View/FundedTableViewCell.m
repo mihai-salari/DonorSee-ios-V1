@@ -1,11 +1,3 @@
-//
-//  FundedTableViewCell.m
-//  DonorSee
-//
-//  Created by star on 3/7/16.
-//  Copyright © 2016 DonorSee LLC. All rights reserved.
-//
-
 #import "FundedTableViewCell.h"
 #import "JAmazonS3ClientManager.h"
 
@@ -39,28 +31,28 @@
     tvDescription.textColor = [UIColor colorWithRed: 153.0/255.0 green: 153.0/255.0 blue: 153.0/255.0 alpha: 1.0];
 }
 
-- (void) setDonateFeed: (Feed*) f
+- (void) setDonateFeed: (Event*) f
 {
     [self initUI];
     
     //Change Progresss
-    int preAmount = f.pre_amount;
-    int donatedAmount = f.donated_amount;
+    int preAmount = f.feed.pre_amount/100;
+    int donatedAmount = f.gift_amount_cents/100;
     float progress = (float)donatedAmount / (float)preAmount;
     if(progress < 0) progress = 0;
     if(progress > 1) progress = 1;
     
     currentFeed = f;
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.photo]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.feed.photo]];
     lbInfo.text = [NSString stringWithFormat: @"%d%@ RAISED", (int)(progress * 100), @"%"];
-    tvDescription.text = f.feed_description;
+    tvDescription.text = f.feed.feed_description;
 }
 
 - (void) onTapPhoto
 {
     if ([self.delegate respondsToSelector:@selector(selectFeed:)])
     {
-        [self.delegate selectFeed: currentFeed];
+        [self.delegate selectFeed: currentFeed.feed];
     }
 }
 

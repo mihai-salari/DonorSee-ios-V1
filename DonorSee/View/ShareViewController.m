@@ -78,7 +78,7 @@
 
 - (void) getProjectLink: (Feed*) f
 {
-    NSData *plainData = [f.feed_id dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *plainData = [[NSString stringWithFormat:@"%@", f.feed_id] dataUsingEncoding:NSUTF8StringEncoding];
     NSString *base64String = [plainData base64EncodedStringWithOptions:0];
     NSString *url = [NSString stringWithFormat:@"https://donorsee.com/feed-details/%@", base64String];
     
@@ -97,7 +97,7 @@
          [SVProgressHUD dismiss];
          
          FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
-         content.imageURL = [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: f.photo]];
+         content.imageURL = [NSURL URLWithString: f.photo];
          content.contentDescription = f.feed_description;
          content.contentURL = [NSURL URLWithString: url];
 
@@ -150,7 +150,7 @@
              
              if(imgShare == nil)
              {
-                 UIImage* image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: f.photo]]]];
+                 UIImage* image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString: f.photo]]];
                  [tweetSheet addImage: image];
              }
              else
@@ -211,7 +211,7 @@
              }
              else
              {
-                 imageData = [NSData dataWithContentsOfURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: f.photo]]];
+                 imageData = [NSData dataWithContentsOfURL: [NSURL URLWithString: f.photo]];
                  [mc addAttachmentData: imageData mimeType: @"image/png" fileName: @"donate"];
              }
              

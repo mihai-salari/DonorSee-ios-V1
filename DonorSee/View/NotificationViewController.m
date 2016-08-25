@@ -179,6 +179,7 @@
     } else {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];
+        nextView.isVisibleFromNotification = YES;
         nextView.selectedFeed = a.feed;
         [self.navigationController pushViewController: nextView animated: YES];
     }

@@ -1,4 +1,4 @@
-//
+/
 //  ActivityTableViewCell.m
 //  DonorSee
 //
@@ -84,11 +84,50 @@
         frm.size.width = 245;
         lbFollowMessage.frame = frm;
         
+        viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x,
+                                            lbFollowMessage.frame.origin.y + lbFollowMessage.frame.size.height + 10.0,
+                                            viPhotoContainer.frame.size.width,
+                                            viPhotoContainer.frame.size.height);
+        
+        viPhotoContainer.hidden = NO;
+        for(UIView* v in viPhotoContainer.subviews)
+        {
+            [v removeFromSuperview];
+        }
+        
+        if(event.photo_urls != nil && event.photo_urls.length > 0)
+        {
+            float fx = 0;
+            float fy = 0;
+            float fw = viPhotoContainer.frame.size.width;
+            float fOffset = 10.0;
+            
+            NSArray *photos = [event.photo_urls componentsSeparatedByString:@","];
+            
+            
+            for(NSString* photoKey in photos)
+            {
+                UIImageView* ivCell = [[UIImageView alloc] initWithFrame: CGRectMake(fx, fy, fw, fw)];
+                ivCell.backgroundColor = [UIColor lightGrayColor];
+                ivCell.layer.masksToBounds = YES;
+                ivCell.layer.cornerRadius = 10.0;
+                ivCell.contentMode = UIViewContentModeScaleAspectFill;
+                [ivCell sd_setImageWithURL: [NSURL URLWithString: photoKey]];
+                [viPhotoContainer addSubview: ivCell];
+                
+                fy += fw + fOffset;
+            }
+            
+            viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x, viPhotoContainer.frame.origin.y, viPhotoContainer.frame.size.width, fy);
+        
+        }
     }
     
     if ([event.type isEqualToString:@"give"]) {
         NSString* filterUsername = [event.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
         message = [NSString stringWithFormat: @"!%@ gave to this project", filterUsername];
+        lbFollowMessage.hidden = YES;
+        viPhotoContainer.hidden = YES;
     }
     
     if ([event.type isEqualToString:@"fund"]) {
@@ -96,6 +135,8 @@
         message = [NSString stringWithFormat: @"!%@ project got totally funded", filterUsername];
         
         [ivAvatar sd_setImageWithURL: [NSURL URLWithString: event.recipient.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
+        lbFollowMessage.hidden = YES;
+        viPhotoContainer.hidden = YES;
     }
     
     
@@ -195,16 +236,7 @@
 {
     if ([self.delegate respondsToSelector:@selector(selectUser:)])
     {
-        User* u = [[User alloc] init];
-        u.user_id = currentActivity.user_id;
-        if (currentActivity.type == 1) {
-            u.user_id = currentActivity.receiver_user_id;
-        }
-        u.name = currentActivity.user_name;
-        u.email = currentActivity.user_email;
-        u.avatar = currentActivity.user_avatar;
-        
-        [self.delegate selectUser: u];
+        [self.delegate selectUser: currentEvent.creator];
     }
 }
 
@@ -231,16 +263,17 @@
                                                        options:NSStringDrawingUsesLineFragmentOrigin
                                                        context:nil];
             CGSize size = rect.size;
-            /*
-            if([a.followMessage.arrPhotos count] > 0)
+            
+            if(a.photo_urls.length > 0)
             {
-                fy += size.height + [a.followMessage.arrPhotos count] * (fw + fOffset) + 20;
+                NSArray *photos = [a.photo_urls componentsSeparatedByString:@","];
+                fy += size.height + [photos count] * (fw + fOffset) + 20;
             }
             else
             {
                 fy += size.height + 5.0;
             }
-             */
+            
             fy += size.height + 5.0;
         }
         

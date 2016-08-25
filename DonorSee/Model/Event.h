@@ -28,4 +28,5 @@
 @property (nonatomic, readwrite) BOOL           is_read;
 @property (nonatomic, assign) int               gift_amount_cents;
 
+@property (nonatomic, strong) NSString          *photo_urls;
 @end

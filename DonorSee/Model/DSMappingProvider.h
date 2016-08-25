@@ -2,7 +2,6 @@
 //  DSMappingProvider.h
 //  DonorSee
 //
-//  Created by Keval on 13/08/16.
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 
@@ -16,4 +15,6 @@
 + (FEMObjectMapping *) eventMapping;
 + (FEMObjectMapping *) notificationMapping;
 + (FEMObjectMapping *)eventMappingForNotification;
+
++ (FEMObjectMapping *) giftsMapping;
 @end
