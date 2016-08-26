@@ -13,6 +13,7 @@
 #import "FEMMapping.h"
 #import "DSMappingProvider.h"
 #import "FEMDeserializer.h"
+#import "Cloudinary/Cloudinary.h"
 
 @implementation NetworkClient
 
@@ -328,6 +329,23 @@
               }];
 }
 
+- (void) getTransactionHistory: (int) user_id
+                       success: (void (^)(NSArray *transactions))success
+                       failure: (void (^)(NSString *errorMessage))failure
+{
+    [self GETRequest: [NSString stringWithFormat:@"users/%i/gifts", user_id]
+          parameters: nil
+             success:^(id responseObject) {
+                 
+                 success(responseObject);
+                 
+             } failure:^(NSError *error) {
+                 
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
+}
+
+
 - (void) postFeed: (NSString*) imageURL
       description: (NSString*) description
            amount: (int) amount
@@ -458,20 +476,7 @@
                   
                   FEMMapping *mapping = [DSMappingProvider projectsMapping];
                   NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
-                  success(arrFeeds);
-                  /*
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSArray* arrFeeds = responseObject[@"data"][@"feeds"];
-                      success(arrFeeds);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }*/
-                  
+                  success(arrFeeds);                  
               } failure:^(NSError *error) {
                   
                   failure(MSG_DISCONNECT_INTERNET);
@@ -482,27 +487,17 @@
             success: (void (^)(NSArray *arrFeed))success
             failure: (void (^)(NSString *errorMessage))failure;
 {
-    [self GETRequest: @"projects/personal"
-           parameters: nil
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       [NSNumber numberWithInt: user_id], @"owner_id",
+                                       nil];
+    
+    [self GETRequest: @"projects"
+           parameters: parameters
               success:^(id responseObject) {
                   
                   FEMMapping *mapping = [DSMappingProvider projectsMapping];
                   NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
                   success(arrFeeds);
-                  /*
-                  NSLog(@"response = %@", responseObject);
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      NSArray* arrFeeds = responseObject[@"data"][@"feeds"];
-                      success(arrFeeds);
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }*/
-                  
               } failure:^(NSError *error) {
                   
                   failure(MSG_DISCONNECT_INTERNET);
@@ -646,6 +641,23 @@
         failure(MSG_DISCONNECT_INTERNET);
     }];
 }
+
+
+- (void) removeUserCard:(int) user_id
+         card_id: (NSString *) card_id
+              success: (void (^)(NSDictionary* cardInfo))success
+              failure: (void (^)(NSString *errorMessage))failure
+{
+    
+    [self DeleteRequest:[NSString stringWithFormat:@"users/%i/cards/%@", user_id, card_id] parameters:nil success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
+}
+
+
 
 - (void) createGift: (NSString *) feed_id
              amount: (int) amount
@@ -966,78 +978,6 @@
                   NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
                   [arrActivityResults addObjectsFromArray:arrFeeds];
                   success(arrActivityResults, f);
-                  /*
-                  int status = [responseObject[@"success"] boolValue];
-                  
-                  NSMutableArray* arrFollowMessageResults = [[NSMutableArray alloc] init];
-                  
-                  if(status)
-                  {
-                      if (responseObject[@"feed"] == [NSNull null]) {
-                          failure(MSG_FEED_DELETED);
-                          return;
-                      }
-                      
-                      NSDictionary* dicFeed = responseObject[@"feed"];
-                      Feed* f = [[Feed alloc] initWithHomeFeed: dicFeed];
-                      
-                      NSArray* arrFollowMessages = responseObject[@"follow_messages"];
-                      if(arrFollowMessages != nil)
-                      {
-                          for(NSDictionary* dicItem in arrFollowMessages)
-                          {
-                              FollowMessage* m = [[FollowMessage alloc] initWithDictionary: dicItem];
-                              [arrFollowMessageResults addObject: m];
-                          }
-                      }
-                      
-                      NSArray* arrActivites = responseObject[@"activities"];
-                      BOOL isFullyFunded = NO;
-                      if(arrActivites != nil)
-                      {
-                          for(NSDictionary* dicItem in arrActivites)
-                          {
-                              Activity* a = [[Activity alloc] initActivityWithDictionary: dicItem];
-                              if(a.type == ACTIVITY_FOLLOW_MESSAGE)
-                              {
-                                  for(FollowMessage* m in arrFollowMessageResults)
-                                  {
-                                      if(m.message_id == a.object_id)
-                                      {
-                                          a.followMessage = m;
-                                          break;
-                                      }
-                                  }
-                              }
-                              //
-                              
-                              
-                              if (a.type != ACTIVITY_FULL_DONATED)
-                              {
-                                  [arrActivityResults addObject: a];
-                              } else {
-                                  if (!isFullyFunded) {
-                                      //[arrActivityResults addObject: a];
-                                      //a.type = ACTIVITY_DONATED;
-                                      
-                                      isFullyFunded = YES;
-                                      Activity* b = [[Activity alloc] initActivityWithDictionary: dicItem];
-                                      [arrActivityResults addObject: b];
-                                  } else {
-                                      [arrActivityResults addObject: a];
-                                      a.type = ACTIVITY_DONATED;
-                                  }
-                              }
-                          }
-                      }
-                      
-                      success(arrActivityResults, f);
-                  }
-                  else
-                  {
-                      failure(MSG_DISCONNECT_INTERNET);                      
-                  }*/
-                  
               } failure:^(NSError *error) {
                   
                   failure(MSG_DISCONNECT_INTERNET);
@@ -1145,20 +1085,6 @@
                    success: (void (^)(void))success
                    failure: (void (^)(NSString *errorMessage))failure
 {
-    /*
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       f.feed_id, @"feed_id",
-                                       [NSNumber numberWithInt: f.post_user_id], @"receiver_user_id",
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",
-                                       message, @"message",
-                                       nil];
-    
-    if(arrPhotos != nil && [arrPhotos count] > 0)
-    {
-        NSString* photos = [arrPhotos componentsJoinedByString: @","];
-        [parameters setObject: photos forKey: @"photos"];
-    }
-    */
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     [parameters setValue:message forKey:@"message"];
     if (arrPhotos.count > 0) {
@@ -1179,6 +1105,27 @@
                   failure(MSG_DISCONNECT_INTERNET);
               }];
 }
+
+- (void) postProjectComment:(NSString *)message
+                       feed: (Feed*) f
+                    success: (void (^)(void))success
+                    failure: (void (^)(NSString *errorMessage))failure
+{
+    //projects/project_id/comments
+    NSString *path = [NSString stringWithFormat:@"projects/%@/comments", f.feed_id];
+    
+    [self PostRequest: path
+           parameters: @{@"message":message}
+              success:^(id responseObject) {
+                  
+                  success();
+                  
+              } failure:^(NSError *error) {
+                  
+                  failure(MSG_DISCONNECT_INTERNET);
+              }];
+}
+
 
 #pragma mark - Report.
 - (void) reportFeed: (Feed*) f
@@ -1280,7 +1227,21 @@
                      success: (void (^)(NSArray *followStatus))success
                      failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *path = [NSString stringWithFormat:@"users/%d/following", selectedUser_id];
+    NSString *path = [NSString stringWithFormat:@"users/%d/followers?limit=100", selectedUser_id];
+    
+    [self GETRequest:path parameters:nil success:^(id responseObject) {
+        success(responseObject);
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+}
+
+- (void) getUserFollowingStatus:(int) selectedUser_id
+                     user_id:(int) user_id
+                     success: (void (^)(NSArray *followStatus))success
+                     failure: (void (^)(NSString *errorMessage))failure
+{
+    NSString *path = [NSString stringWithFormat:@"users/%d/following?limit=10", selectedUser_id];
     
     [self GETRequest:path parameters:nil success:^(id responseObject) {
         success(responseObject);
@@ -1302,5 +1263,46 @@
         failure(MSG_DISCONNECT_INTERNET);
     }];
 }
+
+
+#pragma mark -
+#pragma mark Image upload to Cloudinary
+- (void) uploadImage:(NSData *)data
+             success: (void (^)(NSDictionary *photoInfo))success
+             failure: (void (^)(NSString *errorMessage))failure
+{
+    [self GETRequest:@"photos/presign" parameters:nil success:^(id responseObject) {
+        
+        NSLog(@"responseObject %@", responseObject);
+        if ([responseObject objectForKey:@"url"]) {
+            NSString *url = [responseObject objectForKey:@"url"];
+            
+            CLCloudinary *mobileCloudinary = [[CLCloudinary alloc] initWithUrl:url];
+            [mobileCloudinary.config setValue:@"donorsee" forKey:@"cloud_name"];
+            
+            CLUploader* mobileUploader = [[CLUploader alloc] init:mobileCloudinary delegate:nil];
+            
+            [mobileUploader upload:data options:responseObject withCompletion:^(NSDictionary *successResult, NSString *errorResult, NSInteger code, id context) {
+                if (successResult) {
+                    NSString* publicId = [successResult valueForKey:@"public_id"];
+                    NSLog(@"Block upload success. Public ID=%@, Full result=%@", publicId, successResult);
+                    success(successResult);
+                } else {
+                    NSLog(@"Block upload error: %@, %d", errorResult, code);
+                    failure(errorResult);
+                    
+                }
+            } andProgress:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite, id context) {
+                NSLog(@"Block upload progress: %d/%d (+%d)", totalBytesWritten, totalBytesExpectedToWrite, bytesWritten);
+            }];
+        } else {
+            failure(MSG_DISCONNECT_INTERNET);
+        }
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
+}
+
 
 @end

@@ -13,13 +13,15 @@
 
 #import "SSARefreshControl.h"
 #import <MessageUI/MessageUI.h>
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 #import "AuthView.h"
 #import "DetailFeedViewController.h"
 #import "FEMMapping.h"
 #import "DSMappingProvider.h"
 #import "FEMDeserializer.h"
 #import "Event.h"
+#import "SignInViewController.h"
+#import "FollowersViewController.h"
 
 @interface ProfileViewController() <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, UploadTableViewCellDelegate, SettingsTableViewCellDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate, AuthViewDelegate>
 {
@@ -74,6 +76,7 @@
 @property (nonatomic, weak) IBOutlet UIButton       *btWithdraw;
 @property (weak, nonatomic) IBOutlet UIToolbar      *toolBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem    *btDone;
+@property (weak, nonatomic) IBOutlet UIButton *settingsBtn;
 
 @end
 
@@ -156,13 +159,15 @@
     btFunded.selected = YES;
     isLoadedFunds = NO;
     isLoadedUpload = NO;
+    
+    _settingsBtn.hidden = YES;
 
     [tbFunded registerNib: [UINib nibWithNibName: @"FundedTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([FundedTableViewCell class])];
     tbFunded.tableFooterView = viFundedFooter;
     
     [tbUpload registerNib: [UINib nibWithNibName: @"UploadTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([UploadTableViewCell class])];
 
-    arrSettings = @[@{@"icon": @"withdraw_icon.png", @"title": @"Withdraw"},
+    arrSettings = @[@{@"icon": @"withdraw_icon.png", @"title": @"Transaction History"},
                     @{@"icon": @"edit_profile.png", @"title": @"Edit Profile"},
                     @{@"icon": @"rate_us.png", @"title": @"Rates Us"},
                     @{@"icon": @"email_feedback.png", @"title": @"Email us Feedback"},
@@ -312,6 +317,7 @@
     {
         viSignInFB.hidden = YES;
         [self updateProfileInfo];
+        _settingsBtn.hidden = NO;
     }
     else
     {
@@ -376,6 +382,8 @@
     viSignInFB = [[AuthView alloc] initAuthView: rect parentView: self delegate: self];
     viSignInFB.hidden = YES;
     [self.view addSubview: viSignInFB];
+    
+    //[self showSignupPage];
 }
 
 - (void) successAuth
@@ -385,6 +393,35 @@
 
 - (void) failAuth
 {
+    [self showSignupPage];
+}
+
+- (void) showSignupPage {
+    
+    if([AppEngine sharedInstance].currentUser) return;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SignInViewController *signInView = [storyboard instantiateViewControllerWithIdentifier: @"SignInView"];
+    signInView.isModelView = YES;
+    UINavigationController *signinNav = [[UINavigationController alloc] initWithRootViewController:signInView];
+    [signinNav setNavigationBarHidden:YES];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didDismissSecondViewController)
+     name:@"LOGIN_COMPLETE"
+     object:nil];
+    
+    [self.navigationController presentViewController:signinNav animated:YES completion:^{
+        
+    }];
+}
+
+- (void)didDismissSecondViewController
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGIN_COMPLETE" object:nil];
+    // this method gets called in MainVC when your SecondVC is dismissed
+    NSLog(@"Dismissed SecondViewController");
     [self checkAuthView];
 }
 
@@ -721,6 +758,7 @@
                                                       handler:^(UIAlertAction * _Nonnull action) {
                                                          
                                                           [[NSUserDefaults standardUserDefaults] setValue:@"-1" forKey:@"stripe_userid"];
+                                                          [[NSUserDefaults standardUserDefaults] setValue:@"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNjh9.1ynooVdTHcw6HaN4ZUtPR1ukhjzRiMDBBCXWyp5AKpU" forKey:@"api_token"];
                                                           [[NSUserDefaults standardUserDefaults] synchronize];
                                                           
                                                           [AppEngine sharedInstance].currentUser = nil;
@@ -853,20 +891,10 @@
 
 - (void) showWithdrawDialog
 {
-    lbAvailableAmount.text = [NSString stringWithFormat: @"$%0.2f", (float)[AppEngine sharedInstance].currentUser.received_amount];
-    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
-                                      success:^(NSDictionary *dicUser) {
-                                          
-                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
-                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
-                                          [[CoreHelper sharedInstance] addUser: u];
-                                          [AppEngine sharedInstance].currentUser = u;
-                                          lbAvailableAmount.text = [NSString stringWithFormat: @"$%0.2f", [AppEngine sharedInstance].currentUser.received_amount];
-                                          
-                                      } failure:^(NSString *errorMessage) {
-                                      }];
-    
-    viWithdraw.hidden = NO;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    FollowersViewController *followersController = [storyboard instantiateViewControllerWithIdentifier:@"FollowersView"];
+    followersController.viewType = @"thistory";
+    [self.navigationController pushViewController:followersController animated:YES];
 }
 
 - (void) hideWithdrawDialog

@@ -194,6 +194,10 @@
                      success: (void (^)(NSArray *followStatus))success
                      failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) getUserFollowingStatus:(int) selectedUser_id
+                        user_id:(int) user_id
+                        success: (void (^)(NSArray *followStatus))success
+                        failure: (void (^)(NSString *errorMessage))failure;
 
 // Check version number
 - (void) checkAppVersion: (int) user_id
@@ -210,9 +214,27 @@
               success: (void (^)(NSDictionary* cardInfo))success
               failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) removeUserCard:(int) user_id
+                card_id: (NSString *) card_id
+                success: (void (^)(NSDictionary* cardInfo))success
+                failure: (void (^)(NSString *errorMessage))failure;
+
 - (void) createGift: (NSString *) feed_id
              amount: (int) amount
             success: (void (^)(NSDictionary* dicDonate))success
             failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) uploadImage:(NSData *)data
+             success: (void (^)(NSDictionary *photoInfo))success
+             failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) postProjectComment:(NSString *)message
+                       feed: (Feed*) f
+                    success: (void (^)(void))success
+                    failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) getTransactionHistory: (int) user_id
+                       success: (void (^)(NSArray *transactions))success
+                       failure: (void (^)(NSString *errorMessage))failure;
 
 @end

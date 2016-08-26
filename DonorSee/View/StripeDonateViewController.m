@@ -24,6 +24,12 @@
 
 @property (nonatomic) int selectedIndex;
 
+@property (weak, nonatomic) IBOutlet UIView *addCardView;
+@property (weak, nonatomic) IBOutlet UIButton *removeCardBtn;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCardHeightConstraint;
+
+
 @end
 
 @implementation StripeDonateViewController
@@ -36,8 +42,12 @@
     _savedCardLbl.hidden = YES;
     _savedCardTableView.hidden = YES;
     _cardNewCardBtn.hidden = YES;
-    _selectedIndex = -1;
+    _selectedIndex = 0;
     _saveNewCardBtn.hidden = YES;
+    
+    
+    _addCardView.hidden = YES;
+    _removeCardBtn.hidden = YES;
     
     self.title = @"Payment";
     NSString *title = [NSString stringWithFormat:@"Pay $%@", _amount];
@@ -56,7 +66,7 @@
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
     
-    //[self getUserInfo];
+    [self getUserStripeSavedCards:@""];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,6 +89,22 @@
     }
     
 }
+- (IBAction)onRemoveSavedCard:(id)sender {
+    
+    if (_cardList.count > 0) {
+        
+        NSDictionary *card = [_cardList lastObject];
+        
+        [SVProgressHUD showWithStatus: @"Processing..." maskType: SVProgressHUDMaskTypeClear];
+        [[NetworkClient sharedClient] removeUserCard:[AppEngine sharedInstance].currentUser.user_id card_id:[card objectForKey:@"id"] success:^(NSDictionary *cardInfo) {
+            [SVProgressHUD dismiss];
+            [self getUserStripeSavedCards:@""];
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+        }];
+    }
+    
+}
 
 - (IBAction)onSaveNewCard:(id)sender {
     if (_saveNewCardBtn.isSelected) {
@@ -86,28 +112,6 @@
     } else {
         _saveNewCardBtn.selected = YES;
     }
-}
-
-
-- (void) getUserInfo {
-    [self getUserStripeSavedCards:@""];
-    return;
-    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
-                                      success:^(NSDictionary *dicUser) {
-                                          
-                                          FEMMapping *userMapping = [DSMappingProvider userMapping];
-                                          User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:userMapping];
-                                          [[CoreHelper sharedInstance] addUser: u];
-                                          [AppEngine sharedInstance].currentUser = u;
-                                          
-                                          //if ([dicUser objectForKey:@"stripe_id"]) {
-                                              [self getUserStripeSavedCards:@"cus_8m4EjrivGrc0o2"];
-                                          //}
-                                          
-                                          
-                                      } failure:^(NSString *errorMessage) {
-                                          
-                                      }];
 }
 
 /*
@@ -120,21 +124,10 @@
 }
 */
 
-- (void) updateSelectCard:(int)index {
-    [_cardNewCardBtn setImage:[UIImage imageNamed:@"radio-button-blank"] forState:UIControlStateNormal];
-    if (index == -1) {
-        [_cardNewCardBtn setImage:[UIImage imageNamed:@"radio-button"] forState:UIControlStateNormal];
-    }
-    
-    [_savedCardTableView reloadData];
-}
 
 #pragma mark -
 #pragma mark Navbar Action handler
-- (IBAction)onSelectNewCard:(id)sender {
-    _selectedIndex = -1;
-    [self updateSelectCard:_selectedIndex];
-}
+
 
 -(IBAction)onCancelView:(id)sender
 {
@@ -142,9 +135,17 @@
 }
 
 - (void)save:(id)sender {
+    if (_selectedIndex == 1) {
+        
+        [self.delegate paymentViewController:self didCompletedWithToken:@"0"];
+        return;
+    }
+    
     if (![self.paymentTextField isValid]) {
         return;
     }
+    
+    [self.paymentTextField resignFirstResponder];
     
     
     if (![Stripe defaultPublishableKey]) {
@@ -173,114 +174,36 @@
                                               } failure:^(NSString *errorMessage) {
                                                   
                                               }];
-                                              
-                                              //[self createStipeAccount:token];
-                                              //[self getUserStripeSavedCards];
-                                              //[self getTokenForSavedCard];
-                                              
-                                              //[self.delegate paymentViewController:self didCompletedWithToken:token.tokenId];
                                           }];
 }
 
-- (void) createStipeAccount:(STPToken *)token {
-    [[NetworkClient sharedClient] createStipeAccountForUser:[AppEngine sharedInstance].currentUser.user_id email:[AppEngine sharedInstance].currentUser.email stripe_token:token.tokenId success:^(NSDictionary *dicDonate) {
-        
-    } failure:^(NSString *errorMessage) {
-        
-    }];
-}
 
 - (void) getUserStripeSavedCards:(NSString *)customerId {
     //
-    
+    [SVProgressHUD showWithStatus: @"Processing..." maskType: SVProgressHUDMaskTypeClear];
     [[NetworkClient sharedClient] getUserSavedCards:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *cards) {
         
         //NSLog(@"cards %@", cards);
+        [SVProgressHUD dismiss];
         
         if (cards.count > 0) {
             _cardList = [NSArray arrayWithArray:cards];
-            _savedCardLbl.hidden = NO;
-            _savedCardTableView.hidden = NO;
-            _cardNewCardBtn.hidden = NO;
-            [self updateSelectCard:_selectedIndex];
-            [_savedCardTableView reloadData];
+            _addCardView.hidden = YES;
+            _addCardHeightConstraint.constant = 0;
+            _removeCardBtn.hidden = NO;
+            _selectedIndex = 1;
+        } else {
+            _addCardView.hidden = NO;
+            _addCardHeightConstraint.constant = 96;
+            _removeCardBtn.hidden = YES;
+            _selectedIndex = 0;
         }
         
     } failure:^(NSString *errorMessage) {
-        
-    }];
-    
-    /*
-    [[NetworkClient sharedClient] getUserSavedCardsFromStripe:customerId success:^(NSDictionary *dicDonate) {
-        //id = "card_18UW5YDAyu7GKAGHiDgrN7so";
-        //NSLog(@"dicDonate %@", dicDonate);
-        
-        if ([dicDonate objectForKey:@"data"]) {
-            _cardList = [NSArray arrayWithArray:[dicDonate objectForKey:@"data"]];
-            if (_cardList.count > 0) {
-                
-                _savedCardLbl.hidden = NO;
-                _savedCardTableView.hidden = NO;
-                _cardNewCardBtn.hidden = NO;
-                [self updateSelectCard:_selectedIndex];
-                [_savedCardTableView reloadData];
-                
-            }
-        }
-        
-    } failure:^(NSString *errorMessage) {
-        
-    }];*/
-}
-
-- (void) getTokenForSavedCard {
-    [[NetworkClient sharedClient] getStripeTokenForSavedCard:@"card_18UW5YDAyu7GKAGHiDgrN7so" success:^(NSDictionary *dicDonate) {
-        
-    } failure:^(NSString *errorMessage) {
-        
+        [SVProgressHUD dismiss];
     }];
 }
 
-#pragma mark - UITableView Datasource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _cardList.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"SavedCardCell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    
-    UILabel *cardNo = (UILabel *)[cell.contentView viewWithTag:11];
-    UILabel *cardType = (UILabel *)[cell.contentView viewWithTag:12];
-    
-    UIImageView *selectedRow = (UIImageView *)[cell.contentView viewWithTag:13];
-    [selectedRow setImage:[UIImage imageNamed:@"radio-button-blank"]];
-    if (indexPath.row == _selectedIndex) {
-        [selectedRow setImage:[UIImage imageNamed:@"radio-button"]];
-    }
-    //selectedRow.hidden = YES;
-    
-    NSDictionary *cardInfo = [_cardList objectAtIndex:indexPath.row];
-    
-    cardNo.text = [NSString stringWithFormat:@"XXXX XXXX XXXX %@", [cardInfo objectForKey:@"last4"]];
-    cardType.text = [cardInfo objectForKey:@"brand"];
-    
-    return cell;
-}
-
-#pragma mark - UITableView Delegate methods
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    _selectedIndex = indexPath.row;
-    [self updateSelectCard:_selectedIndex];
-}
 
 
 @end

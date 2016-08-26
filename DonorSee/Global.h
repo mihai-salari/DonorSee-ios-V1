@@ -32,12 +32,12 @@
 #define     kAPIBaseURLString                   @"https://donorsee-api-staging.herokuapp.com/"
 #define     APP_STORE_URL                       @"https://itunes.apple.com/us/app/donorsee/id1093861994?ls=1&mt=8"
 
-#define     ADMIN_EMAIL                         @"gglyer@yahoo.com"
+#define     ADMIN_EMAIL                         @"admin@donorsee.com"
 #define     COLOR_MAIN                          [UIColor colorWithRed: 8.0/255.0 green: 117.0/255.0 blue: 125.0/255.0 alpha:1.0]
 #define     COLOR_FEED_TEXT                     [UIColor colorWithRed: 153.0/255.0 green: 153.0/255.0 blue: 153.0/255.0 alpha:1.0]
 #define     MAX_DESCRIPTION_LENGTH              1500
 #define     MAX_PRICE                           99999
-#define     MIN_PRICE                           5
+#define     MIN_PRICE                           1
 #define     IMAGE_COMPRESSION                   0.5
 #define     FETCH_LIMIT                         10
 #define     TAB_BAR_HEIGHT                      68.0f
@@ -129,7 +129,7 @@ typedef void(^J_DID_COMPLETE_CALL_BACK_BLOCK)(NSString *obj);//NSObject *obj
 #define     MSG_INVALID_DESCRIPTION             @"Please input valid description."
 #define     MSG_DISCONNECT_INTERNET             @"Can't connect with server. Please check your internet connection."
 #define     MSG_INVALID_AMOUNT                  @"Please input valid amount."
-#define     MSG_INFO_AMOUNT                     @"A flat 6.9% is taken from every transaction. Most of that is to pay for credit card fees."
+#define     MSG_INFO_AMOUNT                     @"We recommend that you fundraise about 10% more than what the need actually costs to account for fees and unexpected expenses."
 #define     MSG_WITHDRAW_SUCCESS                @"We will send your money in the next 24 hours."
 #define     MSG_INFO_WITHDRAW                   @"This is how much money has been donated to you after a 6.9% credit card and transaction fee."
 #define     MSG_INVALID_MESSAGE                 @"Please input valid message."

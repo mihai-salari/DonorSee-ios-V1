@@ -15,6 +15,7 @@
 + (FEMObjectMapping *) eventMapping;
 + (FEMObjectMapping *) notificationMapping;
 + (FEMObjectMapping *)eventMappingForNotification;
++ (FEMObjectMapping *)eventMappingForTransactionHistory;
 
 + (FEMObjectMapping *) giftsMapping;
 @end

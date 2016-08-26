@@ -156,6 +156,9 @@
     else if([a.type isEqualToString:@"follow"])
     {
         message = [NSString stringWithFormat: @"!%@ started following you.", filterUsername];
+    } else if ([a.type isEqualToString:@"comment"])
+    {
+        message = [NSString stringWithFormat: @"!%@ posted a comment.", filterUsername];
     }
     return message;
 }

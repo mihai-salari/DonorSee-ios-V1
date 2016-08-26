@@ -172,7 +172,20 @@
     return mapping;
 }
 
-
++ (FEMObjectMapping *)eventMappingForTransactionHistory {
+    FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Event class]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"event_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"gift_amount_cents" toKeyPath:@"amount_cents"]];
+    
+    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"event.created_at"]];
+    
+    [mapping addRelationshipMapping:[self projectsMapping] forProperty:@"feed" keyPath:@"project"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"creator" keyPath:@"user"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"recipient" keyPath:@"recipient"];
+    
+    return mapping;
+}
 
 
 + (FEMObjectMapping *)notificationMapping {

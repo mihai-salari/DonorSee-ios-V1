@@ -165,6 +165,7 @@
         return;
     }
     
+    /*
     if(!isFBUser)
     {
         if(oldPassword == nil || [oldPassword length] == 0)
@@ -179,29 +180,24 @@
             return;
         }
     }
+    */
     
     if(isChangedAvatar)
     {
-        UIImage* imgAvatar = ivAvatar.image;
-        [SVProgressHUD showWithMaskType: SVProgressHUDMaskTypeClear];
-        NSData* imgData = UIImageJPEGRepresentation(imgAvatar, IMAGE_COMPRESSION);
-        [[JAmazonS3ClientManager defaultManager] uploadPostPhotoData: imgData
-                                                             fileKey: [AppEngine getImageName]
-                                                    withProcessBlock:^(float progress) {
-                                                        
-                                                    } completeBlock:^(NSString *imageURL) {
-                                                        
-                                                        NSLog(@"imageURL = %@", imageURL);
-                                                        if(imageURL != nil)
-                                                        {
-                                                            [self updateProfile: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: imageURL]];
-                                                        }
-                                                        else
-                                                        {
-                                                            [SVProgressHUD dismiss];
-                                                        }
-                                                    }];
 
+        UIImage* imgAvatar = ivAvatar.image;
+        NSData* imgData = UIImageJPEGRepresentation(imgAvatar, IMAGE_COMPRESSION);
+        
+        [SVProgressHUD showWithMaskType: SVProgressHUDMaskTypeClear];
+        [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+            [SVProgressHUD dismiss];
+            if ([photoInfo objectForKey:@"secure_url"]) {
+                [self updateProfile:[photoInfo objectForKey:@"secure_url"]];
+            }
+            
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+        }];
     }
     else
     {

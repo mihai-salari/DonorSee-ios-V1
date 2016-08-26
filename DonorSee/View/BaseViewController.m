@@ -143,6 +143,7 @@
                               
                               FEMMapping *mapping = [DSMappingProvider userMapping];
                               User *u = [FEMDeserializer objectFromRepresentation:dicUser mapping:mapping];
+                              u.fb_id = fbId;
                               
                               [[CoreHelper sharedInstance] addUser: u];
                               [[CoreHelper sharedInstance] setCurrentUserId: u.user_id];
@@ -166,6 +167,21 @@
              }
          }
      }];
+}
+
+#pragma mark -
+#pragma mark Check for Model
+- (BOOL)isModal {
+    if([self presentingViewController])
+        return YES;
+    if([[self presentingViewController] presentedViewController] == self)
+        return YES;
+    if([[[self navigationController] presentingViewController] presentedViewController] == [self navigationController])
+        return YES;
+    if([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
+        return YES;
+    
+    return NO;
 }
 
 @end

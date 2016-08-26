@@ -51,6 +51,8 @@
 
 - (void) loadActivities
 {
+    self.tbMain.tableHeaderView = nil;
+    
     if([arrNotifications count] == 0)
     {
         [SVProgressHUD show];
@@ -64,13 +66,10 @@
                                                        [arrNotifications addObjectsFromArray: array1];
                                                    }
         
-//                                                    if([arrNotifications count] == 0)
-//                                                    {
-//                                                        lbEmpty.hidden = NO;
-//                                                    }
-//                                                    else {
-//                                                        lbEmpty.hidden = YES;
-//                                                    }
+                                                    if([arrNotifications count] == 0)
+                                                    {
+                                                        [self showNoDataHeader];
+                                                    }
         
                                                    [tbMain reloadData];
         //[self loadNotifications];
@@ -80,6 +79,19 @@
                                                    [SVProgressHUD dismiss];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
                                                }];
+}
+
+- (void) showNoDataHeader {
+    
+    UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 150)];
+    lbl.backgroundColor = [UIColor whiteColor];
+    lbl.textColor = [UIColor colorWithRed:0.5548 green:0.5385 blue:0.5171 alpha:1.0];
+    lbl.text = @"No notification available";
+    lbl.textAlignment = NSTextAlignmentCenter;
+    lbl.font = [UIFont systemFontOfSize:13];
+    
+    self.tbMain.tableHeaderView = lbl;
+    
 }
 
 - (void) loadNotifications
