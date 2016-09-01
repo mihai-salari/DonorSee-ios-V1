@@ -239,7 +239,7 @@
                       statusCode = httpResponse.statusCode;
                   }
                   
-                  if (statusCode == 401) {
+                  if (statusCode == 401 || statusCode == 404) {
                       
                       NSData *responseErrorData = (NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
                       NSError* error;
@@ -338,19 +338,53 @@
 
 - (void) forgotPassword: (NSString*) email
                 success: (void (^)(NSDictionary *responseObject))success
-                failure: (void (^)(NSError *error))failure
+                failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       email, @"email",
-                                       nil];
     
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
     
-    [self PostRequest: @"user_api/forgotpassword.php"
+    [self GET:[NSString stringWithFormat:@"users/password-reset?email=%@", email] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success(@{@"message":@"Password has been successfully changed"});
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
+}
+
+- (void) verifyPin:(NSString *)pin
+       newPassword:(NSString *)newPassword
+             email:(NSString *)email
+           success: (void (^)(NSDictionary *responseObject))success
+           failure: (void (^)(NSString *errorMessage))failure
+{
+    
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
+    NSDictionary *parameters = @{@"pin":pin, @"email":email, @"new_password":newPassword};
+    
+    [self PostRequest: @"users/password-reset"
            parameters: parameters
               success:^(id responseObject) {
-                  success(responseObject);
+                  
+                  if ([responseObject objectForKey:@"token"]) {
+                      NSString *token = [responseObject objectForKey:@"token"];
+                      [[NSUserDefaults standardUserDefaults] setValue:token forKey:@"api_token"];
+                      [[NSUserDefaults standardUserDefaults] synchronize];
+                  }
+                  
+                  if ([responseObject objectForKey:@"user"]) {
+                      NSDictionary* dicUser = responseObject[@"user"];
+                      success(dicUser);
+                      [self updateDeviceToken];
+                  } else {
+                      failure(@"User UnAuthorised");
+                  }
+                  
               } failure:^(NSError *error) {
-                  failure(error);
+                  
+                  failure(MSG_DISCONNECT_INTERNET);
               }];
 }
 
@@ -915,6 +949,19 @@
     }];
 }
 
+- (void) getStripeKey: (void (^)(NSDictionary* stripeInfo))success
+                 failure: (void (^)(NSString *errorMessage))failure
+{
+    [self GETRequest: @"config"
+          parameters: nil
+             success:^(id responseObject) {
+                 success(responseObject);
+             } failure:^(NSError *error) {
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
+    
+}
+
 #pragma mark - Withdraw.
 - (void) withdrawMoney: (NSString*) email
                message: (NSString*) message
@@ -1022,7 +1069,7 @@
 - (void) getMyActivities: (void (^)(NSArray* arrActivities))success
                  failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *path = [NSString stringWithFormat:@"users/%i/notifications", [AppEngine sharedInstance].currentUser.user_id];
+    NSString *path = [NSString stringWithFormat:@"users/%i/notifications?limit=100", [AppEngine sharedInstance].currentUser.user_id];
     
     [self GETRequest: path
            parameters: nil

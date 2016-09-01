@@ -14,4 +14,6 @@
 - (UITabBarItem *)getNotificationTabItem;
 - (void) updateNotificationBadge;
 - (void) cancelUpdateNotification;
+- (void) markNotificationsUnreadForIds:(NSArray *)notifications;
+
 @end

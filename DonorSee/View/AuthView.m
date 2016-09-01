@@ -29,6 +29,7 @@
 
 - (void) initUI
 {
+    scMain.hidden = YES;
     ivProfileImage.layer.masksToBounds = YES;
     ivProfileImage.layer.cornerRadius = ivProfileImage.frame.size.width / 2.0;
     ivProfileImage.contentMode = UIViewContentModeScaleAspectFill;
@@ -64,6 +65,12 @@
         [self updateInfo];
     }
     return self;
+}
+- (IBAction)onNewSignUpProcess:(id)sender {
+    if ([self.delegate respondsToSelector:@selector(successAuth)])
+    {
+        [self.delegate failAuth];
+    }
 }
 
 - (IBAction) actionSignInFB:(id)sender
@@ -186,8 +193,8 @@
                                                                                                              completion: nil];
                                                                                             
                                                                                             
-                                                                                        } failure:^(NSError *error) {
-                                                                                            NSLog(@"error = %@", error);
+                                                                                        } failure:^(NSString *errorMessage) {
+                                                                                            NSLog(@"error = %@", errorMessage);
                                                                                             [SVProgressHUD dismiss];
                                                                                         }];
                                                    

@@ -68,7 +68,7 @@
     
     [[NetworkClient sharedClient] getReceivedGiftsTransactionHistory:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *transactions) {
         
-        FEMMapping *mapping = [DSMappingProvider eventMappingForTransactionHistory];
+        FEMMapping *mapping = [DSMappingProvider eventMappingForTransactionHistoryReceive];
         _receivedGiftstransactions = [FEMDeserializer collectionFromRepresentation:transactions mapping:mapping];
         [_followersTableView reloadData];
         
@@ -145,14 +145,15 @@
         UILabel *descLbl = (UILabel *)[cell.contentView viewWithTag:11];
         UILabel *amountLbl = (UILabel *)[cell.contentView viewWithTag:12];
         
+        
         if (indexPath.section == 0) {
             Event *transcation = [_transactions objectAtIndex:indexPath.row];
-            amountLbl.text = [NSString stringWithFormat:@"$%i", transcation.gift_amount_cents/100];
+            amountLbl.text = [NSString stringWithFormat:@"$%.2f", ((float)transcation.gift_amount_cents/100)];
             descLbl.text = [NSString stringWithFormat:@"Gave to %@ project", transcation.recipient.name];
         } else {
             Event *transcation = [_receivedGiftstransactions objectAtIndex:indexPath.row];
-            amountLbl.text = [NSString stringWithFormat:@"$%i", transcation.gift_amount_cents/100];
-            descLbl.text = [NSString stringWithFormat:@"Received gift from %@ project", transcation.creator.name];
+            amountLbl.text = [NSString stringWithFormat:@"$%.2f", (float)transcation.gift_amount_cents/100];
+            descLbl.text = [NSString stringWithFormat:@"Received gift from %@", transcation.creator.name];
         }
         
 

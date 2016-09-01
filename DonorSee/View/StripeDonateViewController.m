@@ -29,6 +29,8 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCardHeightConstraint;
 
+@property (nonatomic, strong) NSString *stripeKey;
+
 
 @end
 
@@ -44,6 +46,8 @@
     _cardNewCardBtn.hidden = YES;
     _selectedIndex = 0;
     _saveNewCardBtn.hidden = YES;
+    
+    _stripeKey = @"";
     
     
     _addCardView.hidden = YES;
@@ -67,6 +71,17 @@
     [self.view addGestureRecognizer:tap];
     
     [self getUserStripeSavedCards:@""];
+    
+    
+    [[NetworkClient sharedClient] getStripeKey:^(NSDictionary *stripeInfo) {
+        //NSLog(@"stripeInfo %@", stripeInfo);
+        if ([stripeInfo objectForKey:@"stripe_pub_key"]) {
+            _stripeKey = [stripeInfo objectForKey:@"stripe_pub_key"];
+        }
+        
+    } failure:^(NSString *errorMessage) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -148,7 +163,10 @@
     [self.paymentTextField resignFirstResponder];
     
     
-    if (![Stripe defaultPublishableKey]) {
+    [Stripe setDefaultPublishableKey:_stripeKey];
+    
+    
+    if ([_stripeKey isEqualToString:@""]) {
         NSError *error = [NSError errorWithDomain:StripeDomain
                                              code:STPInvalidRequestError
                                          userInfo:@{

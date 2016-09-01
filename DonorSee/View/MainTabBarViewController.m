@@ -13,6 +13,8 @@
 
 @interface MainTabBarViewController () <UITabBarControllerDelegate>
 
+@property (nonatomic, strong) NSMutableArray *notificationIds;
+
 @end
 
 @implementation MainTabBarViewController
@@ -23,6 +25,8 @@
     
     self.delegate = self;
     [AppDelegate getDelegate].mainTabBar = self;
+    
+    _notificationIds = [NSMutableArray array];
     
     UITabBar *tabBar = self.tabBar;
     
@@ -74,9 +78,13 @@
 
 - (void) updateNotificationBadge
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateNotificationBadge) object:nil];
+    [self performSelector:@selector(updateNotificationBadge) withObject:nil afterDelay:10];
+    //NSLog(@"Notification Called...");
+    
     if([AppEngine sharedInstance].currentUser == nil) return;
     
-    [[self getNotificationTabItem] setMyAppCustomBadgeValue:nil];
+    
     
     [[NetworkClient sharedClient] getUnReadCountInfo:[AppEngine sharedInstance].currentUser.user_id success:^(NSDictionary *dicUser) {
         if ([dicUser objectForKey:@"count"]) {
@@ -87,6 +95,8 @@
             if (totalCount > 0) {
                 [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalCount];
                 [[self getNotificationTabItem] setMyAppCustomBadgeValue:@"0"];
+            } else {
+                [[self getNotificationTabItem] setMyAppCustomBadgeValue:nil];
             }
         }
 
@@ -94,6 +104,11 @@
         
     }];
     
+}
+
+- (void) cancelUpdateNotification {
+    //NSLog(@"Cancelled Notification...");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateNotificationBadge) object:nil];
 }
 
 -(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController: (UIViewController *)viewController
@@ -122,6 +137,26 @@
         
     }
     
+}
+
+- (void) markNotificationRead {
+    if (_notificationIds.count > 0) {
+        
+        int eventId = [[_notificationIds lastObject] intValue];
+        [[NetworkClient sharedClient] readActivity: eventId];
+        [_notificationIds removeLastObject];
+        
+        [self performSelector:@selector(markNotificationRead) withObject:nil afterDelay:0.3];
+        return;
+    } else {
+        [self updateNotificationBadge];
+    }
+}
+
+- (void) markNotificationsUnreadForIds:(NSArray *)notifications
+{
+    _notificationIds = [NSMutableArray arrayWithArray:notifications];
+    [self markNotificationRead];
 }
 
 @end

@@ -75,12 +75,15 @@
         
                                                    [tbMain reloadData];
         //[self loadNotifications];
+        [self checkUnReadItems];
         
         
                                                } failure:^(NSString *errorMessage) {
                                                    [SVProgressHUD dismiss];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
                                                }];
+    
+    [[[AppDelegate getDelegate].mainTabBar getNotificationTabItem] removeBadge];
 }
 
 - (void) showNoDataHeader {
@@ -94,6 +97,19 @@
     
     self.tbMain.tableHeaderView = lbl;
     
+}
+
+- (void) checkUnReadItems {
+    
+    if (arrNotifications.count > 0) {
+        NSPredicate *unRead = [NSPredicate predicateWithFormat:@"is_read==0"];
+        NSArray *unreadMessages = [arrNotifications filteredArrayUsingPredicate:unRead];
+        NSLog(@"unreadMessages %@", unreadMessages);
+        NSArray *unreadIds = [unreadMessages valueForKey:@"event_id"];
+        if (unreadIds.count > 0) {
+            [[AppDelegate getDelegate].mainTabBar markNotificationsUnreadForIds:unreadIds];
+        }
+    }
 }
 
 - (void) loadNotifications

@@ -184,6 +184,57 @@
     [mapping addRelationshipMapping:[self userMapping] forProperty:@"creator" keyPath:@"user"];
     [mapping addRelationshipMapping:[self userMapping] forProperty:@"recipient" keyPath:@"recipient"];
     
+    /*
+    FEMAttribute *nameAttribute = [[FEMAttribute alloc] initWithProperty:@"gift_amount_cents" keyPath:nil map:^id _Nullable(id  _Nonnull value) {
+        if ([value isKindOfClass:[NSDictionary class]]) {
+            
+            int amount_cents = [[value objectForKey:@"amount_cents"] intValue];
+            int est_stripe_fee_cents = [[value objectForKey:@"est_stripe_fee_cents"] intValue];
+            int platform_fee_cents = [[value objectForKey:@"platform_fee_cents"] intValue];
+            return [NSNumber numberWithInt:(amount_cents+est_stripe_fee_cents+platform_fee_cents)];
+        }
+        
+        return nil;
+    } reverseMap:^id _Nullable(id  _Nonnull value) {
+        return nil;
+    }];
+    
+    [mapping addAttribute:nameAttribute];
+    */
+    
+    return mapping;
+}
+
++ (FEMObjectMapping *)eventMappingForTransactionHistoryReceive {
+    FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Event class]];
+    
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"event_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"gift_amount_cents" toKeyPath:@"amount_cents"]];
+    
+    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"event.created_at"]];
+    
+    [mapping addRelationshipMapping:[self projectsMapping] forProperty:@"feed" keyPath:@"project"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"creator" keyPath:@"user"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"recipient" keyPath:@"recipient"];
+    
+    
+//    FEMAttribute *nameAttribute = [[FEMAttribute alloc] initWithProperty:@"gift_amount_cents" keyPath:nil map:^id _Nullable(id  _Nonnull value) {
+//        if ([value isKindOfClass:[NSDictionary class]]) {
+//            
+//            int amount_cents = [[value objectForKey:@"amount_cents"] intValue];
+//            int est_stripe_fee_cents = [[value objectForKey:@"est_stripe_fee_cents"] intValue];
+//            int platform_fee_cents = [[value objectForKey:@"platform_fee_cents"] intValue];
+//            return [NSNumber numberWithInt:(amount_cents+est_stripe_fee_cents+platform_fee_cents)];
+//        }
+//        
+//        return nil;
+//    } reverseMap:^id _Nullable(id  _Nonnull value) {
+//        return nil;
+//    }];
+    
+    //[mapping addAttribute:nameAttribute];
+    
+    
     return mapping;
 }
 

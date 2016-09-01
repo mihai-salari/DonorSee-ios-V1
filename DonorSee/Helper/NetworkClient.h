@@ -40,7 +40,13 @@
 
 - (void) forgotPassword: (NSString*) email
                 success: (void (^)(NSDictionary *responseObject))success
-                failure: (void (^)(NSError *error))failure;
+                failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) verifyPin:(NSString *)pin
+       newPassword:(NSString *)newPassword
+             email:(NSString *)email
+           success: (void (^)(NSDictionary *responseObject))success
+           failure: (void (^)(NSString *errorMessage))failure;
 
 - (void) updateProfile: (NSString*) firstName
               lastName: (NSString*) lastName
@@ -240,5 +246,8 @@
 - (void) getReceivedGiftsTransactionHistory: (int) user_id
                                     success: (void (^)(NSArray *transactions))success
                                     failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) getStripeKey: (void (^)(NSDictionary* stripeInfo))success
+              failure: (void (^)(NSString *errorMessage))failure;
 
 @end

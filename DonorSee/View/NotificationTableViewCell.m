@@ -65,7 +65,7 @@
         [ivAvatar sd_setImageWithURL: [NSURL URLWithString: event.recipient.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
     }
     
-    viReadState.hidden = event.is_read;
+    viReadState.hidden = YES;
     
     lbMessage.text = [NotificationTableViewCell getNotificationMessage:event];
     
@@ -151,7 +151,7 @@
     }
     else if([a.type isEqualToString:@"update"])
     {
-        message = [NSString stringWithFormat: @"!%@ posted a follow up message to your project.", filterUsername];
+        message = [NSString stringWithFormat: @"!%@ posted a follow up message.", filterUsername];
     }
     else if([a.type isEqualToString:@"follow"])
     {
@@ -159,6 +159,9 @@
     } else if ([a.type isEqualToString:@"comment"])
     {
         message = [NSString stringWithFormat: @"!%@ posted a comment.", filterUsername];
+    } else if ([a.type isEqualToString:@"create"])
+    {
+        message = [NSString stringWithFormat: @"!%@ posted a new project.", filterUsername];
     }
     return message;
 }

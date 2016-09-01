@@ -5,6 +5,7 @@
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 
+
 #import <Foundation/Foundation.h>
 #import "FEMObjectMapping.h"
 
@@ -16,6 +17,7 @@
 + (FEMObjectMapping *) notificationMapping;
 + (FEMObjectMapping *)eventMappingForNotification;
 + (FEMObjectMapping *)eventMappingForTransactionHistory;
++ (FEMObjectMapping *)eventMappingForTransactionHistoryReceive;
 
 + (FEMObjectMapping *) giftsMapping;
 @end

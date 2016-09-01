@@ -97,7 +97,18 @@
                                      [[CoreHelper sharedInstance] setCurrentUserId: u.user_id];
                                      [AppEngine sharedInstance].currentUser = u;
                                      
-                                     [self gotoHomeView: YES];
+                                     if (self.isModal) {
+                                         NSLog(@"Presented in Model");
+                                         [[NSNotificationCenter defaultCenter]
+                                          postNotificationName:@"LOGIN_COMPLETE"
+                                          object:nil userInfo:@{@"status":@"1"}];
+                                         
+                                         [self dismissViewControllerAnimated:YES completion:nil];
+                                     } else {
+                                         [self gotoHomeView: YES];
+                                     }
+                                     
+                                     
                                      
                                  } failure:^(NSString *errorMessage) {
                                      [SVProgressHUD dismiss];
@@ -108,13 +119,20 @@
 - (IBAction) actionFBSignIn:(id)sender
 {
     [self signInFB:^{
-        [self gotoHomeView: YES];
+        if (self.isModal) {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"LOGIN_COMPLETE"
+             object:nil userInfo:@{@"status":@"1"}];
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [self gotoHomeView: YES];
+        }
     }];
 }
 
-- (IBAction) actionForgotPassword:(id)sender
-{
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"Forgot Password" message: @"Please type your email address." preferredStyle: UIAlertControllerStyleAlert];
+- (void) showEnterPinForEmail:(NSString *)email {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"PIN Verification" message: @"Please enter PIN and new password" preferredStyle: UIAlertControllerStyleAlert];
     UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                handler:^(UIAlertAction * action){
                                                    //Do Some action here
@@ -130,21 +148,99 @@
                                                        return;
                                                    }
                                                    
+                                                   UITextField *pintextField = alert.textFields[1];
+                                                   
+                                                   if (pintextField.text.length == 0) {
+                                                       [self presentViewController: [AppEngine showErrorWithText: @"Enter a valid PIN"]
+                                                                          animated: YES
+                                                                        completion: nil];
+                                                       return;
+                                                   }
+                                                   
+                                                   UITextField *passwordtextField = alert.textFields[2];
+                                                   
+                                                   if (passwordtextField.text.length == 0) {
+                                                       [self presentViewController: [AppEngine showErrorWithText: @"Enter a valid password"]
+                                                                          animated: YES
+                                                                        completion: nil];
+                                                       return;
+                                                   }
+                                                   
+                                                   [SVProgressHUD showWithMaskType: SVProgressHUDMaskTypeClear];
+                                                   [[NetworkClient sharedClient] verifyPin:pintextField.text newPassword:passwordtextField.text email:email success:^(NSDictionary *responseObject) {
+                                                       [SVProgressHUD dismiss];
+                                                       
+                                                       [self presentViewController: [AppEngine showErrorWithText: @"Password changed successfully"]
+                                                                          animated: YES
+                                                                        completion: nil];
+                                                       
+                                                   } failure:^(NSString *errorMessage) {
+                                                       [SVProgressHUD dismiss];
+                                                       [self presentViewController: [AppEngine showErrorWithText: errorMessage]
+                                                                          animated: YES
+                                                                        completion: nil];
+                                                   }];
+                                                   
+                                                   
+                                                   
+                                               }];
+    UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction * action) {
+                                                       [alert dismissViewControllerAnimated:YES completion:nil];
+                                                       
+                                                   }];
+    
+    [alert addAction:ok];
+    [alert addAction:cancel];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Email";
+        textField.text = email;
+        textField.keyboardType = UIKeyboardTypeEmailAddress;
+    }];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"PIN";
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"New password";
+        textField.keyboardType = UIKeyboardTypeDefault;
+    }];
+    
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (IBAction) actionForgotPassword:(id)sender
+{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"Forgot Password" message: @"Please type your email address to request new PIN." preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                               handler:^(UIAlertAction * action){
+                                                   //Do Some action here
+                                                   UITextField *textField = alert.textFields[0];
+                                                   NSLog(@"text was %@", textField.text);
+                                                   
+                                                   NSString* email = textField.text;
+                                                   if(email == nil && [AppEngine emailValidate: email])
+                                                   {
+                                                       [self presentViewController: [AppEngine showErrorWithText: MSG_INVALID_EMAIL]
+                                                                          animated: YES
+                                                                        completion: nil];
+                                                       return;
+                                                   }
+                                                   
+                                                   
                                                    [SVProgressHUD showWithMaskType: SVProgressHUDMaskTypeClear];
                                                    [[NetworkClient sharedClient] forgotPassword: email
                                                                                         success:^(NSDictionary *responseObject) {
                                                                                             
                                                                                             [SVProgressHUD dismiss];
-                                                                                            NSLog(@"url = %@", [responseObject valueForKey: @"url"]);
-                                                                                            NSString* message = [responseObject valueForKey: @"message"];
-                                                                                            [self presentViewController: [AppEngine showMessage: message
-                                                                                                                                          title: nil]
-                                                                                                               animated: YES
-                                                                                                             completion: nil];
+                                                                                            [self showEnterPinForEmail:email];
                                                                                             
-                                                                                            
-                                                                                        } failure:^(NSError *error) {
-                                                                                            NSLog(@"error = %@", error);
+                                                                                        } failure:^(NSString *errorMessage) {
+                                                                                            NSLog(@"error = %@", errorMessage);
                                                                                             [SVProgressHUD dismiss];
                                                                                         }];
                                                    
