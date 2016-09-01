@@ -237,4 +237,8 @@
                        success: (void (^)(NSArray *transactions))success
                        failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) getReceivedGiftsTransactionHistory: (int) user_id
+                                    success: (void (^)(NSArray *transactions))success
+                                    failure: (void (^)(NSString *errorMessage))failure;
+
 @end

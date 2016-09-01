@@ -17,6 +17,7 @@
 #import "AuthView.h"
 #import "WebDonateViewController.h"
 #import "StripeDonateViewController.h"
+#import "SignInViewController.h"
 
 @import ALCameraViewController;
 @import CircleProgressView;
@@ -25,6 +26,7 @@
 {
     NSMutableArray              *arrActivities;
     BOOL                        isFollowUp;
+    BOOL                        isPostComment;
     
     NSMutableArray              *arrFollowPhotos;
     UIImagePickerController     *imagePicker;
@@ -139,6 +141,7 @@
     [self initAuthUI];
     
     isFollowUp = NO;
+    isPostComment = NO;
     [tbActivity registerNib: [UINib nibWithNibName: @"ActivityTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([ActivityTableViewCell class])];
 
     if([AppEngine sharedInstance].currentUser == nil)
@@ -419,18 +422,24 @@
     tfAmount.leftView = dollarSignLabel;
     tfAmount.leftViewMode = UITextFieldViewModeAlways;
     
-    if([selectedFeed isCreatedByCurrentUser])
-    {
-        viPost.hidden = YES;
-        btFollowUp.hidden = NO;
-        viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, btFollowUp.frame.size.height + 70.0);
-    }
-    else
-    {
+    if([AppEngine sharedInstance].currentUser != nil) {
+        if([selectedFeed isCreatedByCurrentUser])
+        {
+            viPost.hidden = YES;
+            btFollowUp.hidden = NO;
+            viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, btFollowUp.frame.size.height + 70.0);
+        } else {
+            viPost.hidden = YES;
+            btFollowUp.hidden = NO;
+            [btFollowUp setTitle:@"POST COMMENT" forState:UIControlStateNormal];
+            viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, btFollowUp.frame.size.height + 30.0);
+        }
+    } else {
         viPost.hidden = YES;
         btFollowUp.hidden = YES;
         viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, 40.0);
     }
+    
 }
 
 - (void) updateFollowPhotos
@@ -550,44 +559,82 @@
 
 - (IBAction) actionFollowUp:(id)sender
 {
-    isFollowUp = !isFollowUp;
-    if(isFollowUp)
+    
+    if([selectedFeed isCreatedByCurrentUser])
     {
-        [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
-        
-        viPost.hidden = NO;
-        viFooter.frame = CGRectMake(viFooter.frame.origin.x,
-                                    viFooter.frame.origin.y,
-                                    viDonateBar.frame.size.width,
-                                    viPost.frame.size.height + viDonateBar.frame.size.height + btFollowUp.frame.size.height + 70.0);
-        
-        [tbActivity reloadData];
-        CGPoint newContentOffset = CGPointMake(0, [tbActivity contentSize].height -  tbActivity.bounds.size.height);
-        [tbActivity setContentOffset:newContentOffset animated:YES];
-        [self updateFollowPhotos];
-        [tfMessage becomeFirstResponder];
-    }
-    else
-    {
-        [arrUploadedPhotos removeAllObjects];
-        
-        NSString* message = tfMessage.text;
-        if(message == nil || [message length] == 0)
+        isFollowUp = !isFollowUp;
+        if(isFollowUp)
         {
-            [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_MESSAGE] animated: YES completion: nil];
-            return;
-        }
-        
-        if([arrFollowPhotos count] > 0)
-        {
-            [self uploadPhotos];
+            [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
+            
+            viPost.hidden = NO;
+            viFooter.frame = CGRectMake(viFooter.frame.origin.x,
+                                        viFooter.frame.origin.y,
+                                        viDonateBar.frame.size.width,
+                                        viPost.frame.size.height + viDonateBar.frame.size.height + btFollowUp.frame.size.height + 70.0);
+            
+            [tbActivity reloadData];
+            CGPoint newContentOffset = CGPointMake(0, [tbActivity contentSize].height -  tbActivity.bounds.size.height);
+            [tbActivity setContentOffset:newContentOffset animated:YES];
+            [self updateFollowPhotos];
+            [tfMessage becomeFirstResponder];
         }
         else
         {
-            [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
-            [self postFollowMessage];
+            [arrUploadedPhotos removeAllObjects];
+            
+            NSString* message = tfMessage.text;
+            if(message == nil || [message length] == 0)
+            {
+                [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_MESSAGE] animated: YES completion: nil];
+                return;
+            }
+            
+            if([arrFollowPhotos count] > 0)
+            {
+                [self uploadPhotos];
+            }
+            else
+            {
+                [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
+                [self postFollowMessage];
+            }
         }
+        return;
     }
+    
+    if ([selectedFeed is_gave]) {
+        isPostComment = !isPostComment;
+        if(isPostComment)
+        {
+            [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
+            
+            viPost.hidden = NO;
+            viFooter.frame = CGRectMake(viFooter.frame.origin.x,
+                                        viFooter.frame.origin.y,
+                                        viDonateBar.frame.size.width,
+                                        viPost.frame.size.height + viDonateBar.frame.size.height + btFollowUp.frame.size.height + 30.0);
+            
+            [tbActivity reloadData];
+            CGPoint newContentOffset = CGPointMake(0, [tbActivity contentSize].height -  tbActivity.bounds.size.height);
+            [tbActivity setContentOffset:newContentOffset animated:YES];
+            [tfMessage becomeFirstResponder];
+        } else {
+            NSString* message = tfMessage.text;
+            if(message == nil || [message length] == 0)
+            {
+                [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_MESSAGE] animated: YES completion: nil];
+                return;
+            }
+            
+            [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
+            [self postCommentMessage];
+        }
+    } else {
+        [self presentViewController: [AppEngine showAlertWithText: @"You need to give to this project before you can leave a comment!"] animated: YES completion: nil];
+    }
+    
+    
 }
 
 - (void) clearPostView
@@ -605,9 +652,28 @@
     
     [btFollowUp setTitle: @"FOLLOW UP" forState: UIControlStateNormal];
     
+    if ([selectedFeed is_gave]) {
+        [btFollowUp setTitle: @"POST COMMENT" forState: UIControlStateNormal];
+    }
+    
     viPost.hidden = YES;
     viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viDonateBar.frame.size.width, viDonateBar.frame.size.height + btFollowUp.frame.size.height + 70.0);
     [tbActivity reloadData];
+}
+
+- (void) postCommentMessage {
+    [self hideKeyboard];
+    
+    NSString* message = tfMessage.text;
+    [[NetworkClient sharedClient] postProjectComment:message feed:selectedFeed success:^{
+        [SVProgressHUD dismiss];
+        [self cancelPostFollowMessage];
+        [self loadActivities];
+    } failure:^(NSString *errorMessage) {
+        [SVProgressHUD dismiss];
+        [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
+    }];
+    
 }
 
 - (void) postFollowMessage
@@ -642,44 +708,40 @@
 {
     UIImage* image = [arrFollowPhotos objectAtIndex: uploadingPhotoIndex];
     NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
-    [[JAmazonS3ClientManager defaultManager] uploadPostPhotoData: imgData
-                                                         fileKey: [AppEngine getImageName]
-                                                withProcessBlock:^(float progress) {
-                                                    
-                                                } completeBlock:^(NSString *imageURL) {
-                                                    
-                                                    NSLog(@"imageURL = %@", imageURL);
-                                                    if(imageURL != nil)
-                                                    {
-                                                        [arrUploadedPhotos addObject: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: imageURL]];
-                                                        uploadingPhotoIndex ++;
-                                                        
-                                                        if(uploadingPhotoIndex >= [arrFollowPhotos count])
-                                                        {
-                                                            [self postFollowMessage];
-                                                        }
-                                                        else
-                                                        {
-                                                            [self uploadSinglePhoto];
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        [SVProgressHUD dismiss];
-                                                        [self presentViewController: [AppEngine showErrorWithText: MSG_ERROR_UPLOADING_IMAGE] animated: YES completion: nil];
-                                                    }
-                                                }];
+    
+    
+    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+        
+        if ([photoInfo objectForKey:@"secure_url"]) {
+            NSString *secure_url = [photoInfo objectForKey:@"secure_url"];
+            
+            [arrUploadedPhotos addObject: secure_url];
+            uploadingPhotoIndex ++;
+            
+            if(uploadingPhotoIndex >= [arrFollowPhotos count])
+            {
+                [self postFollowMessage];
+            }
+            else
+            {
+                [self uploadSinglePhoto];
+            }
+            
+        }else
+        {
+            [SVProgressHUD dismiss];
+            [self presentViewController: [AppEngine showErrorWithText: MSG_ERROR_UPLOADING_IMAGE] animated: YES completion: nil];
+        }
+        
+    } failure:^(NSString *errorMessage) {
+        [SVProgressHUD dismiss];
+    }];
 }
 
 #pragma mark - Feed Delegate.
 - (void) selectUser: (User*) user
 {
     [[AppDelegate getDelegate] gotoOtherProfile:@{@"user_id":[NSNumber numberWithInteger:user.user_id]}];
-    return;
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    OtherUserViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"OtherUserViewController"];
-    nextView.selectedUser = selectedFeed.postUser;
-    [self.navigationController pushViewController: nextView animated: YES];
 }
 
 - (void) donateFeed:(Feed *)f
@@ -925,9 +987,43 @@
     }
     else
     {
-        viSignInFB.hidden = NO;
+        [self showSignupPage];
     }
 }
+
+- (void) showSignupPage {
+    
+    if([AppEngine sharedInstance].currentUser) return;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SignInViewController *signInView = [storyboard instantiateViewControllerWithIdentifier: @"SignInView"];
+    signInView.isModelView = YES;
+    UINavigationController *signinNav = [[UINavigationController alloc] initWithRootViewController:signInView];
+    [signinNav setNavigationBarHidden:YES];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didDismissSecondViewController)
+     name:@"LOGIN_COMPLETE"
+     object:nil];
+    
+    [self.navigationController presentViewController:signinNav animated:YES completion:^{
+        
+    }];
+}
+
+- (void)didDismissSecondViewController
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGIN_COMPLETE" object:nil];
+    if([AppEngine sharedInstance].currentUser != nil)
+    {
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self showPaymentOption];
+        });
+    }
+}
+
 
 -(void)showPaymentOption{
     

@@ -13,8 +13,11 @@
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import <MessageUI/MessageUI.h>
 #import <Social/Social.h>
+#import "SignInViewController.h"
 
 @interface FeedViewController () <MFMailComposeViewControllerDelegate, FBSDKSharingDelegate>
+
+@property (nonatomic, strong) User *followUserOnSignUp;
 
 @end
 
@@ -105,7 +108,7 @@
         Feed* f = notification.object;
         for(Feed* item in arrItemFeeds)
         {
-            if([item.feed_id isEqualToString: f.feed_id])
+            if([item.feed_id isEqual: f.feed_id])
             {
                 [arrItemFeeds removeObject: item];
                 [self.tbMain reloadData];
@@ -142,6 +145,12 @@
 
 - (void) followUser: (User*) user
 {
+    if ([AppEngine sharedInstance].currentUser == nil) {
+        _followUserOnSignUp = user;
+        [self showSignupPage];
+        return;
+    }
+    
     [SVProgressHUD showWithStatus: @"Following..." maskType: SVProgressHUDMaskTypeClear];
     [[NetworkClient sharedClient] followUser: [AppEngine sharedInstance].currentUser.user_id
                                 following_id: user.user_id
@@ -163,6 +172,12 @@
 
 - (void) unfollowUser: (User*) user
 {
+    if ([AppEngine sharedInstance].currentUser == nil) {
+        _followUserOnSignUp = user;
+        [self showSignupPage];
+        return;
+    }
+    
     [SVProgressHUD showWithStatus: @"Unfollowing..." maskType: SVProgressHUDMaskTypeClear];
     [[NetworkClient sharedClient] unfollowUser: [AppEngine sharedInstance].currentUser.user_id
                                   following_id: user.user_id
@@ -182,6 +197,41 @@
                                          
                                      }];
 }
+
+- (void) showSignupPage {
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SignInViewController *signInView = [storyboard instantiateViewControllerWithIdentifier: @"SignInView"];
+    signInView.isModelView = YES;
+    UINavigationController *signinNav = [[UINavigationController alloc] initWithRootViewController:signInView];
+    [signinNav setNavigationBarHidden:YES];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didDismissSecondViewController)
+     name:@"LOGIN_COMPLETE"
+     object:nil];
+    
+    [self.navigationController presentViewController:signinNav animated:YES completion:^{
+        
+    }];
+}
+
+- (void)didDismissSecondViewController
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGIN_COMPLETE" object:nil];
+    if([AppEngine sharedInstance].currentUser != nil)
+    {
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            //[self showPaymentOption];
+            [self followUser:_followUserOnSignUp];
+        });
+    }
+}
+
+
+
 
 #pragma mark -
 #pragma mark Handlers accessed from profile view

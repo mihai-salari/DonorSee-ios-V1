@@ -9,6 +9,7 @@
 #import "MainTabBarViewController.h"
 #import "UploadViewController.h"
 #import "AppDelegate.h"
+#import "ProfileViewController.h"
 
 @interface MainTabBarViewController () <UITabBarControllerDelegate>
 
@@ -79,14 +80,8 @@
     
     [[NetworkClient sharedClient] getUnReadCountInfo:[AppEngine sharedInstance].currentUser.user_id success:^(NSDictionary *dicUser) {
         if ([dicUser objectForKey:@"count"]) {
-            NSArray *counts = [NSArray arrayWithArray:[dicUser objectForKey:@"count"]];
-            int totalCount = 0;
-            for (NSDictionary *c in counts) {
-                if ([c objectForKey:@"count"]) {
-                    int count = [[c objectForKey:@"count"] intValue];
-                    totalCount += count;
-                }
-            }
+            
+            int totalCount = [[dicUser objectForKey:@"count"] intValue];
             
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
             if (totalCount > 0) {
@@ -116,6 +111,17 @@
 //                                                                                                }];
 //        [self presentViewController: cameraController animated: YES completion: nil];
 //    }
+    
+    if (tabBarController.selectedIndex == 2) {
+        //NSLog(@"Profile Selected...");
+        
+        if ([viewController isKindOfClass:[ProfileViewController class]]) {
+            ProfileViewController *profileController = (ProfileViewController *)viewController;
+            [profileController showSignupPage];
+        }
+        
+    }
+    
 }
 
 @end

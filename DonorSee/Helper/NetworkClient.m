@@ -14,6 +14,7 @@
 #import "DSMappingProvider.h"
 #import "FEMDeserializer.h"
 #import "Cloudinary/Cloudinary.h"
+#import "AppDelegate.h"
 
 @implementation NetworkClient
 
@@ -100,6 +101,29 @@
     }];
 }
 
+- (void) updateDeviceToken {
+    
+    //[AppEngine sharedInstance].currentDeviceToken = @"3de17731eef7b45b033940867066a41a944c455738a5acd40b4286c359e96d6e";
+    
+    if ([AppEngine sharedInstance].currentDeviceToken != nil) {
+        
+        if([AppEngine sharedInstance].currentUser != nil) {
+            
+            int user_id = [AppEngine sharedInstance].currentUser.user_id;
+            
+            [self PostRequest: [NSString stringWithFormat:@"users/%i/device-tokens", user_id]
+                   parameters: @{@"token":[AppEngine sharedInstance].currentDeviceToken}
+                     success:^(id responseObject) {
+                         NSLog(@"Device Token saved..");
+                     } failure:^(NSError *error) {
+                         
+                         //failure(MSG_DISCONNECT_INTERNET);
+                     }];
+            
+        }
+    }
+}
+
 - (void) signUp: (NSString*) first_name
       last_name: (NSString*) last_name
           email: (NSString*) email
@@ -120,24 +144,60 @@
         [parameters setValue:avatar forKey:@"photo_url"];
     }
     
-    [self PostRequest: @"users"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  if ([responseObject objectForKey:@"token"]) {
-                      NSString *token = [responseObject objectForKey:@"token"];
-                      [[NSUserDefaults standardUserDefaults] setValue:token forKey:@"api_token"];
-                      [[NSUserDefaults standardUserDefaults] synchronize];
-                  }
-                  
-                  NSDictionary* dicUser = responseObject[@"user"];
-                  success(dicUser);
-                  
-              } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
-              }];
+
+
+
+        [self POST:@"users" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            if ([responseObject objectForKey:@"token"]) {
+                NSString *token = [responseObject objectForKey:@"token"];
+                [[NSUserDefaults standardUserDefaults] setValue:token forKey:@"api_token"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
+            NSDictionary* dicUser = responseObject[@"user"];
+            success(dicUser);
+            [self updateDeviceToken];
+            
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSInteger statusCode = 0;
+            
+            NSHTTPURLResponse *httpResponse = error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey];
+            
+            
+            if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+                statusCode = httpResponse.statusCode;
+            }
+            
+            if (statusCode == 400) {
+                
+                NSData *responseErrorData = (NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+                NSError* error;
+                NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseErrorData
+                                                                     options:kNilOptions
+                                                                       error:&error];
+                
+                if ([json objectForKey:@"errors"] != nil) {
+                    
+                    NSDictionary *errors = [json objectForKey:@"errors"];
+                    if ([errors objectForKey:@"email"]) {
+                        NSArray *emailerror = [NSArray arrayWithArray:[errors objectForKey:@"email"]];
+                        if (emailerror.count > 0) {
+                            failure(emailerror.firstObject);
+                            return;
+                        }
+                    }
+                }
+            }
+            failure(MSG_DISCONNECT_INTERNET);
+            
+        }];
+    
+    
+
 }
+
+
 
 - (void) login: (NSString*) email
       password: (NSString*) password
@@ -162,6 +222,7 @@
                   if ([responseObject objectForKey:@"user"]) {
                       NSDictionary* dicUser = responseObject[@"user"];
                       success(dicUser);
+                      [self updateDeviceToken];
                   } else {
                       failure(@"User UnAuthorised");
                   }
@@ -264,6 +325,7 @@
                   if ([responseObject objectForKey:@"user"]) {
                       NSDictionary* dicUser = responseObject[@"user"];
                       success(dicUser);
+                      [self updateDeviceToken];
                   } else {
                       failure(@"User UnAuthorised");
                   }
@@ -334,6 +396,23 @@
                        failure: (void (^)(NSString *errorMessage))failure
 {
     [self GETRequest: [NSString stringWithFormat:@"users/%i/gifts", user_id]
+          parameters: nil
+             success:^(id responseObject) {
+                 
+                 success(responseObject);
+                 
+             } failure:^(NSError *error) {
+                 
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
+}
+
+
+- (void) getReceivedGiftsTransactionHistory: (int) user_id
+                       success: (void (^)(NSArray *transactions))success
+                       failure: (void (^)(NSString *errorMessage))failure
+{
+    [self GETRequest: [NSString stringWithFormat:@"users/%i/received-gifts", user_id]
           parameters: nil
              success:^(id responseObject) {
                  
@@ -883,6 +962,7 @@
     NSString *path = [NSString stringWithFormat:@"users/%i/notifications/%i", [AppEngine sharedInstance].currentUser.user_id, activity_id];
     [self PATCH:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         //NSLog(@"responseObject %@", responseObject);
+        [[AppDelegate getDelegate].mainTabBar updateNotificationBadge];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
          //NSLog(@"error %@", error);
     }];
@@ -1132,64 +1212,53 @@
             success: (void (^)(void))success
             failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       f.feed_id, @"object_id",
-                                       [NSNumber numberWithInt: REPORT_FEED], @"type",
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",
-                                       [AppEngine sharedInstance].currentUser.email, @"email",
-                                       nil];
+
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
     
-    [self PostRequest: @"report_api/report_feed.php"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  BOOL status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      success();
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
-                  
-              } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
-              }];
+    [self POST:[NSString stringWithFormat:@"projects/%@/abuse-reports", f.feed_id] parameters:@{@"message":@"Test user"} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success();
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSInteger statusCode = 0;
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+            statusCode = httpResponse.statusCode;
+        }
+        
+        if (statusCode == 201) {
+            success();
+            return;
+        }
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
 }
 
 - (void) reportUser: (User*) u
             success: (void (^)(void))success
             failure: (void (^)(NSString *errorMessage))failure
 {
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       [NSNumber numberWithInt: u.user_id], @"object_id",
-                                       [NSNumber numberWithInt: REPORT_USER], @"type",
-                                       [NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",
-                                       [AppEngine sharedInstance].currentUser.email, @"email",
-                                       nil];
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
     
-    [self PostRequest: @"report_api/report_user.php"
-           parameters: parameters
-              success:^(id responseObject) {
-                  
-                  BOOL status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      success();
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }
-                  
-              } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
-              }];
+    [self POST:[NSString stringWithFormat:@"users/%i/abuse-reports", u.user_id] parameters:@{@"message":@"Test user"} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success();
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSInteger statusCode = 0;
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        if ([httpResponse isKindOfClass:[NSHTTPURLResponse class]]) {
+            statusCode = httpResponse.statusCode;
+        }
+        
+        if (statusCode == 201) {
+            success();
+            return;
+        }
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
 }
 
 
@@ -1203,20 +1272,10 @@
              failure: (void (^)(NSString *errorMessage))failure
 {
     
-    NSString *path = [NSString stringWithFormat:@"activity_api/get_unread_count_notification.php?user_id=%i", user_id];
+    NSString *path = [NSString stringWithFormat:@"users/%i/notifications/unread/count", user_id];
     
     [self GETRequest:path parameters:nil success:^(id responseObject) {
-        int status = [responseObject[@"success"] boolValue];
-        if(status)
-        {
-            //NSDictionary* dicUser = responseObject[@"user"];
-            success(responseObject);
-        }
-        else
-        {
-            NSString* message = responseObject[@"message"];
-            failure(message);
-        }
+        success(responseObject);
     } failure:^(NSError *error) {
         failure(MSG_DISCONNECT_INTERNET);
     }];

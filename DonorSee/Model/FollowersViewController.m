@@ -3,6 +3,7 @@
 //  DonorSee
 //
 //  Created by Keval on 25/08/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import "FollowersViewController.h"
@@ -15,6 +16,9 @@
 @property (nonatomic, strong) NSArray *followers;
 
 @property (nonatomic, strong) NSArray *transactions;
+
+@property (nonatomic, strong) NSArray *receivedGiftstransactions;
+
 @property (weak, nonatomic) IBOutlet UILabel *headerTitle;
 
 @end
@@ -26,6 +30,8 @@
     // Do any additional setup after loading the view.
     _followers = @[];
     _transactions = @[];
+    _receivedGiftstransactions = @[];
+    
     
     if ([_viewType isEqualToString:@"thistory"]) {
         [self getTransactionHistory];
@@ -52,9 +58,24 @@
                                                     FEMMapping *mapping = [DSMappingProvider eventMappingForTransactionHistory];
                                                     _transactions = [FEMDeserializer collectionFromRepresentation:transactions mapping:mapping];
                                                     [_followersTableView reloadData];
-                                                    
+                                                    [self getReceivedGiftsTransactionHistory];
                                                 } failure:^(NSString *errorMessage) {
+                                                    [self getReceivedGiftsTransactionHistory];
                                                 }];
+}
+
+- (void) getReceivedGiftsTransactionHistory {
+    
+    [[NetworkClient sharedClient] getReceivedGiftsTransactionHistory:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *transactions) {
+        
+        FEMMapping *mapping = [DSMappingProvider eventMappingForTransactionHistory];
+        _receivedGiftstransactions = [FEMDeserializer collectionFromRepresentation:transactions mapping:mapping];
+        [_followersTableView reloadData];
+        
+    } failure:^(NSString *errorMessage) {
+        
+    }];
+    
 }
 
 - (void) getUserFollowStatus {
@@ -102,12 +123,16 @@
 #pragma mark - UITableView Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if ([_viewType isEqualToString:@"thistory"]) return 2;
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([_viewType isEqualToString:@"thistory"]) {
-        return _transactions.count;
+        if (section == 0) {
+            return _transactions.count;
+        }
+        return _receivedGiftstransactions.count;
     }
     return _followers.count;
 }
@@ -120,10 +145,17 @@
         UILabel *descLbl = (UILabel *)[cell.contentView viewWithTag:11];
         UILabel *amountLbl = (UILabel *)[cell.contentView viewWithTag:12];
         
-        Event *transcation = [_transactions objectAtIndex:indexPath.row];
+        if (indexPath.section == 0) {
+            Event *transcation = [_transactions objectAtIndex:indexPath.row];
+            amountLbl.text = [NSString stringWithFormat:@"$%i", transcation.gift_amount_cents/100];
+            descLbl.text = [NSString stringWithFormat:@"Gave to %@ project", transcation.recipient.name];
+        } else {
+            Event *transcation = [_receivedGiftstransactions objectAtIndex:indexPath.row];
+            amountLbl.text = [NSString stringWithFormat:@"$%i", transcation.gift_amount_cents/100];
+            descLbl.text = [NSString stringWithFormat:@"Received gift from %@ project", transcation.creator.name];
+        }
         
-        amountLbl.text = [NSString stringWithFormat:@"$%i", transcation.gift_amount_cents/100];
-        descLbl.text = [NSString stringWithFormat:@"Gave to %@ project", transcation.recipient.name];
+
         return cell;
         
     }
@@ -146,6 +178,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if ([_viewType isEqualToString:@"thistory"])  return;
     
     NSDictionary *user = [_followers objectAtIndex:indexPath.row];
     FEMMapping *mapping = [DSMappingProvider userMapping];

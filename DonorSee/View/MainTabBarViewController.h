@@ -13,4 +13,5 @@
 
 - (UITabBarItem *)getNotificationTabItem;
 - (void) updateNotificationBadge;
+- (void) cancelUpdateNotification;
 @end
