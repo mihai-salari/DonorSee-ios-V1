@@ -2,7 +2,6 @@
 //  StripeDonateViewController.h
 //  DonorSee
 //
-//  Created by Keval on 11/06/16.
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 

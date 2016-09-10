@@ -2,7 +2,6 @@
 //  UITabBarItem+CustomBadge.h
 //  DonorSee
 //
-//  Created by Keval on 09/07/16.
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 
