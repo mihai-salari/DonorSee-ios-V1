@@ -80,7 +80,16 @@
 - (IBAction) actionFBSignIn:(id)sender
 {
     [self signInFB:^{
-        [self gotoHomeView: YES];
+        
+        if (self.isModal) {
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName:@"LOGIN_COMPLETE"
+             object:nil userInfo:@{@"status":@"1"}];
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [self gotoHomeView: YES];
+        }
     }];
 }
 
@@ -149,22 +158,18 @@
     {
         [SVProgressHUD showWithStatus: @"Sign up..." maskType: SVProgressHUDMaskTypeClear];
         NSData* imgData = UIImageJPEGRepresentation(imgAvatar, IMAGE_COMPRESSION);
-        [[JAmazonS3ClientManager defaultManager] uploadPostPhotoData: imgData
-                                                             fileKey: [AppEngine getImageName]
-                                                    withProcessBlock:^(float progress) {
-                                                        
-                                                    } completeBlock:^(NSString *imageURL) {
-                                                        
-                                                        NSLog(@"imageURL = %@", imageURL);
-                                                        if(imageURL != nil)
-                                                        {
-                                                            [self signUp: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: imageURL]];
-                                                        }
-                                                        else
-                                                        {
-                                                            [SVProgressHUD dismiss];
-                                                        }
-                                                    }];
+        
+        [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+            [SVProgressHUD dismiss];
+            if ([photoInfo objectForKey:@"secure_url"]) {
+                [self signUp:[photoInfo objectForKey:@"secure_url"]];
+            } else {
+                [self signUp: @""];
+            }
+            
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+        }];
     }
     else
     {
@@ -200,7 +205,16 @@
                                      [[CoreHelper sharedInstance] setCurrentUserId: u.user_id];
                                      [AppEngine sharedInstance].currentUser = u;
                                      
-                                     [self gotoHomeView: YES];
+                                     if (self.isModal) {
+                                         [[NSNotificationCenter defaultCenter]
+                                          postNotificationName:@"LOGIN_COMPLETE"
+                                          object:nil userInfo:@{@"status":@"1"}];
+                                         
+                                         [self dismissViewControllerAnimated:YES completion:nil];
+                                     } else {
+                                         [self gotoHomeView: YES];
+                                     }
+                                     
                                      
                                  } failure:^(NSString *errorMessage) {
                                      [SVProgressHUD dismiss];

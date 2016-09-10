@@ -7,7 +7,7 @@
 //
 
 #import "FeedTableViewCell.h"
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 @import CircleProgressView;
 
 @interface FeedTableViewCell()
@@ -132,7 +132,7 @@
     
     //Heart.
     btHeart.hidden = NO;
-    if([AppEngine sharedInstance].currentUser == nil || currentFeed.postUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
+    if(currentFeed.postUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
     {
         btHeart.hidden = YES;
     }

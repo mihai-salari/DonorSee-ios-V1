@@ -12,6 +12,6 @@
 {
     
 }
-
+- (void) showSignupPage;
 - (void) loadMyFeeds;
 @end

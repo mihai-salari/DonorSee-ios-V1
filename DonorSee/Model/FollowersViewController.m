@@ -2,7 +2,6 @@
 //  FollowersViewController.m
 //  DonorSee
 //
-//  Created by Keval on 25/08/16.
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 
@@ -24,6 +23,7 @@
 @end
 
 @implementation FollowersViewController
+@synthesize intSelectedTab,tableFromTop;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -36,8 +36,10 @@
     if ([_viewType isEqualToString:@"thistory"]) {
         [self getTransactionHistory];
         self.headerTitle.text = @"Transaction History";
+        self.tableFromTop.constant=111;
     } else {
         [self getUserFollowStatus];
+        
     }
     
     
@@ -109,6 +111,23 @@
         [SVProgressHUD dismiss];
     }];
 }
+- (IBAction)ReceivedGiftButtonPress:(UIButton *)sender {
+    intSelectedTab=1;
+    self.ActiveSendGift.hidden=TRUE;
+    self.ActiveResevedGifts.hidden=FALSE;
+    _btnReceiveGift.selected=TRUE;
+    _btnSendGift.selected=FALSE;
+    [self.followersTableView reloadData];
+    
+}
+- (IBAction)SendGiftsButtonPress:(UIButton *)sender {
+    intSelectedTab=0;
+    self.ActiveSendGift.hidden=FALSE;
+    self.ActiveResevedGifts.hidden=TRUE;
+    _btnReceiveGift.selected=FALSE;
+    _btnSendGift.selected=TRUE;
+    [self.followersTableView reloadData];
+}
 
 /*
 #pragma mark - Navigation
@@ -123,13 +142,19 @@
 #pragma mark - UITableView Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if ([_viewType isEqualToString:@"thistory"]) return 2;
+    //if ([_viewType isEqualToString:@"thistory"]) return 2;
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([_viewType isEqualToString:@"thistory"]) {
+        /*
         if (section == 0) {
+            return _transactions.count;
+        }
+        return _receivedGiftstransactions.count;
+         */
+        if (intSelectedTab == 0) {
             return _transactions.count;
         }
         return _receivedGiftstransactions.count;
@@ -145,7 +170,7 @@
         UILabel *descLbl = (UILabel *)[cell.contentView viewWithTag:11];
         UILabel *amountLbl = (UILabel *)[cell.contentView viewWithTag:12];
         
-        
+        /*
         if (indexPath.section == 0) {
             Event *transcation = [_transactions objectAtIndex:indexPath.row];
             amountLbl.text = [NSString stringWithFormat:@"$%.2f", ((float)transcation.gift_amount_cents/100)];
@@ -153,6 +178,15 @@
         } else {
             Event *transcation = [_receivedGiftstransactions objectAtIndex:indexPath.row];
             amountLbl.text = [NSString stringWithFormat:@"$%.2f", (float)transcation.gift_amount_cents/100];
+            descLbl.text = [NSString stringWithFormat:@"Received gift from %@", transcation.creator.name];
+        }*/
+        if (intSelectedTab == 0) {
+            Event *transcation = [_transactions objectAtIndex:indexPath.row];
+            amountLbl.text = [NSString stringWithFormat:@"$%.0f", ((float)transcation.gift_amount_cents/100)];
+            descLbl.text = [NSString stringWithFormat:@"Gave to %@ project", transcation.recipient.name];
+        } else {
+            Event *transcation = [_receivedGiftstransactions objectAtIndex:indexPath.row];
+            amountLbl.text = [NSString stringWithFormat:@"$%.0f", (float)transcation.gift_amount_cents/100];
             descLbl.text = [NSString stringWithFormat:@"Received gift from %@", transcation.creator.name];
         }
         

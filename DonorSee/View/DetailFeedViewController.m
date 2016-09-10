@@ -128,6 +128,7 @@
 - (void) initMember
 {
     [super initMember];
+    lbMaxPrice.text = @"$";
     
     arrActivities = [[NSMutableArray alloc] init];
     arrFollowPhotos = [[NSMutableArray alloc] init];
@@ -193,6 +194,11 @@
     progressView.trackBorderColor = [UIColor whiteColor];
     progressView.trackFillColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
     
+    //Amit
+    if (_isVisibleFromNotification) {
+        [self loadFeed];
+    }
+    /*
     //Fill out Info.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self updateFeedInfo];
@@ -200,7 +206,7 @@
         if (_isVisibleFromNotification) {
             [self loadFeed];
         }
-    });
+    });*/
 }
 
 - (void) updateFeedInfo
@@ -311,7 +317,8 @@
                                                    }
                                                    
                                                    selectedFeed = f;
-                                                   [self updateFeedInfo];
+                                                   //Amit------No need to update Feed Info
+                                                   //[self updateFeedInfo];
                                                    [tbActivity reloadData];
                                                    
                                                    if(_isFollowMessage)

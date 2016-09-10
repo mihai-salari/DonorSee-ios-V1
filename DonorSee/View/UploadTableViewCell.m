@@ -7,7 +7,7 @@
 //
 
 #import "UploadTableViewCell.h"
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 
 @implementation UploadTableViewCell
 @synthesize lbDescription;
@@ -94,7 +94,10 @@
     DONATED_STATUS status = [f getDonatedStatus];
     if(status == FULL_DONATED)
     {
-        lbDescription.text = [NSString stringWithFormat: @"You have received funds from %@. Don't forget to email them a follow up picture!", [self getUsernameString: donatedUserNames]];
+        
+        //Amit I change text of lblDescription in condition
+        //lbDescription.text = [NSString stringWithFormat: @"You have received funds from %@. Don't forget to email them a follow up picture!", [self getUsernameString: donatedUserNames]];
+        lbDescription.text = @"You have received funds! Use the \"follow up\" button to update your donors!";
 //        [btBig setTitle: @"Email Follow Up Picture" forState: UIControlStateNormal];
 //        btBig.hidden = NO;
 //        btSmall1.hidden = YES;
@@ -102,14 +105,16 @@
     }
     else if(status == DONATING)
     {
-        lbDescription.text = [NSString stringWithFormat: @"You have received funds from %@. Don't forget to email them a follow up picture!", [self getUsernameString: donatedUserNames]];
+        //lbDescription.text = [NSString stringWithFormat: @"You have received funds from %@. Don't forget to email them a follow up picture!", [self getUsernameString: donatedUserNames]];
+        lbDescription.text = @"You have received funds! Use the \"follow up\" button to update your donors!";
 //        btBig.hidden = YES;
 //        btSmall1.hidden = NO;
 //        btSmall2.hidden = NO;
     }
     else
     {
-        lbDescription.text = @"No donations have been made to this project yet.";
+        //lbDescription.text = @"No donations have been made to this project yet.";
+        lbDescription.text = @"No funds have been received yet.";
 //        [btBig setTitle: @"Share Your Project" forState: UIControlStateNormal];
 //        btBig.hidden = NO;
 //        btSmall1.hidden = YES;
@@ -194,6 +199,9 @@
 
 - (IBAction) actionEmail:(id)sender
 {
+    //--Amit
+    
+    /*
     NSMutableArray* arrEmails = [[NSMutableArray alloc] init];
     if(currentFeed.arrUsers != nil && [currentFeed.arrUsers count] > 0)
     {
@@ -209,7 +217,7 @@
     if ([self.delegate respondsToSelector:@selector(emailFeed:array:)])
     {
         [self.delegate emailFeed: currentFeed array: arrEmails];
-    }
+    }*/
 }
 
 - (IBAction) actionFollow:(id)sender

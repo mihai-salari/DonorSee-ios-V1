@@ -10,4 +10,6 @@
 
 @interface SignInViewController : BaseViewController
 
+@property (nonatomic, readwrite) BOOL isModelView;
+
 @end

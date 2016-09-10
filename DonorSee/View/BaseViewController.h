@@ -19,5 +19,5 @@
 - (void) gotoHomeView: (BOOL) animate;
 - (IBAction) actionBack:(id)sender;
 - (void) signInFB: (void (^)(void)) completed;
-
+- (BOOL)isModal;
 @end

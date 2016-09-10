@@ -26,6 +26,5 @@
 #import "AppEngine.h"
 #import "CoreHelper.h"
 #import "NetworkClient.h"
-#import "JAmazonS3ClientManager.h"
 
 #endif /* DonorSee_Prefix_pch */

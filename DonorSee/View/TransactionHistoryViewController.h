@@ -2,7 +2,7 @@
 //  TransactionHistoryViewController.h
 //  DonorSee
 //
-//  Created by Keval on 26/08/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -16,6 +16,7 @@
 @property (nonatomic, weak) IBOutlet UIButton           *btSkip;
 @property (nonatomic, weak) IBOutlet UIButton           *btLogin;
 @property (nonatomic, weak) IBOutlet UIButton           *btSignUp;
+@property (weak, nonatomic) IBOutlet UIButton *backBtn;
 
 @end
 
@@ -52,8 +53,22 @@
     btSignUp.layer.cornerRadius = 20.0;
     btSignUp.layer.borderColor = [UIColor whiteColor].CGColor;
     btSignUp.layer.borderWidth = 1.0;
+    
+    _backBtn.hidden = YES;
+    
+    if (_isModelView) {
+        _backBtn.hidden = NO;
+        btSkip.hidden = YES;
+    }
 }
 
+- (IBAction)dismissView:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:@"LOGIN_COMPLETE"
+     object:nil userInfo:@{@"status":@"0"}];
+}
 
 - (IBAction) actionSkip:(id)sender
 {

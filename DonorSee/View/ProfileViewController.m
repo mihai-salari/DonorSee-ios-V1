@@ -11,6 +11,8 @@
 #import "FundedTableViewCell.h"
 #import "SettingsTableViewCell.h"
 
+#import "UploadViewController.h"
+
 #import "SSARefreshControl.h"
 #import <MessageUI/MessageUI.h>
 //#import "JAmazonS3ClientManager.h"
@@ -190,6 +192,8 @@
     currentPage = TAB_FUNDED;
     [self updatePages];
     [self loadFundedFeeds];
+    
+    //NSLog(@"%f",[AppEngine sharedInstance].currentUser.pay_amount);
 }
 
 - (void) loadAllFeeds
@@ -331,8 +335,25 @@
     
     lbUsername.text = [AppEngine sharedInstance].currentUser.name;
     [ivUserAvatar sd_setImageWithURL: [NSURL URLWithString: [AppEngine sharedInstance].currentUser.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
-    lbDonatedAmount.text = [NSString stringWithFormat: @"$%d Given", (int)[AppEngine sharedInstance].currentUser.pay_amount];
     lbDonatedAmount.hidden = ![AppEngine sharedInstance].isShowDonatedAmount;
+    
+    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
+                                      success:^(NSDictionary *userInfo) {
+                                          NSString * amountGivenCents = [NSString stringWithFormat:@"%@",[userInfo valueForKey:@"amount_given_cents"]];
+                                          if ([amountGivenCents isEqual :@"<null>"]) {
+                                              lbDonatedAmount.text = [NSString stringWithFormat: @"$0 Given"];
+                                          }
+                                          else{
+                                              lbDonatedAmount.text = [NSString stringWithFormat: @"$%@ Given", [amountGivenCents substringToIndex:2]];
+                                          }
+                                          
+                                      } failure:^(NSString *errorMessage) {
+                                          
+                                          [loadingUpload stopAnimating];
+                                          loadingUpload.hidden = YES;
+                                          [refreshUpload endRefreshing];
+                                          
+                                      }];
     
     [self loadFundedFeeds];
     [self loadMyFeeds];
@@ -625,7 +646,28 @@
     {
         FundedTableViewCell *cell = (FundedTableViewCell*)[tableView dequeueReusableCellWithIdentifier: NSStringFromClass([FundedTableViewCell class]) forIndexPath:indexPath];
         cell.delegate = self;
-        Event* f = [arrFunds objectAtIndex: indexPath.row];
+        NSDictionary *dic=[arrFunds objectAtIndex:indexPath.row];
+        Event *f =[[Event alloc]init];
+        f.event_id=[dic objectForKey:@"id"];
+        //f.type
+        f.message=[dic objectForKey:@"description"];
+       // f.created_at
+        //f.updated_at
+        //f.creator
+        //f.recipient
+        
+        //f.is_read
+        NSDictionary *dicStatus=[dic objectForKey:@"stats"];
+        f.gift_amount_cents=[[dicStatus objectForKey:@"amount_raised_cents"] intValue];
+        f.photo_urls=[dic objectForKey:@"photo_url"];
+        
+        Feed *objFeed=[[Feed alloc]init];
+        objFeed.feed_id=[dic objectForKey:@"id"];
+        objFeed.pre_amount=[[dic objectForKey:@"goal_amount_cents"] intValue];
+        f.feed=objFeed;
+       // objFeed.pre_amount=[dic objectForKey:@""];
+        
+        //Event* f = [arrFunds objectAtIndex: indexPath.row];
         [cell setDonateFeed: f];
         return cell;
     }
@@ -634,6 +676,9 @@
         UploadTableViewCell *cell = (UploadTableViewCell*)[tableView dequeueReusableCellWithIdentifier: NSStringFromClass([UploadTableViewCell class]) forIndexPath:indexPath];
         Feed* f = [arrUploads objectAtIndex: indexPath.row];
         cell.delegate = self;
+        cell.btSmall1.tag=indexPath.row;
+        [cell.btSmall1 addTarget:self action:@selector(EditProject:) forControlEvents:UIControlEventTouchDown];
+        
         [cell setFeed: f];
         return cell;
     }
@@ -646,6 +691,19 @@
     }
 }
 
+-(IBAction)EditProject:(UIButton*)sender
+{
+    Feed* f = [arrUploads objectAtIndex: sender.tag];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UploadViewController *myVC = (UploadViewController *)[storyboard instantiateViewControllerWithIdentifier:@"UploadViewController"];
+    myVC.isUpdateMode=TRUE;
+    myVC.objFeed=f;
+    [AppEngine sharedInstance].currentUser.lastSelectedId=[f.feed_id intValue];
+    [self.navigationController pushViewController:myVC animated:TRUE];
+    //[self presentViewController:myVC animated:YES completion:nil];
+    
+}
 - (void) changedShowDonatedAmount:(BOOL)isShowDonatedAmount
 {
     [[CoreHelper sharedInstance] setIsShowDonatedAmount: isShowDonatedAmount];    

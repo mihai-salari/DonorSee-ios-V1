@@ -485,6 +485,33 @@
                   failure(MSG_DISCONNECT_INTERNET);
               }];
 }
+- (void) UpdatepostFeed: (NSString*) imageURL
+      description: (NSString*) description
+           amount: (int) amount
+          user_id: (int) user_id
+          success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
+          failure: (void (^)(NSString *errorMessage))failure
+{
+    
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       imageURL, @"photo_url",
+                                       description, @"description",
+                                       [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
+                                       nil];
+    
+    NSLog(@"%d",[AppEngine sharedInstance].currentUser.lastSelectedId);
+    [self PATCH:[NSString stringWithFormat:@"projects/%i",[AppEngine sharedInstance].currentUser.lastSelectedId] parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    {
+        NSDictionary* dicFeed = responseObject;
+        NSDictionary* dicUser = responseObject[@"owner"];
+        success(dicFeed, dicUser);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+}
 
 - (void) getSingleFeed: (NSString*) feed_id
                success: (void (^)(NSDictionary *dicFeed))success
@@ -621,34 +648,45 @@
                 success: (void (^)(NSArray *arrFeed))success
                 failure: (void (^)(NSString *errorMessage))failure
 {
-    
+    /*
     [self GETRequest: [NSString stringWithFormat:@"users/%i/gifts", user_id]
            parameters: nil
               success:^(id responseObject) {
                   FEMMapping *mapping = [DSMappingProvider giftsMapping];
                   NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
                   success(arrFeeds);
-                  /*
-                  NSLog(@"response = %@", responseObject);
-                  int status = [responseObject[@"success"] boolValue];
-                  if(status)
-                  {
-                      if([[responseObject allKeys] containsObject: @"data"])
-                      {
-                          NSArray* arrFeeds = responseObject[@"data"][@"feeds"];
-                          success(arrFeeds);
-                      }
-                  }
-                  else
-                  {
-                      NSString* message = responseObject[@"message"];
-                      failure(message);
-                  }*/
-                  
               } failure:^(NSError *error) {
                   
                   failure(MSG_DISCONNECT_INTERNET);
-              }];
+              }];*/
+    
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    
+    
+//    [self GET: @"projects/given-to"
+//   parameters: nil
+//     progress:^(NSProgress * _Nonnull downloadProgress) {
+//         
+//     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//         success(responseObject);
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//         failure(error);
+//     }];
+    
+    [self GETRequest:@"projects/given-to"
+          parameters: nil
+             success:^(id responseObject) {
+                // FEMMapping *mapping = [DSMappingProvider NewgiftsMapping];
+                // NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                 NSArray* arr =[NSArray arrayWithObject:responseObject];
+                 NSArray* arrFeeds =[arr objectAtIndex:0];
+                 NSLog(@"%d",arrFeeds.count);
+                 success(arrFeeds);
+             } failure:^(NSError *error) {
+                 
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
 }
 
 - (void) removeFeed: (Feed*) f

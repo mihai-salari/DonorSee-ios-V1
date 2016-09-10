@@ -1,4 +1,4 @@
-/
+//
 //  ActivityTableViewCell.m
 //  DonorSee
 //
@@ -69,10 +69,13 @@
     
     lbFollowMessage.text = @"";
     NSString* message = @"";
-    if ([event.type isEqualToString:@"update"]) {
+    if ([event.type isEqualToString:@"update"] || [event.type isEqualToString:@"comment"]) {
         NSString* filterUsername = [event.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
         message = [NSString stringWithFormat: @"!%@ posted a follow up", filterUsername];
         
+        if ([event.type isEqualToString:@"comment"]) {
+            message = [NSString stringWithFormat: @"!%@ posted a comment", filterUsername];    
+        }
         
         //Follow Message.
         lbFollowMessage.hidden = NO;
@@ -121,6 +124,13 @@
             viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x, viPhotoContainer.frame.origin.y, viPhotoContainer.frame.size.width, fy);
         
         }
+    }
+    
+    if ([event.type isEqualToString:@"create"]) {
+        NSString* filterUsername = [event.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
+        message = [NSString stringWithFormat: @"!%@ created this project", filterUsername];
+        lbFollowMessage.hidden = YES;
+        viPhotoContainer.hidden = YES;
     }
     
     if ([event.type isEqualToString:@"give"]) {
@@ -219,7 +229,7 @@
                 ivCell.layer.masksToBounds = YES;
                 ivCell.layer.cornerRadius = 10.0;
                 ivCell.contentMode = UIViewContentModeScaleAspectFill;
-                [ivCell sd_setImageWithURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: photoKey]]];
+                //[ivCell sd_setImageWithURL: [NSURL URLWithString: [[JAmazonS3ClientManager defaultManager] getPathForPhoto: photoKey]]];
                 [viPhotoContainer addSubview: ivCell];
 
                 fy += fw + fOffset;
@@ -242,7 +252,7 @@
 
 + (CGFloat) getEventHeight: (Event*) a
 {
-    if ([a.type isEqualToString:@"update"]) {
+    if ([a.type isEqualToString:@"update"] || [a.type isEqualToString:@"comment"]) {
         float fw = 220.0;
         if(IS_IPHONE_5)
         {

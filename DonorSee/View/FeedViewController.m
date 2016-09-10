@@ -239,10 +239,12 @@
 - (void) getProfileLinkForUserid:(int)userid
 {
     //[SVProgressHUD show];
-    
-    NSData *plainData = [[NSString stringWithFormat:@"%i", userid] dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *base64String = [plainData base64EncodedStringWithOptions:0];
-    NSString *url = [NSString stringWithFormat:@"https://donorsee.com/public-profile/%@", base64String];
+
+    NSString *user = [NSString stringWithFormat:@"%i",userid];
+   // NSData *plainData = [[NSString stringWithFormat:@"%i", userid] dataUsingEncoding:NSUTF8StringEncoding];
+  //  NSString *base64String = [plainData base64EncodedStringWithOptions:0];
+  //  NSString *url = [NSString stringWithFormat:@"https://donorsee.com/public-profile/%@", base64String];
+    NSString *url = [NSString stringWithFormat:@"https://donorsee.com/profile/%@", user];
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = url;
     
@@ -264,15 +266,18 @@
 {
     [SVProgressHUD show];
     
+    NSString *user = [NSString stringWithFormat:@"%i",userid];
+    NSString *fbUrl = [NSString stringWithFormat:@"https://donorsee.com/profile/%@", user];
+    
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i", userid ], @"user_id", nil];
     [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
      {
          [SVProgressHUD dismiss];
-         
+             NSLog(@"urlurlurlurl : %@", url);
          FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
          content.contentDescription = MSG_SHARE_USER;
-         content.contentURL = [NSURL URLWithString: url];
-         
+       //  content.contentURL = [NSURL URLWithString: url];
+         content.contentURL = [NSURL URLWithString: [NSString stringWithFormat:@"%@",fbUrl]];
          FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
          dialog.mode = FBSDKShareDialogModeFeedWeb;
          dialog.shareContent = content;
@@ -315,7 +320,11 @@
          {
              [SVProgressHUD dismiss];
              [tweetSheet setInitialText: MSG_SHARE_USER];
-             [tweetSheet addURL: [NSURL URLWithString: url]];
+             
+             NSString *user = [NSString stringWithFormat:@"%i",userid];
+             NSString *tweeterUrl = [NSString stringWithFormat:@"https://donorsee.com/profile/%@", user];
+             
+             [tweetSheet addURL: [NSURL URLWithString: tweeterUrl]];
              SLComposeViewControllerCompletionHandler myBlock = ^(SLComposeViewControllerResult result){
                  if (result == SLComposeViewControllerResultCancelled)
                  {
@@ -360,7 +369,10 @@
          {
              [SVProgressHUD dismiss];
              
-             NSString *messageBody = [NSString stringWithFormat: @"%@\n%@", MSG_SHARE_USER, url];
+             NSString *user = [NSString stringWithFormat:@"%i",userid];
+             NSString *emailUrl = [NSString stringWithFormat:@"https://donorsee.com/profile/%@", user];
+             
+             NSString *messageBody = [NSString stringWithFormat: @"%@\n%@", MSG_SHARE_USER, emailUrl];
              MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
              mc.mailComposeDelegate = self;
              [mc setMessageBody: messageBody isHTML:NO];

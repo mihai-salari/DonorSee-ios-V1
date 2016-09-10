@@ -9,7 +9,7 @@
 #import "ShareViewController.h"
 #import <Social/Social.h>
 #import "Branch.h"
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import <MessageUI/MessageUI.h>
 
@@ -78,17 +78,38 @@
 
 - (void) getProjectLink: (Feed*) f
 {
+    //Amit
+    NSString *strURL =[NSString stringWithFormat:@"https://donorsee.com/project/%@",f.feed_id];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = strURL;
+
+    
+    /*
     NSData *plainData = [[NSString stringWithFormat:@"%@", f.feed_id] dataUsingEncoding:NSUTF8StringEncoding];
     NSString *base64String = [plainData base64EncodedStringWithOptions:0];
+    
     NSString *url = [NSString stringWithFormat:@"https://donorsee.com/feed-details/%@", base64String];
     
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = url;
-    
+    */
 }
 
 - (void) shareFeedInFacebook: (Feed*) f image: (UIImage*) imgShare
 {
+    NSString *strURL =[NSString stringWithFormat:@"https://donorsee.com/project/%@",f.feed_id];
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    content.imageURL = [NSURL URLWithString: f.photo];
+    content.contentDescription = f.feed_description;
+    content.contentURL = [NSURL URLWithString: strURL];
+    
+    FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
+    dialog.mode = FBSDKShareDialogModeFeedWeb;
+    dialog.shareContent = content;
+    dialog.delegate = self;
+    dialog.fromViewController = self;
+    [dialog show];
+    /*
     [SVProgressHUD show];
     
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:f.feed_id, @"feed_id", nil];
@@ -107,7 +128,7 @@
          dialog.delegate = self;
          dialog.fromViewController = self;
          [dialog show];
-     }];
+     }];*/
 }
 
 - (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results
@@ -134,7 +155,44 @@
                                                composeViewControllerForServiceType:SLServiceTypeTwitter];
         
         
-        NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:f.feed_id, @"feed_id", nil];
+        
+        
+        //Amit ------------------
+        NSString *strURL =[NSString stringWithFormat:@"https://donorsee.com/project/%@",f.feed_id];
+        NSString* postText = f.feed_description;
+        if([f.feed_description length] > TWITTER_MAX_LENGTH)
+        {
+            postText = [NSString stringWithFormat: @"%@...", [f.feed_description substringToIndex: TWITTER_MAX_LENGTH]];
+        }
+        
+        [tweetSheet setInitialText: postText];
+        [tweetSheet addURL: [NSURL URLWithString: strURL]];
+        
+        if(imgShare == nil)
+        {
+            UIImage* image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString: f.photo]]];
+            [tweetSheet addImage: image];
+        }
+        else
+        {
+            [tweetSheet addImage: imgShare];
+        }
+        
+        SLComposeViewControllerCompletionHandler myBlock = ^(SLComposeViewControllerResult result){
+            if (result == SLComposeViewControllerResultCancelled)
+            {
+                NSLog(@"delete");
+            } else
+            {
+                NSLog(@"post twitter");
+            }
+        };
+        
+        tweetSheet.completionHandler = myBlock;
+        [self presentViewController:tweetSheet animated:YES completion:nil];
+        /*
+         NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:f.feed_id, @"feed_id", nil];
+         
         [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
          {
              [SVProgressHUD dismiss];
@@ -170,7 +228,7 @@
              
              tweetSheet.completionHandler = myBlock;
              [self presentViewController:tweetSheet animated:YES completion:nil];
-         }];
+         }];*/
     }
     else
     {
@@ -192,6 +250,27 @@
 {
     if([MFMailComposeViewController canSendMail])
     {
+        //Amit
+        NSString *strURL =[NSString stringWithFormat:@"https://donorsee.com/project/%@",f.feed_id];
+        NSString *messageBody = [NSString stringWithFormat: @"%@\n%@", f.feed_description, strURL];
+        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+        mc.mailComposeDelegate = self;
+        [mc setMessageBody:messageBody isHTML:NO];
+        
+        NSData* imageData;
+        if(imgShare)
+        {
+            imageData = UIImageJPEGRepresentation(imgShare, 1.0);
+            [mc addAttachmentData: imageData mimeType: @"image/png" fileName: @"donate"];
+        }
+        else
+        {
+            imageData = [NSData dataWithContentsOfURL: [NSURL URLWithString: f.photo]];
+            [mc addAttachmentData: imageData mimeType: @"image/png" fileName: @"donate"];
+        }
+        
+        [self presentViewController:mc animated:YES completion:NULL];
+        /*
         [SVProgressHUD show];
         NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:f.feed_id, @"feed_id", nil];
         [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
@@ -217,7 +296,7 @@
              
              [self presentViewController:mc animated:YES completion:NULL];
 
-         }];
+         }];*/
     }
     else
     {

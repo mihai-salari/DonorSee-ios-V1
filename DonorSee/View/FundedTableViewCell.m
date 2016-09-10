@@ -1,5 +1,13 @@
+//
+//  FundedTableViewCell.m
+//  DonorSee
+//
+//  Created by star on 3/7/16.
+//  Copyright © 2016 DonorSee LLC. All rights reserved.
+//
+
 #import "FundedTableViewCell.h"
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 
 @implementation FundedTableViewCell
 @synthesize ivPhoto;
@@ -43,9 +51,11 @@
     if(progress > 1) progress = 1;
     
     currentFeed = f;
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.feed.photo]];
+    //[ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.feed.photo]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.photo_urls]];
     lbInfo.text = [NSString stringWithFormat: @"%d%@ RAISED", (int)(progress * 100), @"%"];
-    tvDescription.text = f.feed.feed_description;
+    //lbInfo.text = [NSString stringWithFormat: @"%d%@ RAISED", (int)( f.gift_amount_cents/ 100), @"%"];
+    tvDescription.text = f.message;//f.feed.feed_description;
 }
 
 - (void) onTapPhoto

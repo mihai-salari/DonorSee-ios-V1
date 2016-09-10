@@ -7,11 +7,20 @@
 //
 
 #import "BaseViewController.h"
+#import "Feed.h"
 
 @interface UploadViewController : BaseViewController
 {
     
 }
+@property (weak, nonatomic) IBOutlet UIButton *BtnUpdateProject;
+@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
+
+@property(nonatomic,assign) BOOL isUpdateMode;
+@property(nonatomic,retain) Feed *objFeed;
+
+- (IBAction)UpdateButtonPress:(UIButton *)sender;
+- (IBAction)CancelButtonPress:(UIButton *)sender;
 
 - (void) captureImage: (UIImage*) image;
 @end

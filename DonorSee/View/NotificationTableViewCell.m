@@ -151,7 +151,9 @@
     }
     else if([a.type isEqualToString:@"update"])
     {
-        message = [NSString stringWithFormat: @"!%@ posted a follow up message.", filterUsername];
+        //Amit Change MSG text
+        //message = [NSString stringWithFormat: @"!%@ posted a follow up message.", filterUsername];
+        message = [NSString stringWithFormat: @"!%@ A posted a follow up message to the project.", filterUsername];
     }
     else if([a.type isEqualToString:@"follow"])
     {

@@ -82,8 +82,6 @@
                                                    [SVProgressHUD dismiss];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
                                                }];
-    
-    [[[AppDelegate getDelegate].mainTabBar getNotificationTabItem] removeBadge];
 }
 
 - (void) showNoDataHeader {
@@ -195,11 +193,19 @@
 
     return cell;
 }
-
+/*
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Event* a = [arrNotifications objectAtIndex: indexPath.row];
     return [NotificationTableViewCell getHeight: a];
+}*/
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    //minimum size of your cell, it should be single line of label if you are not clear min. then return UITableViewAutomaticDimension;
+    return UITableViewAutomaticDimension;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewAutomaticDimension;
 }
 
 - (void) selectedNotification: (Event *) a cell:(NotificationTableViewCell*) cell

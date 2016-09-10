@@ -2,7 +2,6 @@
 //  StripeSignupViewController.m
 //  DonorSee
 //
-//  Created by Keval on 18/08/16.
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 

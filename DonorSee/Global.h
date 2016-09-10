@@ -30,7 +30,12 @@
 //#define     kAPIBaseURLString                   @"http://ec2-52-38-29-235.us-west-2.compute.amazonaws.com/donorsee/webservice"
 //#define     kAPIBaseURLString                   @"https://donorsee.com/donorsee/webservice/"
 //#define     kAPIBaseURLString                   @"https://donorsee-api-staging.herokuapp.com/"
-#define     kAPIBaseURLString                   @"https://api.donorsee.com/"
+
+//Amit Hear i change base url bellow
+//#define     kAPIBaseURLString                   @"https://api.donorsee.com/"
+#define     kAPIBaseURLString                   @"https://donorsee-api-staging.herokuapp.com/"
+
+
 #define     APP_STORE_URL                       @"https://itunes.apple.com/us/app/donorsee/id1093861994?ls=1&mt=8"
 
 #define     ADMIN_EMAIL                         @"admin@donorsee.com"

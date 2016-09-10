@@ -9,7 +9,7 @@
 #import "HomeViewController.h"
 #import "FeedTableViewCell.h"
 #import <SVPullToRefresh/SVPullToRefresh.h>
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 #import "DonateViewController.h"
 
 #import "SquareCashStyleBar.h"
@@ -118,7 +118,7 @@
 }
 
 - (void) getUserFollowStatus {
-    [[NetworkClient sharedClient] getUserFollowStatus:[AppEngine sharedInstance].currentUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
+    [[NetworkClient sharedClient] getUserFollowingStatus:[AppEngine sharedInstance].currentUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
         
         _followedUserIds = @[];
         

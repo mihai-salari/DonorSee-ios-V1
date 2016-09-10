@@ -24,4 +24,6 @@
 - (void) shareUserInEmail:(int)userid;
 - (void) shareUserInTwitter:(int)userid;
 - (void) shareUserInFacebook:(int)userid;
+
+- (void) selectUser: (User*) user;
 @end

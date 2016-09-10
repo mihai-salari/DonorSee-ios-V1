@@ -288,13 +288,53 @@
                                 <constraint firstItem="939-Nd-8KG" firstAttribute="centerY" secondItem="rS2-X4-SbW" secondAttribute="centerY" id="xuW-9i-G7R"/>
                             </constraints>
                         </scrollView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aJk-OA-LS6">
+                            <rect key="frame" x="8" y="8" width="359" height="651"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ki-4B-cuw">
+                                    <rect key="frame" x="128" y="307" width="102" height="37"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="102" id="7ot-cc-EbQ"/>
+                                        <constraint firstAttribute="height" constant="37" id="fTt-bo-56a"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
+                                    <state key="normal" title="Sign In">
+                                        <color key="titleColor" red="0.35686274509999999" green="0.36078431370000003" blue="0.34901960780000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="onNewSignUpProcess:" destination="iN0-l3-epB" eventType="touchUpInside" id="0Er-K9-Dvz"/>
+                                    </connections>
+                                </button>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You need to Sign In to view your profile" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="87o-DQ-uCK">
+                                    <rect key="frame" x="8" y="257" width="343" height="42"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="42" id="hDB-Po-YyZ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="7Ki-4B-cuw" firstAttribute="centerY" secondItem="aJk-OA-LS6" secondAttribute="centerY" id="Rd7-l9-c2a"/>
+                                <constraint firstItem="7Ki-4B-cuw" firstAttribute="centerX" secondItem="aJk-OA-LS6" secondAttribute="centerX" id="WT2-NX-3HG"/>
+                                <constraint firstItem="7Ki-4B-cuw" firstAttribute="top" secondItem="87o-DQ-uCK" secondAttribute="bottom" constant="8" id="YfY-Sc-fZO"/>
+                                <constraint firstItem="87o-DQ-uCK" firstAttribute="leading" secondItem="aJk-OA-LS6" secondAttribute="leading" constant="8" id="fvY-Kb-zyq"/>
+                                <constraint firstAttribute="trailing" secondItem="87o-DQ-uCK" secondAttribute="trailing" constant="8" id="xnz-SN-Mm1"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="rS2-X4-SbW" secondAttribute="bottom" id="OZY-2z-o9o"/>
+                        <constraint firstItem="aJk-OA-LS6" firstAttribute="leading" secondItem="n4x-Px-MQp" secondAttribute="leading" constant="8" id="bGw-Ye-xg9"/>
                         <constraint firstItem="rS2-X4-SbW" firstAttribute="top" secondItem="n4x-Px-MQp" secondAttribute="top" id="fgT-EF-Ahx"/>
                         <constraint firstAttribute="trailing" secondItem="rS2-X4-SbW" secondAttribute="trailing" id="iwa-ds-2jp"/>
+                        <constraint firstAttribute="bottom" secondItem="aJk-OA-LS6" secondAttribute="bottom" constant="8" id="p5j-FX-C2q"/>
                         <constraint firstItem="rS2-X4-SbW" firstAttribute="leading" secondItem="n4x-Px-MQp" secondAttribute="leading" id="uFM-s5-VjS"/>
+                        <constraint firstItem="aJk-OA-LS6" firstAttribute="top" secondItem="n4x-Px-MQp" secondAttribute="top" constant="8" id="z1i-Bc-CqP"/>
+                        <constraint firstAttribute="trailing" secondItem="aJk-OA-LS6" secondAttribute="trailing" constant="8" id="zVa-Ws-h2K"/>
                     </constraints>
                 </view>
             </subviews>

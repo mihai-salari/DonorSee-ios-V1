@@ -16,6 +16,7 @@
 #import <FBSDKShareKit/FBSDKShareKit.h>
 #import <MessageUI/MessageUI.h>
 #import <Social/Social.h>
+#import "FollowersViewController.h"
 
 @interface OtherUserViewController () <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, MFMailComposeViewControllerDelegate, FBSDKSharingDelegate>
 {
@@ -84,7 +85,7 @@
     if([AppEngine sharedInstance].currentUser == nil || self.selectedUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
     {
         viFollow.hidden = YES;
-        //btSettings.hidden = YES;
+        btSettings.hidden = YES;
     }
     
     [self getUserFollowStatus];
@@ -170,10 +171,22 @@
 }
 
 - (void) getUserFollowStatus {
-    [[NetworkClient sharedClient] getUserFollowStatus:[AppEngine sharedInstance].currentUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
+    
+    if (_selectedUser.user_id == [AppEngine sharedInstance].currentUser.user_id) {
+      
+        [[NetworkClient sharedClient] getUserFollowingStatus:_selectedUser.user_id user_id:_selectedUser.user_id success:^(NSArray *followStatus) {
+            lbFollowers.text = [NSString stringWithFormat: @"%d", followStatus.count];
+        } failure:^(NSString *errorMessage) {
+            
+        }];
+        
+        return;
+    }
+    
+    [[NetworkClient sharedClient] getUserFollowStatus:_selectedUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
         
         if (followStatus.count > 0) {
-            NSPredicate *isCurrentUserFollowingPredicate = [NSPredicate predicateWithFormat:@"id == %d", _selectedUser.user_id];
+            NSPredicate *isCurrentUserFollowingPredicate = [NSPredicate predicateWithFormat:@"id == %d", [AppEngine sharedInstance].currentUser.user_id];
             NSArray *filteredList = [followStatus filteredArrayUsingPredicate:isCurrentUserFollowingPredicate];
             if (filteredList.count > 0) {
                 _selectedUser.followed = YES;
@@ -313,6 +326,19 @@
     }
 }
 
+#pragma mark -
+#pragma mark
+- (IBAction)onShowFollowers:(id)sender {
+    
+    if (![lbFollowers.text isEqualToString:@"0"]) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        FollowersViewController *followersController = [storyboard instantiateViewControllerWithIdentifier:@"FollowersView"];
+        followersController.selectedUser = self.selectedUser;
+        [self.navigationController pushViewController:followersController animated:YES];
+    }
+}
+
+
 #pragma mark - Report.
 
 - (IBAction) actionReport:(id)sender
@@ -386,14 +412,22 @@
 - (void) getProfileLink
 {
     [SVProgressHUD show];
+//    
+//    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i", _selectedUser.user_id ], @"user_id", nil];
+//    [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
+//     {
+//         [SVProgressHUD dismiss];
+//         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+//         pasteboard.string = url;
+//     }];
     
-    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i", _selectedUser.user_id ], @"user_id", nil];
-    [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
-     {
-         [SVProgressHUD dismiss];
-         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-         pasteboard.string = url;
-     }];
+    NSString *user = [NSString stringWithFormat:@"%i",_selectedUser.user_id];
+    // NSData *plainData = [[NSString stringWithFormat:@"%i", userid] dataUsingEncoding:NSUTF8StringEncoding];
+    //  NSString *base64String = [plainData base64EncodedStringWithOptions:0];
+    //  NSString *url = [NSString stringWithFormat:@"https://donorsee.com/public-profile/%@", base64String];
+    NSString *url = [NSString stringWithFormat:@"https://donorsee.com/profile/%@", user];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = url;
 
 }
 
@@ -435,8 +469,20 @@
 
 - (void) shareUserInFacebook
 {
-    [SVProgressHUD show];
+    //Amit--
+    FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
+    content.contentDescription = MSG_SHARE_USER;
+    content.contentURL = [NSURL URLWithString: [NSString stringWithFormat:@"https://donorsee.com/profile/%d", _selectedUser.user_id ]];
     
+    FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
+    dialog.mode = FBSDKShareDialogModeFeedWeb;
+    dialog.shareContent = content;
+    dialog.delegate = self;
+    dialog.fromViewController = self;
+    [dialog show];
+    
+    /*
+     [SVProgressHUD show];
     NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i", _selectedUser.user_id ], @"user_id", nil];
     [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
      {
@@ -452,7 +498,7 @@
          dialog.delegate = self;
          dialog.fromViewController = self;
          [dialog show];
-     }];
+     }];*/
 }
 
 - (void)sharer:(id<FBSDKSharing>)sharer didCompleteWithResults:(NSDictionary *)results
@@ -474,11 +520,28 @@
 {
     if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
     {
-        [SVProgressHUD show];
+        
         SLComposeViewController *tweetSheet = [SLComposeViewController
                                                composeViewControllerForServiceType:SLServiceTypeTwitter];
         
+        ;
         
+        [tweetSheet setInitialText: MSG_SHARE_USER];
+        [tweetSheet addURL: [NSURL URLWithString: [NSString stringWithFormat:@"https://donorsee.com/profile/%d", _selectedUser.user_id ]]];
+        SLComposeViewControllerCompletionHandler myBlock = ^(SLComposeViewControllerResult result){
+            if (result == SLComposeViewControllerResultCancelled)
+            {
+                NSLog(@"delete");
+            } else
+            {
+                NSLog(@"post twitter");
+            }
+        };
+        
+        tweetSheet.completionHandler = myBlock;
+        [self presentViewController:tweetSheet animated:YES completion:nil];
+        /*
+         [SVProgressHUD show];
         NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i", _selectedUser.user_id ], @"user_id", nil];
         [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
          {
@@ -497,7 +560,7 @@
              
              tweetSheet.completionHandler = myBlock;
              [self presentViewController:tweetSheet animated:YES completion:nil];
-         }];
+         }];*/
     }
     else
     {
@@ -519,7 +582,15 @@
 {
     if([MFMailComposeViewController canSendMail])
     {
-        [SVProgressHUD show];
+        //Amit
+        
+        NSString *messageBody = [NSString stringWithFormat: @"%@\n%@", MSG_SHARE_USER, [NSString stringWithFormat:@"https://donorsee.com/profile/%d", _selectedUser.user_id ]];
+        MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+        mc.mailComposeDelegate = self;
+        [mc setMessageBody: messageBody isHTML:NO];
+        [self presentViewController:mc animated:YES completion:NULL];
+        /*
+         //[SVProgressHUD show];
         NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys: [NSString stringWithFormat:@"%i", _selectedUser.user_id ], @"user_id", nil];
         [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
          {
@@ -531,7 +602,7 @@
              [mc setMessageBody: messageBody isHTML:NO];
              [self presentViewController:mc animated:YES completion:NULL];
              
-         }];
+         }];*/
     }
     else
     {

@@ -9,7 +9,7 @@
 #import "UploadViewController.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import "JAmazonS3ClientManager.h"
+//#import "JAmazonS3ClientManager.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
 #import "AuthView.h"
@@ -17,6 +17,10 @@
 #import "DSMappingProvider.h"
 #import "FEMMapping.h"
 #import "FEMDeserializer.h"
+#import "SignInViewController.h"
+
+
+
 @import ALCameraViewController;
 
 @interface UploadViewController() <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AuthViewDelegate>
@@ -59,10 +63,11 @@
 @synthesize toolBar;
 @synthesize btDone;
 @synthesize btPost;
-
+@synthesize objFeed;
 @synthesize constraintScrollHeight;
 @synthesize constraintPhotoHeight;
 @synthesize constraintContentTop;
+@synthesize isUpdateMode;
 
 - (void) initMember
 {
@@ -95,8 +100,91 @@
     viPrice.layer.cornerRadius = 20.0;
     
     ivCheck.hidden = YES;
+    
+    
+    _BtnUpdateProject.layer.masksToBounds = YES;
+    _BtnUpdateProject.layer.cornerRadius = 20.0;
+    if (isUpdateMode==TRUE)
+    {
+        _BtnUpdateProject.hidden=false;
+        btPost.hidden=TRUE;
+        ivCheck.hidden=TRUE;
+        ivCheck.alpha=0.0;
+        [self setInformationOfProject];
+    }
+    else
+    {
+        _BtnUpdateProject.hidden=TRUE;
+        _btnCancel.hidden=TRUE;
+        btPost.hidden=FALSE;
+    }
+}
+-(IBAction)BackButtonPress:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:TRUE];
+}
+//--------Amit
+-(void)setInformationOfProject
+{
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: objFeed.photo]];
+    tvDescription.text=objFeed.feed_description;
+    tfPrice.text=[NSString stringWithFormat:@"%d",objFeed.pre_amount/100];
+}
+- (IBAction)UpdateButtonPress:(UIButton *)sender
+{
+    [self hideKeyboard];
+    
+    UIImage* imgPhoto = ivPhoto.image;
+    NSString* feedDescription = tvDescription.text;
+    int amount = [tfPrice.text intValue];
+    
+    //Check Max count today.
+    NSDate *date = [NSDate date];
+    int count = [[CoreHelper sharedInstance] getHistoryCountPerDay: date];
+    if(count > MAX_POST_COUNT_DAY)
+    {
+        [self presentViewController: [AppEngine showAlertWithText: MSG_MAX_POST_PROJECT] animated: YES completion: nil];
+        return;
+    }
+    
+    if(imgPhoto == nil)
+    {
+        [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_PHOTO] animated: YES completion: nil];
+        return;
+    }
+    
+    if(feedDescription == nil || [feedDescription length] == 0)
+    {
+        [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_DESCRIPTION] animated: YES completion: nil];
+        return;
+    }
+    
+    if(amount < MIN_PRICE || amount > MAX_PRICE)
+    {
+        [self presentViewController: [AppEngine showAlertWithText: [NSString stringWithFormat: @"Enter any price from $%d ~ $%d", MIN_PRICE, MAX_PRICE]] animated: YES completion: nil];
+        return;
+    }
+    
+//    if([AppEngine sharedInstance].currentUser == nil)
+//    {
+//        [self showSignupPage];
+//        return;
+//    }
+    
+    /*
+    if ([self isUserConfiguredStripeAccount]) {
+        //[self postFeed: imgPhoto description: feedDescription amount: amount];
+        
+    }*/
+    [self UpdateMypostedFeed:imgPhoto description:feedDescription amount:amount];
 }
 
+- (IBAction)CancelButtonPress:(UIButton *)sender{
+    //[self dismissViewControllerAnimated:TRUE completion:nil];
+    [self.navigationController popViewControllerAnimated:TRUE];
+}
+//--------------------------------------
+//--------------------------------------
 - (void) clearContent
 {
     ivCheck.hidden = YES;
@@ -120,6 +208,38 @@
 - (IBAction) actionInfo:(id)sender
 {
     [self presentViewController: [AppEngine showAlertWithText: MSG_INFO_AMOUNT] animated: YES completion: nil];
+}
+
+- (void) showSignupPage {
+    
+    if([AppEngine sharedInstance].currentUser) return;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SignInViewController *signInView = [storyboard instantiateViewControllerWithIdentifier: @"SignInView"];
+    signInView.isModelView = YES;
+    UINavigationController *signinNav = [[UINavigationController alloc] initWithRootViewController:signInView];
+    [signinNav setNavigationBarHidden:YES];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didDismissSecondViewController)
+     name:@"LOGIN_COMPLETE"
+     object:nil];
+    
+    [self.navigationController presentViewController:signinNav animated:YES completion:^{
+        
+    }];
+}
+
+- (void)didDismissSecondViewController
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGIN_COMPLETE" object:nil];
+    // this method gets called in MainVC when your SecondVC is dismissed
+    NSLog(@"Dismissed SecondViewController");
+    if([AppEngine sharedInstance].currentUser != nil)
+    {
+        [self successAuth];
+    }
 }
 
 - (IBAction)actionPost:(id)sender
@@ -160,7 +280,7 @@
     
     if([AppEngine sharedInstance].currentUser == nil)
     {
-        viSignInFB.hidden = NO;
+        [self showSignupPage];
         return;
     }
     
@@ -179,54 +299,88 @@
     NSString *imageKey = [AppEngine getImageName];
     
     NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
-    [[JAmazonS3ClientManager defaultManager] uploadPostPhotoData: imgData
-                                                         fileKey: imageKey
-                                                withProcessBlock:^(float progress) {
-                                                    
-                                                } completeBlock:^(NSString *imageURL) {
-                                                    
-                                                    NSLog(@"imageURL = %@", imageURL);
-                                                    if(imageURL != nil)
-                                                    {
-                                                        imageURL = [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@", BUCKET_PHOTO,imageURL];
-                                                        
-                                                        [[NetworkClient sharedClient] postFeed: imageURL
-                                                                                   description: text
-                                                                                        amount: amount
-                                                                                       user_id: [AppEngine sharedInstance].currentUser.user_id
-                                                                                       success:^(NSDictionary *dicFeed, NSDictionary* dicUser) {
-                                                                                          
-                                                                                           [SVProgressHUD dismiss];
-                                                                                           
-                                                                                           //Refresh Feeds.
-                                                                                           HomeViewController* homeView = [self.tabBarController.viewControllers firstObject];
-                                                                                           [homeView refreshFeeds];
-                                                                                           self.tabBarController.selectedIndex = 0;
-                                                                                           
-                                                                                           //Refresh Profile's Upload.
-                                                                                           ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 2];
-                                                                                           [profileView loadMyFeeds];
-                                                                                           
-                                                                                           //Add Post history.
-                                                                                           [[CoreHelper sharedInstance] addPostHistory: [AppEngine sharedInstance].currentUser.user_id
-                                                                                                                             post_date: [NSDate date]];
-                                                                                           [self clearContent];
-                                                                                           
-                                                                                       } failure:^(NSString *errorMessage) {
-                                                                                           
-                                                                                           [SVProgressHUD dismiss];
-                                                                                           [self presentViewController: [AppEngine showErrorWithText: errorMessage]
-                                                                                                              animated: YES
-                                                                                                            completion: nil];
-                                                                                       }];
-                                                    }
-                                                    else
-                                                    {
-                                                        [SVProgressHUD dismiss];
-                                                    }
-                                                }];
+    
+    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+        [SVProgressHUD dismiss];
+        if ([photoInfo objectForKey:@"secure_url"]) {
+            NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
+            [[NetworkClient sharedClient] postFeed: secureUrl
+                                       description: text
+                                            amount: amount
+                                           user_id: [AppEngine sharedInstance].currentUser.user_id
+                                           success:^(NSDictionary *dicFeed, NSDictionary* dicUser) {
+                                               
+                                               [SVProgressHUD dismiss];
+                                               
+                                               //Refresh Feeds.
+                                               HomeViewController* homeView = [self.tabBarController.viewControllers firstObject];
+                                               [homeView refreshFeeds];
+                                               self.tabBarController.selectedIndex = 0;
+                                               
+                                               //Refresh Profile's Upload.
+                                               ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 2];
+                                               [profileView loadMyFeeds];
+                                               
+                                               //Add Post history.
+                                               [[CoreHelper sharedInstance] addPostHistory: [AppEngine sharedInstance].currentUser.user_id
+                                                                                 post_date: [NSDate date]];
+                                               [self clearContent];
+                                               
+                                           } failure:^(NSString *errorMessage) {
+                                               
+                                               [SVProgressHUD dismiss];
+                                               [self presentViewController: [AppEngine showErrorWithText: errorMessage]
+                                                                  animated: YES
+                                                                completion: nil];
+                                           }];
+        }
+        
+    } failure:^(NSString *errorMessage) {
+        [SVProgressHUD dismiss];
+    }];
 }
-
+- (void) UpdateMypostedFeed: (UIImage*) image description: (NSString*) text amount: (int) amount
+{
+    [SVProgressHUD showWithStatus: @"Updating..." maskType: SVProgressHUDMaskTypeClear];
+    
+    NSString *imageKey = [AppEngine getImageName];
+    NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
+    
+    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+        [SVProgressHUD dismiss];
+        if ([photoInfo objectForKey:@"secure_url"]) {
+            NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
+            [[NetworkClient sharedClient] UpdatepostFeed:secureUrl description:text amount:amount user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSDictionary *dicFeed, NSDictionary *dicUser) {
+                [SVProgressHUD dismiss];
+                
+                /*
+                //Refresh Feeds.
+                HomeViewController* homeView = [self.tabBarController.viewControllers firstObject];
+                [homeView refreshFeeds];
+                self.tabBarController.selectedIndex = 0;
+                
+                //Refresh Profile's Upload.
+                ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 2];
+                [profileView loadMyFeeds];
+                
+                //Add Post history.
+                [[CoreHelper sharedInstance] addPostHistory: [AppEngine sharedInstance].currentUser.user_id
+                                                  post_date: [NSDate date]];
+                [self clearContent];
+                 */
+                [self CancelButtonPress:nil];
+            } failure:^(NSString *errorMessage) {
+                [SVProgressHUD dismiss];
+                [self presentViewController: [AppEngine showErrorWithText: errorMessage]
+                                   animated: YES
+                                 completion: nil];
+            }];
+        }
+        
+    } failure:^(NSString *errorMessage) {
+        [SVProgressHUD dismiss];
+    }];
+}
 - (void) hideKeyboard
 {
     [tfPrice resignFirstResponder];
@@ -277,6 +431,8 @@
     viSignInFB = [[AuthView alloc] initAuthView: rect parentView: self delegate: self];    
     viSignInFB.hidden = YES;
     [self.view addSubview: viSignInFB];
+    
+    if([AppEngine sharedInstance].currentUser) return;
     
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *dicUser) {

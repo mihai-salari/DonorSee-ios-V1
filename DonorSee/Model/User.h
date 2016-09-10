@@ -36,6 +36,8 @@
 @property (nonatomic, readwrite) BOOL   stripe_connected;
 @property (nonatomic, readwrite) BOOL   can_receive_gifts;
 
+@property (nonatomic, assign) int           lastSelectedId;
+
 
 - (id) initUserWithDictionary: (NSDictionary*) dicUser;
 - (id) initUserWithManagedObject: (NSManagedObject*) objUser;

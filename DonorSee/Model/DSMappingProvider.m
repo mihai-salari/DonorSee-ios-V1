@@ -2,7 +2,6 @@
 //  DSMappingProvider.m
 //  DonorSee
 //
-//  Created by Keval on 13/08/16.
 //  Copyright © 2016 miroslave. All rights reserved.
 //
 
@@ -116,6 +115,23 @@
     return mapping;
     
 }
+
++ (FEMObjectMapping *) NewgiftsMapping {
+    
+    FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Event class]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"event_id" toKeyPath:@"id"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"gift_amount_cents" toKeyPath:@"amount_cents"]];
+    
+    
+    [mapping addRelationshipMapping:[self projectsMapping] forProperty:@"feed" keyPath:@"project"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"creator" keyPath:@"user"];
+    [mapping addRelationshipMapping:[self userMapping] forProperty:@"recipient" keyPath:@"recipient"];
+    
+    [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"created_at"]];
+    return mapping;
+    
+}
+
 
 + (FEMObjectMapping *)eventMapping {
     FEMObjectMapping *mapping = [[FEMObjectMapping alloc] initWithObjectClass:[Event class]];

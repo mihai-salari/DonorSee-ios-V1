@@ -73,6 +73,14 @@
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) UpdatepostFeed: (NSString*) imageURL
+            description: (NSString*) description
+                 amount: (int) amount
+                user_id: (int) user_id
+                success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
+                failure: (void (^)(NSString *errorMessage))failure;
+
+
 - (void) getHomeFeeds: (int) limit
                offset: (int) offset
               success: (void (^)(NSArray *arrFeed))success
