@@ -866,12 +866,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F87AE4311C83739C00FE9417 /* Build configuration list for PBXNativeTarget "DonorSee" */;
 			buildPhases = (
+				A1AB73C8E5949AC70B78432F /* 📦 Check Pods Manifest.lock */,
 				70BCDD2E94CA0FA97203452C /* [CP] Check Pods Manifest.lock */,
 				F87AE4161C83739C00FE9417 /* Sources */,
 				F87AE4171C83739C00FE9417 /* Frameworks */,
 				F87AE4181C83739C00FE9417 /* Resources */,
 				1229FFCA241F4902A2D17123 /* [CP] Embed Pods Frameworks */,
 				07BA4E16AB108078E5A9C15E /* [CP] Copy Pods Resources */,
+				F56E74C72A2836312859F61A /* 📦 Embed Pods Frameworks */,
+				FF2E3F1F72D4DA3889B4B07F /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1070,6 +1073,51 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		A1AB73C8E5949AC70B78432F /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F56E74C72A2836312859F61A /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF2E3F1F72D4DA3889B4B07F /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1243,8 +1291,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1287,7 +1335,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8215460e-7c02-41e2-b77c-c467365190a8";
+				PROVISIONING_PROFILE = "d1f26ef2-b102-4a42-8bd3-0c4eea1051ec";
 			};
 			name = Debug;
 		};
@@ -1341,7 +1389,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8215460e-7c02-41e2-b77c-c467365190a8";
+				PROVISIONING_PROFILE = "d6738288-6fcc-4b89-a818-b07281c7b936";
 			};
 			name = Release;
 		};
