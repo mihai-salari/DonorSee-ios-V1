@@ -171,7 +171,7 @@
 
     arrSettings = @[@{@"icon": @"withdraw_icon.png", @"title": @"Transaction History"},
                     @{@"icon": @"edit_profile.png", @"title": @"Edit Profile"},
-                    @{@"icon": @"rate_us.png", @"title": @"Rates Us"},
+                    @{@"icon": @"rate_us.png", @"title": @"Rate Us"},
                     @{@"icon": @"email_feedback.png", @"title": @"Email us Feedback"},
 //                    @{@"icon": @"help.png", @"title": @"Help"},
                     @{@"icon": @"", @"title": @"Show amount given"},
