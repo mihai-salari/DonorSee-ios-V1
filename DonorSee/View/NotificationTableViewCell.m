@@ -147,13 +147,13 @@
     else if([a.type isEqualToString:@"fund"])
     {
         filterUsername = [a.recipient.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
-        message = [NSString stringWithFormat: @"!%@ project got totaly funded!", filterUsername];
+        message = [NSString stringWithFormat: @"!%@ project was totally funded!", filterUsername];
     }
     else if([a.type isEqualToString:@"update"])
     {
         //Amit Change MSG text
         //message = [NSString stringWithFormat: @"!%@ posted a follow up message.", filterUsername];
-        message = [NSString stringWithFormat: @"!%@ A posted a follow up message to the project.", filterUsername];
+        message = [NSString stringWithFormat: @"!%@ posted a follow up message to this project.", filterUsername];
     }
     else if([a.type isEqualToString:@"follow"])
     {
