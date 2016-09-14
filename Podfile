@@ -20,5 +20,6 @@ pod 'ALCameraViewController'
 pod 'CircleProgressView'
 pod 'Stripe'
 pod 'FastEasyMapping', '~> 1.0'
+pod 'Cloudinary', '~> 1.0' 
 
 end

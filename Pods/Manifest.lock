@@ -27,7 +27,8 @@ PODS:
     - Branch/without-IDFA (= 0.12.5)
   - Branch/Core (0.12.5)
   - Branch/without-IDFA (0.12.5)
-  - CircleProgressView (1.0.11)
+  - CircleProgressView (1.0.10)
+  - Cloudinary (1.0.15)
   - FastEasyMapping (1.0.2)
   - FBSDKCoreKit (4.14.0):
     - Bolts (~> 1.7)
@@ -50,6 +51,7 @@ DEPENDENCIES:
   - BLKFlexibleHeightBar
   - Branch
   - CircleProgressView
+  - Cloudinary (~> 1.0)
   - FastEasyMapping (~> 1.0)
   - FBSDKCoreKit
   - FBSDKLoginKit
@@ -67,7 +69,8 @@ SPEC CHECKSUMS:
   BLKFlexibleHeightBar: b27572a69633d8e33f1f2bbc486b04d8e86f742d
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   Branch: 42307809efa9f23a55f40d8375ef8193bfe62b7c
-  CircleProgressView: 3e7e26454ad9a93e310fe9cd612af6d779deb0c1
+  CircleProgressView: 5116fc2d3be792d755e6979d7f7309648de79d11
+  Cloudinary: f80af4565ec08c521d5e58cb56d9fbe1e4595e40
   FastEasyMapping: 77d566a817ca73304af3e7fbed130850238f1cb4
   FBSDKCoreKit: 6e020b5db0b5bd1e01f5fb0902131befd129a502
   FBSDKLoginKit: da563567a108050ef83739c8c8c001ee9e25fa13
@@ -79,6 +82,6 @@ SPEC CHECKSUMS:
   SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
   SWTableViewCell: 2a94aadc9d47b2b611fa064566bf57948b95b579
 
-PODFILE CHECKSUM: 17feee58d8d9e3e6d9dce537509c6f3c4ac46f3f
+PODFILE CHECKSUM: 271b47f40495ff557dbcc73c364c8412e3599be4
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.0.0
