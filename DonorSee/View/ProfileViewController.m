@@ -349,10 +349,10 @@
                                               int dollars = cents / 100;
                                               int centsRemainder = cents % 100;
                                               if (centsRemainder == 0){
-                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"%d Given", dollars];
+                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"$%d Given", dollars];
                                               }
                                               else{
-                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"%d.%d Given", dollars, centsRemainder];
+                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"$%d.%02d Given", dollars, centsRemainder];
                                               }
                                           }
                                           
