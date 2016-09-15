@@ -147,7 +147,7 @@
     else if([a.type isEqualToString:@"fund"])
     {
         filterUsername = [a.recipient.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
-        message = [NSString stringWithFormat: @"!%@ project was totally funded!", filterUsername];
+        message = [NSString stringWithFormat: @"!%@'s project was totally funded!", filterUsername];
     }
     else if([a.type isEqualToString:@"update"])
     {
