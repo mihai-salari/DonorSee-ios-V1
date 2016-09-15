@@ -23,8 +23,13 @@
 - (void)configureBar
 {
     // Configure bar appearence
-    self.maximumBarHeight = 132.0;
-    self.minimumBarHeight = 20.0;
+    const CGFloat whiteViewHeight = 54.0;
+    const CGFloat statusBarheight = 20.0;
+    const CGFloat navigationBarHeight = 58.0;
+    
+    self.maximumBarHeight = statusBarheight + navigationBarHeight + whiteViewHeight;
+    
+    self.minimumBarHeight = statusBarheight + whiteViewHeight;
     self.backgroundColor = COLOR_MAIN;
     self.clipsToBounds = YES;
     
@@ -34,16 +39,15 @@
     blueBarView.backgroundColor = self.backgroundColor;
     
     BLKFlexibleHeightBarSubviewLayoutAttributes *initialBlueBarLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] init];
-    initialBlueBarLayoutAttributes.frame = CGRectMake(0.0, 0, self.frame.size.width, 78.0);
-    initialBlueBarLayoutAttributes.zIndex = 1023;
+    initialBlueBarLayoutAttributes.frame = CGRectMake(0.0, 0, self.frame.size.width, navigationBarHeight + statusBarheight);
     [blueBarView addLayoutAttributes:initialBlueBarLayoutAttributes forProgress:0.0];
-    [blueBarView addLayoutAttributes:initialBlueBarLayoutAttributes forProgress:40.0/(self.maximumBarHeight-20.0)];
     
     BLKFlexibleHeightBarSubviewLayoutAttributes *finalBlueBarLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] initWithExistingLayoutAttributes:initialBlueBarLayoutAttributes];
-    finalBlueBarLayoutAttributes.transform = CGAffineTransformMakeTranslation(0.0, -40.0);
+    finalBlueBarLayoutAttributes.transform = CGAffineTransformMakeTranslation(0.0, -navigationBarHeight);
     [blueBarView addLayoutAttributes:finalBlueBarLayoutAttributes forProgress:1.0];
     
     [self addSubview:blueBarView];
+    
     
     UIImageView *profileImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"small_logo.png"]];
     profileImageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -51,16 +55,13 @@
     
     BLKFlexibleHeightBarSubviewLayoutAttributes *initialProfileImageViewLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] init];
     initialProfileImageViewLayoutAttributes.size = CGSizeMake(137, 37);
-    initialProfileImageViewLayoutAttributes.center = CGPointMake(self.frame.size.width*0.5, 78-30.0);
+    initialProfileImageViewLayoutAttributes.center = CGPointMake(self.frame.size.width*0.5, navigationBarHeight + statusBarheight-30.0);
     initialProfileImageViewLayoutAttributes.zIndex = 1024;
     [profileImageView addLayoutAttributes:initialProfileImageViewLayoutAttributes forProgress:0.0];
     
-    BLKFlexibleHeightBarSubviewLayoutAttributes *midwayProfileImageViewLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] initWithExistingLayoutAttributes:initialProfileImageViewLayoutAttributes];
-    midwayProfileImageViewLayoutAttributes.center = CGPointMake(self.frame.size.width*0.5, (78-self.minimumBarHeight)*0.8+self.minimumBarHeight-30.0);
-    [profileImageView addLayoutAttributes:midwayProfileImageViewLayoutAttributes forProgress:0.2];
     
-    BLKFlexibleHeightBarSubviewLayoutAttributes *finalProfileImageViewLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] initWithExistingLayoutAttributes:midwayProfileImageViewLayoutAttributes];
-    finalProfileImageViewLayoutAttributes.center = CGPointMake(self.frame.size.width*0.5, (78-self.minimumBarHeight)*0.64+self.minimumBarHeight-30.0);
+    BLKFlexibleHeightBarSubviewLayoutAttributes *finalProfileImageViewLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] initWithExistingLayoutAttributes:initialProfileImageViewLayoutAttributes];
+    finalProfileImageViewLayoutAttributes.center = CGPointMake(finalProfileImageViewLayoutAttributes.center.x, finalProfileImageViewLayoutAttributes.center.y - navigationBarHeight * 0.25);
     finalProfileImageViewLayoutAttributes.transform = CGAffineTransformMakeScale(0.5, 0.5);
     finalProfileImageViewLayoutAttributes.alpha = 0.0;
     finalProfileImageViewLayoutAttributes.zIndex = 1024;
@@ -74,12 +75,12 @@
     whiteBarView.backgroundColor = [UIColor whiteColor];
     
     BLKFlexibleHeightBarSubviewLayoutAttributes *initialWhiteBarLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] init];
-    initialWhiteBarLayoutAttributes.frame = CGRectMake(0.0, 78.0, self.frame.size.width, 54.0);
+    initialWhiteBarLayoutAttributes.frame = CGRectMake(0.0, navigationBarHeight + statusBarheight, self.frame.size.width, whiteViewHeight);
     [whiteBarView addLayoutAttributes:initialWhiteBarLayoutAttributes forProgress:0.0];
     
     BLKFlexibleHeightBarSubviewLayoutAttributes *finalWhiteBarLayoutAttributes = [[BLKFlexibleHeightBarSubviewLayoutAttributes alloc] initWithExistingLayoutAttributes:initialWhiteBarLayoutAttributes];
-    finalWhiteBarLayoutAttributes.transform = CGAffineTransformMakeTranslation(0.0, -54.0);
-    [whiteBarView addLayoutAttributes:finalWhiteBarLayoutAttributes forProgress:54.0/(132.0-20.0)];
+    finalWhiteBarLayoutAttributes.frame = CGRectMake(0.0, statusBarheight, self.frame.size.width, whiteViewHeight);
+    [whiteBarView addLayoutAttributes:finalWhiteBarLayoutAttributes forProgress:1.0];
     
     [self addSubview:whiteBarView];
     whiteBarView.userInteractionEnabled = YES;
