@@ -340,11 +340,20 @@
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *userInfo) {
                                           NSString * amountGivenCents = [NSString stringWithFormat:@"%@",[userInfo valueForKey:@"amount_given_cents"]];
-                                          if ([amountGivenCents isEqual :@"<null>"]) {
+                                          int cents = [amountGivenCents intValue];
+                                          
+                                          if (cents == 0) {
                                               lbDonatedAmount.text = [NSString stringWithFormat: @"$0 Given"];
                                           }
                                           else{
-                                              lbDonatedAmount.text = [NSString stringWithFormat: @"$%@ Given", [amountGivenCents substringToIndex:2]];
+                                              int dollars = cents / 100;
+                                              int centsRemainder = cents % 100;
+                                              if (centsRemainder == 0){
+                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"%d Given", dollars];
+                                              }
+                                              else{
+                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"%d.%d Given", dollars, centsRemainder];
+                                              }
                                           }
                                           
                                       } failure:^(NSString *errorMessage) {
