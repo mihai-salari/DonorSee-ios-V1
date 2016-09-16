@@ -316,9 +316,7 @@
                                                        [arrActivities addObjectsFromArray: array1];
                                                    }
                                                    
-                                                   selectedFeed = f;
-                                                   //Amit------No need to update Feed Info
-                                                   //[self updateFeedInfo];
+                                                   
                                                    [tbActivity reloadData];
                                                    
                                                    if(_isFollowMessage)
