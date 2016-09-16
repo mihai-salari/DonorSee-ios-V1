@@ -80,6 +80,10 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem    *btDone;
 @property (weak, nonatomic) IBOutlet UIButton *settingsBtn;
 
+@property (weak, nonatomic) IBOutlet UILabel *followersCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *receivedMoneyLabel;
+
+
 @end
 
 @implementation ProfileViewController
@@ -194,6 +198,7 @@
     [self loadFundedFeeds];
     
     //NSLog(@"%f",[AppEngine sharedInstance].currentUser.pay_amount);
+    
 }
 
 - (void) loadAllFeeds
@@ -339,6 +344,7 @@
     
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *userInfo) {
+                                          dispatch_async(dispatch_get_main_queue(), ^{
                                           NSString * amountGivenCents = [NSString stringWithFormat:@"%@",[userInfo valueForKey:@"amount_given_cents"]];
                                           int cents = [amountGivenCents intValue];
                                           
@@ -354,7 +360,26 @@
                                               else{
                                                   lbDonatedAmount.text = [NSString stringWithFormat: @"$%d.%02d Given", dollars, centsRemainder];
                                               }
+                                              
                                           }
+                                          
+                                          
+                                              // show received amount
+                                              NSString *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
+                                              int centsReceived =  [receivedAmount intValue];
+                                              int dollars = centsReceived / 100;
+                                              int centsRemainder = centsReceived % 100;
+                                              if (centsRemainder == 0){
+                                                  self.receivedMoneyLabel.text = [NSString stringWithFormat: @"$%d", dollars];
+                                              }
+                                              else{
+                                                  self.receivedMoneyLabel.text = [NSString stringWithFormat: @"$%d.%02d", dollars, centsRemainder];
+                                              }
+                                              
+                                              // show follower count
+                                              NSString *followersString = [userInfo valueForKey:@"followers_count"];
+                                              self.followersCountLabel.text = [NSString stringWithFormat:@"%d", [followersString intValue]];
+                                              });
                                           
                                       } failure:^(NSString *errorMessage) {
                                           
@@ -1124,5 +1149,16 @@
                                         }];
 }
 
+
+- (IBAction)showFollowersButtonTapped:(id)sender {
+    if (![self.followersCountLabel.text isEqualToString:@"0"]) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        FollowersViewController *followersController = [storyboard instantiateViewControllerWithIdentifier:@"FollowersView"];
+        followersController.selectedUser = [AppEngine sharedInstance].currentUser;
+        [self.navigationController pushViewController:followersController animated:YES];
+    }
+
+    
+}
 
 @end
