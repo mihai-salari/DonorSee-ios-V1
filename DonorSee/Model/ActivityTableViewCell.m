@@ -253,39 +253,45 @@
 + (CGFloat) getEventHeight: (Event*) a
 {
     if ([a.type isEqualToString:@"update"] || [a.type isEqualToString:@"comment"]) {
-        float fw = 220.0;
-        if(IS_IPHONE_5)
-        {
-            fw = 220.0;
-        }
-        else if(IS_IPHONE_6 || IS_IPHONE_6P)
-        {
-            fw = 275.0;
-        }
+        
+        const CGFloat screenHeight = [UIScreen mainScreen].bounds.size.width;
+        
+        // HARDCODE calculate size by autoresize mask
+        const CGFloat textLeftMargin = 66;
+        const CGFloat textRightMargin = 9;
+        const CGFloat textWidth = screenHeight - textLeftMargin - textRightMargin;
+        
+        // HARDCODE calculate size by autoresize mask
+        const CGFloat imageLeftMargin = 61;
+        const CGFloat imageRightMargin = 34;
+        const CGFloat imageWidth = screenHeight - imageLeftMargin - imageRightMargin;
+        
         
         float fy = 51;
         float fOffset = 10.0;
         
         if (a.message != nil) {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            [paragraphStyle setLineBreakMode:NSLineBreakByWordWrapping];
             NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString: a.message
-                                                                                 attributes:@{NSFontAttributeName: [UIFont fontWithName: FONT_LIGHT size: 14.0]}];
-            CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(fw, 50000)
+                                                                                 attributes:@{NSFontAttributeName: [UIFont fontWithName: FONT_LIGHT size: 14.0], NSParagraphStyleAttributeName: paragraphStyle}];
+            CGRect rect = [attributedText boundingRectWithSize:CGSizeMake(textWidth, 50000)
                                                        options:NSStringDrawingUsesLineFragmentOrigin
                                                        context:nil];
             CGSize size = rect.size;
             
-            if(a.photo_urls.length > 0)
-            {
-                NSArray *photos = [a.photo_urls componentsSeparatedByString:@","];
-                fy += size.height + [photos count] * (fw + fOffset) + 20;
-            }
-            else
-            {
-                fy += size.height + 5.0;
-            }
-            
-            fy += size.height + 5.0;
+            fy += size.height;
         }
+        
+        if(a.photo_urls.length > 0)
+        {
+            NSArray *photos = [a.photo_urls componentsSeparatedByString:@","];
+            fy += [photos count] * (imageWidth + fOffset) ;
+        }
+        
+        
+        fy += fOffset;
+        
         
         return fy;
     }
