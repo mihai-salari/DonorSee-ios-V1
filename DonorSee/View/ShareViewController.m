@@ -149,8 +149,7 @@
 - (void) shareFeedInTwitter:(Feed *)f image:(UIImage *)imgShare
 {
     if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
-    {
-        [SVProgressHUD show];
+    {        
         SLComposeViewController *tweetSheet = [SLComposeViewController
                                                composeViewControllerForServiceType:SLServiceTypeTwitter];
         
