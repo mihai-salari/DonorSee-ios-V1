@@ -24,6 +24,7 @@
 #import "Event.h"
 #import "SignInViewController.h"
 #import "FollowersViewController.h"
+#import "NSString+Formats.h"
 
 @interface ProfileViewController() <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, UploadTableViewCellDelegate, SettingsTableViewCellDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate, AuthViewDelegate>
 {
@@ -345,36 +346,17 @@
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *userInfo) {
                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                          NSString * amountGivenCents = [NSString stringWithFormat:@"%@",[userInfo valueForKey:@"amount_given_cents"]];
-                                          int cents = [amountGivenCents intValue];
+                                              NSString * amountGivenCents = [NSString stringWithFormat:@"%@",[userInfo valueForKey:@"amount_given_cents"]];
+                                              int cents = [amountGivenCents intValue];
                                           
-                                          if (cents == 0) {
-                                              lbDonatedAmount.text = [NSString stringWithFormat: @"$0 Given"];
-                                          }
-                                          else{
-                                              int dollars = cents / 100;
-                                              int centsRemainder = cents % 100;
-                                              if (centsRemainder == 0){
-                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"$%d Given", dollars];
-                                              }
-                                              else{
-                                                  lbDonatedAmount.text = [NSString stringWithFormat: @"$%d.%02d Given", dollars, centsRemainder];
-                                              }
+                                          
+                                              lbDonatedAmount.text = [NSString stringWithFormat: @"$%@ Given", [NSString StringWithAmountCents:cents]];
+                                          
                                               
-                                          }
-                                          
-                                          
                                               // show received amount
                                               NSString *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
                                               int centsReceived =  [receivedAmount intValue];
-                                              int dollars = centsReceived / 100;
-                                              int centsRemainder = centsReceived % 100;
-                                              if (centsRemainder == 0){
-                                                  self.receivedMoneyLabel.text = [NSString stringWithFormat: @"$%d", dollars];
-                                              }
-                                              else{
-                                                  self.receivedMoneyLabel.text = [NSString stringWithFormat: @"$%d.%02d", dollars, centsRemainder];
-                                              }
+                                              self.receivedMoneyLabel.text = [NSString stringWithFormat: @"$%@", [NSString StringWithAmountCents:centsReceived]];
                                               
                                               // show follower count
                                               NSString *followersString = [userInfo valueForKey:@"followers_count"];

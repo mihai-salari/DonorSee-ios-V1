@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
 		49ED71A3D06D46BB608AA3A7 /* Pods_DonorSee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */; };
 		9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */; };
@@ -176,6 +177,8 @@
 
 /* Begin PBXFileReference section */
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		452510771D8CA31500B2AA29 /* NSString+Formats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Formats.h"; sourceTree = "<group>"; };
+		452510781D8CA31500B2AA29 /* NSString+Formats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Formats.m"; sourceTree = "<group>"; };
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		457447431D8AEA8F005A7E5C /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
@@ -453,6 +456,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		452510761D8CA2DC00B2AA29 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				452510771D8CA31500B2AA29 /* NSString+Formats.h */,
+				452510781D8CA31500B2AA29 /* NSString+Formats.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 		457447411D8AEA50005A7E5C /* Web */ = {
 			isa = PBXGroup;
 			children = (
@@ -653,6 +665,7 @@
 		F87AE4341C83D45900FE9417 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				452510761D8CA2DC00B2AA29 /* Categories */,
 				F84932B81C8CA76D00F0DDC1 /* CardIO */,
 				F84932C41C8CA76D00F0DDC1 /* PayPalMobile */,
 				F8548C4D1C889C2E0003F01F /* SSAPullToRefresh */,
@@ -1167,6 +1180,7 @@
 				9FCAE5811D5F6DA50004B1D3 /* DSMappingProvider.m in Sources */,
 				F87AE4221C83739C00FE9417 /* AppDelegate.m in Sources */,
 				F8483B201C902D69003C86E9 /* DetailFeedViewController.m in Sources */,
+				452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */,
 				F87AE4431C83D7DA00FE9417 /* UploadViewController.m in Sources */,
 				F83E83651C9AAAC900A40334 /* SignInViewController.m in Sources */,
 				F8548C571C889C2E0003F01F /* SSAPullToRefreshAnimator.m in Sources */,

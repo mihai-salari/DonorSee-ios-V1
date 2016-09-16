@@ -17,6 +17,7 @@
 #import <MessageUI/MessageUI.h>
 #import <Social/Social.h>
 #import "FollowersViewController.h"
+#import "NSString+Formats.h"
 
 @interface OtherUserViewController () <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, MFMailComposeViewControllerDelegate, FBSDKSharingDelegate>
 {
@@ -34,6 +35,7 @@
 @property (weak, nonatomic) IBOutlet UILabel                *lbFollowStatus;
 @property (weak, nonatomic) IBOutlet UIView                 *viFollow;
 @property (weak, nonatomic) IBOutlet UIButton               *btSettings;
+@property (weak, nonatomic) IBOutlet UILabel *receivedAmountLabel;
 
 @end
 
@@ -90,12 +92,34 @@
     
     [self getUserFollowStatus];
     
-    
     [self updateFollowUI];
+    
+    [self updaseUserInfo];
     
     isEnded = NO;
     offset = 0;
     [self loadFeeds: YES];
+    
+    
+}
+- (void)updaseUserInfo{
+    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
+                                      success:^(NSDictionary *userInfo) {
+                                          dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                            // show received amount
+                                              NSString *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
+                                              int centsReceived =  [receivedAmount intValue];
+                                              self.receivedAmountLabel.text = [NSString stringWithFormat: @"$%@", [NSString StringWithAmountCents:centsReceived]];
+                                              
+                                          });
+                                          
+                                      } failure:^(NSString *errorMessage) {
+                                          
+                                          
+                                          
+                                      }];
+    
+
 }
 
 - (void) refreshFeeds
@@ -175,7 +199,7 @@
     if (_selectedUser.user_id == [AppEngine sharedInstance].currentUser.user_id) {
       
         [[NetworkClient sharedClient] getUserFollowingStatus:_selectedUser.user_id user_id:_selectedUser.user_id success:^(NSArray *followStatus) {
-            lbFollowers.text = [NSString stringWithFormat: @"%d", followStatus.count];
+            lbFollowers.text = [NSString stringWithFormat: @"%lu", (unsigned long)followStatus.count];
         } failure:^(NSString *errorMessage) {
             
         }];
@@ -194,9 +218,10 @@
                 _selectedUser.followed = NO;
             }
             [self updateFollowUI];
+            [self updaseUserInfo];
             [tbMain reloadData];
         }
-        lbFollowers.text = [NSString stringWithFormat: @"%d", followStatus.count];
+        lbFollowers.text = [NSString stringWithFormat: @"%lu", (unsigned long)followStatus.count];
     } failure:^(NSString *errorMessage) {
         
     }];
@@ -303,6 +328,7 @@
     {
         [self followUser: self.selectedUser];
     }
+    
 }
 
 - (void) finishedFollowForFeed: (NSNotification*) notification
