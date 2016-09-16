@@ -2171,6 +2171,40 @@
             </objects>
             <point key="canvasLocation" x="2149.5" y="2652.5"/>
         </scene>
+        <!--Web View Controller-->
+        <scene sceneID="FJq-Is-Uqa">
+            <objects>
+                <viewController id="vKZ-gb-fDs" customClass="WebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jqe-zk-g8Z"/>
+                        <viewControllerLayoutGuide type="bottom" id="dAP-Pj-b9d"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="HAd-Ib-f58">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rKP-0R-Xv8">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="rKP-0R-Xv8" secondAttribute="trailing" id="167-nL-wNw"/>
+                            <constraint firstItem="rKP-0R-Xv8" firstAttribute="top" secondItem="HAd-Ib-f58" secondAttribute="top" id="AOG-3z-Aty"/>
+                            <constraint firstAttribute="bottom" secondItem="rKP-0R-Xv8" secondAttribute="bottom" id="Bml-cq-FOS"/>
+                            <constraint firstItem="rKP-0R-Xv8" firstAttribute="leading" secondItem="HAd-Ib-f58" secondAttribute="leading" id="qh7-Vd-kSx"/>
+                        </constraints>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="webView" destination="rKP-0R-Xv8" id="C8y-lv-eps"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xIc-Qf-1pW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2140.5" y="415.5"/>
+        </scene>
         <!--Stripe Signup View Controller-->
         <scene sceneID="obf-8V-Dv4">
             <objects>
@@ -2991,6 +3025,7 @@
                         <outlet property="toolBar" destination="TIn-fL-IkG" id="6JJ-B9-uxm"/>
                         <outlet property="tvDescription" destination="m0d-Vy-2At" id="QOv-JU-OaJ"/>
                         <outlet property="viPrice" destination="rEJ-0Z-ZGp" id="CYn-fg-WZH"/>
+                        <segue destination="vKZ-gb-fDs" kind="show" identifier="ShowFAQ" id="aEk-4d-3aO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sub-5T-AtN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3008,7 +3043,7 @@
                     </items>
                 </toolbar>
             </objects>
-            <point key="canvasLocation" x="1539.5" y="437.5"/>
+            <point key="canvasLocation" x="1577.5" y="415.5"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="P3j-qo-Mqw">

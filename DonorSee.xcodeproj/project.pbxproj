@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
 		49ED71A3D06D46BB608AA3A7 /* Pods_DonorSee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */; };
 		9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */; };
 		9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */; };
@@ -175,6 +176,8 @@
 
 /* Begin PBXFileReference section */
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		457447431D8AEA8F005A7E5C /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
 		610AE77298E1481F47BB26D0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F2936A71D0BA0AD000A485D /* StripeDonateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StripeDonateViewController.h; sourceTree = "<group>"; };
@@ -448,6 +451,15 @@
 				5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		457447411D8AEA50005A7E5C /* Web */ = {
+			isa = PBXGroup;
+			children = (
+				457447421D8AEA8F005A7E5C /* WebViewController.h */,
+				457447431D8AEA8F005A7E5C /* WebViewController.m */,
+			);
+			name = Web;
 			sourceTree = "<group>";
 		};
 		BD3947E22B0A270A5AFEEA5A /* Frameworks */ = {
@@ -780,6 +792,7 @@
 		F87AE4381C83D45900FE9417 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				457447411D8AEA50005A7E5C /* Web */,
 				F854F9B41C859EFA0080D03A /* MainTabBarViewController.h */,
 				F854F9B51C859EFA0080D03A /* MainTabBarViewController.m */,
 				9F96713F1D31439300F756BF /* UITabBarItem+CustomBadge.h */,
@@ -1144,6 +1157,7 @@
 				9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */,
 				F848F4271CA4670400EC347A /* NotificationTableViewCell.m in Sources */,
 				9F6017801D2513A600BA8D59 /* Notification.m in Sources */,
+				457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */,
 				F833050A1C933F4C004D11F1 /* SquareCashStyleBar.m in Sources */,
 				F84149611C9C58DB005272D2 /* SettingsTableViewCell.m in Sources */,
 				F8F5F9021C845A4E002A54BA /* CoreHelper.m in Sources */,

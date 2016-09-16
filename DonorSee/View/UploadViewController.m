@@ -18,6 +18,7 @@
 #import "FEMMapping.h"
 #import "FEMDeserializer.h"
 #import "SignInViewController.h"
+#import "WebViewController.h"
 
 
 
@@ -207,7 +208,18 @@
 
 - (IBAction) actionInfo:(id)sender
 {
-    [self presentViewController: [AppEngine showAlertWithText: MSG_INFO_AMOUNT] animated: YES completion: nil];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle: nil message: MSG_INFO_AMOUNT preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertAction* okAction = [UIAlertAction actionWithTitle: @"Ok" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    [alert addAction: okAction];
+    
+    UIAlertAction* learnMoreAction = [UIAlertAction actionWithTitle: @"Learn More" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performSegueWithIdentifier:@"ShowFAQ" sender:self];
+    }];
+    [alert addAction: learnMoreAction];
+    
+    
+    [self presentViewController: alert animated: YES completion: nil];
 }
 
 - (void) showSignupPage {
@@ -722,4 +734,14 @@
     
     [self checkValid];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"ShowFAQ"]){
+        if ([segue.destinationViewController isKindOfClass:[WebViewController class]]){
+            WebViewController *controller = segue.destinationViewController;
+            controller.urlString = @"https://donorsee.com/faq";
+        }
+    }
+}
+
 @end
