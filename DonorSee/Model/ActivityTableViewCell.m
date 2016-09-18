@@ -142,7 +142,7 @@
     
     if ([event.type isEqualToString:@"fund"]) {
         NSString* filterUsername = [event.recipient.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
-        message = [NSString stringWithFormat: @"!%@ project got totally funded", filterUsername];
+        message = [NSString stringWithFormat: @"!%@'s project was totally funded!", filterUsername];
         
         [ivAvatar sd_setImageWithURL: [NSURL URLWithString: event.recipient.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
         lbFollowMessage.hidden = YES;
