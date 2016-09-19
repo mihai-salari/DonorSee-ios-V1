@@ -346,16 +346,25 @@
     [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *userInfo) {
                                           dispatch_async(dispatch_get_main_queue(), ^{
-                                              NSString * amountGivenCents = [NSString stringWithFormat:@"%@",[userInfo valueForKey:@"amount_given_cents"]];
-                                              int cents = [amountGivenCents intValue];
-                                          
+                                              NSNumber * amountGivenCents = [userInfo valueForKey:@"amount_given_cents"];
+                                              
+                                              int cents = 0;
+                                              if ([amountGivenCents isKindOfClass: [NSNumber class]]){
+                                                  cents = [amountGivenCents intValue];
+                                              }
+                                              
                                           
                                               lbDonatedAmount.text = [NSString stringWithFormat: @"$%@ Given", [NSString StringWithAmountCents:cents]];
                                           
                                               
                                               // show received amount
-                                              NSString *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
-                                              int centsReceived =  [receivedAmount intValue];
+                                              NSNumber *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
+                                              
+                                              int centsReceived = 0;
+                                              if ([receivedAmount isKindOfClass: [NSNumber class]]){
+                                                  centsReceived = [receivedAmount intValue];
+                                              }
+                                              
                                               self.receivedMoneyLabel.text = [NSString stringWithFormat: @"$%@", [NSString StringWithAmountCents:centsReceived]];
                                               
                                               // show follower count

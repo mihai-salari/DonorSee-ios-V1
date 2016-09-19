@@ -103,12 +103,16 @@
     
 }
 - (void)updaseUserInfo{
-    [[NetworkClient sharedClient] getUserInfo: [AppEngine sharedInstance].currentUser.user_id
+    [[NetworkClient sharedClient] getUserInfo: self.selectedUser.user_id
                                       success:^(NSDictionary *userInfo) {
                                           dispatch_async(dispatch_get_main_queue(), ^{
                                                                                             // show received amount
-                                              NSString *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
-                                              int centsReceived =  [receivedAmount intValue];
+                                              NSNumber *receivedAmount = [userInfo valueForKey:@"amount_received_cents"];
+                                              int centsReceived = 0;
+                                              if ([receivedAmount isKindOfClass: [NSNumber class]]){
+                                                  centsReceived = [receivedAmount intValue];
+                                              }
+                                              
                                               self.receivedAmountLabel.text = [NSString stringWithFormat: @"$%@", [NSString StringWithAmountCents:centsReceived]];
                                               
                                           });
@@ -208,7 +212,6 @@
                 _selectedUser.followed = NO;
             }
             [self updateFollowUI];
-            [self updaseUserInfo];
             [tbMain reloadData];
         }
         lbFollowers.text = [NSString stringWithFormat: @"%lu", (unsigned long)followStatus.count];
