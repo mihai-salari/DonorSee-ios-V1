@@ -196,16 +196,6 @@
 
 - (void) getUserFollowStatus {
     
-    if (_selectedUser.user_id == [AppEngine sharedInstance].currentUser.user_id) {
-      
-        [[NetworkClient sharedClient] getUserFollowingStatus:_selectedUser.user_id user_id:_selectedUser.user_id success:^(NSArray *followStatus) {
-            lbFollowers.text = [NSString stringWithFormat: @"%lu", (unsigned long)followStatus.count];
-        } failure:^(NSString *errorMessage) {
-            
-        }];
-        
-        return;
-    }
     
     [[NetworkClient sharedClient] getUserFollowStatus:_selectedUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
         

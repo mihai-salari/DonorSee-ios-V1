@@ -1385,7 +1385,7 @@
                      success: (void (^)(NSArray *followStatus))success
                      failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *path = [NSString stringWithFormat:@"users/%d/following?limit=10", selectedUser_id];
+    NSString *path = [NSString stringWithFormat:@"users/%d/following?limit=100", selectedUser_id];
     
     [self GETRequest:path parameters:nil success:^(id responseObject) {
         success(responseObject);

@@ -83,23 +83,6 @@
 - (void) getUserFollowStatus {
     [SVProgressHUD show];
     
-    if (_selectedUser.user_id == [AppEngine sharedInstance].currentUser.user_id) {
-        
-        [[NetworkClient sharedClient] getUserFollowingStatus:_selectedUser.user_id user_id:_selectedUser.user_id success:^(NSArray *followStatus) {
-            [SVProgressHUD dismiss];
-            if (followStatus.count > 0) {
-                _followers = [NSArray arrayWithArray:followStatus];
-                [_followersTableView reloadData];
-                
-            }
-        } failure:^(NSString *errorMessage) {
-            [SVProgressHUD dismiss];
-        }];
-        
-        return;
-    }
-    
-    
     [[NetworkClient sharedClient] getUserFollowStatus:_selectedUser.user_id user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSArray *followStatus) {
         [SVProgressHUD dismiss];
         if (followStatus.count > 0) {
