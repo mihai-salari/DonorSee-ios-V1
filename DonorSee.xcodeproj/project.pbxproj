@@ -897,6 +897,7 @@
 				F87AE4161C83739C00FE9417 /* Sources */,
 				F87AE4171C83739C00FE9417 /* Frameworks */,
 				F87AE4181C83739C00FE9417 /* Resources */,
+				45F2E40C1D8FB06D00E94BF7 /* Greanhouse autoincrement build number  */,
 				1229FFCA241F4902A2D17123 /* [CP] Embed Pods Frameworks */,
 				07BA4E16AB108078E5A9C15E /* [CP] Copy Pods Resources */,
 				F56E74C72A2836312859F61A /* 📦 Embed Pods Frameworks */,
@@ -1083,6 +1084,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		45F2E40C1D8FB06D00E94BF7 /* Greanhouse autoincrement build number  */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Greanhouse autoincrement build number ";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "DSYM_INFO_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\nbuildNumber=$GREENHOUSE_BUILD_NUMBER\nstringLength=${#buildNumber}\n    \n    if [ $stringLength -ne 0 ]; then\n    echo \"Updating build number to $buildNumber\"\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n    if [ -f \"$DSYM_INFO_PLIST\" ]; then\n    /usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $BUILD_NUMBER\" \"$DSYM_INFO_PLIST\"\n    fi\n    else\n    echo \"Missing build number, skip updating\"\n    fi";
 		};
 		70BCDD2E94CA0FA97203452C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
