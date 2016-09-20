@@ -12,6 +12,7 @@
 #import "Branch.h"
 #import "DetailFeedViewController.h"
 #import "OtherUserViewController.h"
+#import "NetworkClient.h"
 
 #import <Stripe/Stripe.h>
 

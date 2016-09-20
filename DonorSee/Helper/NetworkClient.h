@@ -16,6 +16,7 @@
 
 + (NetworkClient*) sharedClient;
 - (void) cancelAllRequest;
+- (void) updateDeviceToken;
 
 - (void) signUp: (NSString*) first_name
       last_name: (NSString*) last_name
