@@ -11,17 +11,24 @@
 #import "DetailFeedViewController.h"
 #import "OtherUserViewController.h"
 #import "AppDelegate.h"
+#import "SignInViewController.h"
+#import "AuthView.h"
 
 @interface NotificationViewController () <UITableViewDataSource, UITableViewDelegate, NotificationTableViewCellDelegate>
 {
     NSMutableArray          *arrNotifications;
 }
 
+
+@property (nonatomic, strong) AuthView *viSignInFB;
+
 @property (nonatomic, weak) IBOutlet UITableView        *tbMain;
 @property (nonatomic, weak) IBOutlet UILabel            *lbEmpty;
 @end
 
 @implementation NotificationViewController
+@synthesize viSignInFB;
+
 @synthesize tbMain;
 @synthesize lbEmpty;
 
@@ -43,13 +50,28 @@
 
     arrNotifications = [[NSMutableArray alloc] init];
     [tbMain registerNib: [UINib nibWithNibName: @"NotificationTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([NotificationTableViewCell class])];
+    
+    [self initAuthUI];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     tbMain.estimatedRowHeight = 75.0; // for example. Set your average height
-    [self loadActivities];
+    
+    [self  checkAuthView];
 }
+
+- (void) checkAuthView{
+    if([AppEngine sharedInstance].currentUser){
+        [self loadActivities];
+        viSignInFB.hidden = YES;
+    }
+    else{
+        viSignInFB.hidden = NO;
+    }
+    
+}
+
 
 - (void) loadActivities
 {
@@ -242,5 +264,56 @@
 //    [cell setNotificationNew:a];
 //    [[NetworkClient sharedClient] readNotification: a.notification_id];
 //}
+
+#pragma mark - Auth.
+
+- (void) initAuthUI
+{
+    CGRect rect = CGRectMake(0, TOP_BAR_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - TOP_BAR_HEIGHT - TAB_BAR_HEIGHT);
+    //    viSignInFB = [[AuthView alloc] initAuthView: rect isAskingPaypal: NO parentView: self delegate: self];
+    viSignInFB = [[AuthView alloc] initAuthView: rect parentView: self delegate: self];
+    viSignInFB.hidden = YES;
+    [self.view addSubview: viSignInFB];
+    
+}
+
+- (void) successAuth
+{
+    [self checkAuthView];
+}
+
+- (void) failAuth
+{
+    [self showSignupPage];
+}
+
+- (void) showSignupPage {
+    
+    if([AppEngine sharedInstance].currentUser) return;
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    SignInViewController *signInView = [storyboard instantiateViewControllerWithIdentifier: @"SignInView"];
+    signInView.isModelView = YES;
+    UINavigationController *signinNav = [[UINavigationController alloc] initWithRootViewController:signInView];
+    [signinNav setNavigationBarHidden:YES];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didDismissSecondViewController)
+     name:@"LOGIN_COMPLETE"
+     object:nil];
+    
+    [self.navigationController presentViewController:signinNav animated:YES completion:^{
+        
+    }];
+}
+
+- (void)didDismissSecondViewController
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LOGIN_COMPLETE" object:nil];
+    // this method gets called in MainVC when your SecondVC is dismissed
+    NSLog(@"Dismissed SecondViewController");
+    [self checkAuthView];
+}
 
 @end

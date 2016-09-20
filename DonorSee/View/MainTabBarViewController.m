@@ -10,6 +10,7 @@
 #import "UploadViewController.h"
 #import "AppDelegate.h"
 #import "ProfileViewController.h"
+#import "NotificationViewController.h"
 
 @interface MainTabBarViewController () <UITabBarControllerDelegate>
 
@@ -127,15 +128,15 @@
 //        [self presentViewController: cameraController animated: YES completion: nil];
 //    }
     
-    if (tabBarController.selectedIndex == 2) {
-        //NSLog(@"Profile Selected...");
-        
         if ([viewController isKindOfClass:[ProfileViewController class]]) {
             ProfileViewController *profileController = (ProfileViewController *)viewController;
             [profileController showSignupPage];
         }
         
-    }
+        if ([viewController isKindOfClass:[NotificationViewController class]]) {
+            NotificationViewController *profileController = (NotificationViewController *)viewController;
+            [profileController showSignupPage];
+        }
     
 }
 

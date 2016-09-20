@@ -10,4 +10,6 @@
 
 @interface NotificationViewController : BaseViewController
 
+- (void) showSignupPage;
+
 @end
