@@ -116,7 +116,7 @@
             [self PostRequest: [NSString stringWithFormat:@"users/%i/device-tokens", user_id]
                    parameters: @{@"token":[AppEngine sharedInstance].currentDeviceToken}
                      success:^(id responseObject) {
-                         NSLog(@"Device Token saved..");
+                         NSLog(@"Device Token saved: %@", [AppEngine sharedInstance].currentDeviceToken);                         
                      } failure:^(NSError *error) {
                          
                          //failure(MSG_DISCONNECT_INTERNET);

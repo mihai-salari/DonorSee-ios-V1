@@ -232,6 +232,7 @@
     //deviceTokenString = [deviceTokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
     [AppEngine sharedInstance].currentDeviceToken = hexToken;
     NSLog(@"device token = %@", [AppEngine sharedInstance].currentDeviceToken);
+    [[NetworkClient sharedClient] updateDeviceToken];
 }
 
 // system push notification registration error callback, delegate to pushManager
