@@ -33,10 +33,8 @@
 @property (nonatomic, weak) NSString *postUsername;
 @property (strong, nonatomic) UIImage *postUserAvatar;
 
-- (void) setActivity: (Activity*) activity;
 - (void) setEvent:(Event *)event;
 - (void)setPostusername: (NSString*) postusername setPostUserAvatar :(UIImage*) postUserAvatar;
 
-+ (CGFloat) getHeight: (Activity*) a;
 + (CGFloat) getEventHeight: (Event*) a;
 @end
