@@ -179,7 +179,6 @@
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		452510771D8CA31500B2AA29 /* NSString+Formats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Formats.h"; sourceTree = "<group>"; };
 		452510781D8CA31500B2AA29 /* NSString+Formats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Formats.m"; sourceTree = "<group>"; };
-		455718DB1D9180590025B69B /* DonorSee.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DonorSee.entitlements; sourceTree = "<group>"; };
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		457447431D8AEA8F005A7E5C /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
@@ -638,7 +637,6 @@
 		F87AE41C1C83739C00FE9417 /* DonorSee */ = {
 			isa = PBXGroup;
 			children = (
-				455718DB1D9180590025B69B /* DonorSee.entitlements */,
 				F87AE4341C83D45900FE9417 /* Helper */,
 				F87AE4351C83D45900FE9417 /* Model */,
 				F87AE4381C83D45900FE9417 /* View */,
@@ -1338,7 +1336,7 @@
 			baseConfigurationReference = C7C81B38A09C8727FA0A9F75 /* Pods-DonorSee.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
 				ENABLE_BITCODE = NO;
@@ -1392,7 +1390,7 @@
 			baseConfigurationReference = 5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
 				ENABLE_BITCODE = NO;
