@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
+		457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 457D1E681D91A7EA00127F3C /* Entitlements.plist */; };
 		49ED71A3D06D46BB608AA3A7 /* Pods_DonorSee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */; };
 		9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */; };
 		9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */; };
@@ -181,6 +182,7 @@
 		452510781D8CA31500B2AA29 /* NSString+Formats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Formats.m"; sourceTree = "<group>"; };
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		457447431D8AEA8F005A7E5C /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		457D1E681D91A7EA00127F3C /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
 		610AE77298E1481F47BB26D0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F2936A71D0BA0AD000A485D /* StripeDonateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StripeDonateViewController.h; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				F87AE4381C83D45900FE9417 /* View */,
 				F87AE4201C83739C00FE9417 /* AppDelegate.h */,
 				F87AE4211C83739C00FE9417 /* AppDelegate.m */,
+				457D1E681D91A7EA00127F3C /* Entitlements.plist */,
 				F87AE43A1C83D47C00FE9417 /* Global.h */,
 				F87AE4261C83739C00FE9417 /* Main.storyboard */,
 				F87AE4291C83739C00FE9417 /* Assets.xcassets */,
@@ -1041,6 +1044,7 @@
 				F85BEC721CA1C5F40001AB66 /* tab_notification_normal.png in Resources */,
 				F83E83721C9ABD5300A40334 /* bottom_tab_bar_bg@3x.png in Resources */,
 				F85BEC6A1CA19D5C0001AB66 /* heart_sel.png in Resources */,
+				457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */,
 				F83E83861C9AC41500A40334 /* tab_upload_sel@2x.png in Resources */,
 				F85BEC731CA1C5F40001AB66 /* tab_notification_normal@2x.png in Resources */,
 				F83E838D1C9AC6FC00A40334 /* add_photo.png in Resources */,
