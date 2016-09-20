@@ -30,8 +30,6 @@
         AFJSONRequestSerializer *jsonRequestSerializer = [AFJSONRequestSerializer serializer];
         [client setRequestSerializer:jsonRequestSerializer];
         
-        NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-        [client.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
         
         [client.requestSerializer setTimeoutInterval: REQUEST_TIME_OUT];
 
@@ -45,13 +43,19 @@
     return client;
 }
 
+- (void)addTokenIfExist{
+    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
+    if ([apiToken isKindOfClass:[NSString class]] && ![apiToken isEqualToString:@""]){
+        [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    }
+}
+
 - (void) GETRequest: (NSString *)URLString
          parameters: (nullable id)parameters
             success:(nullable void (^)(id responseObject))success
             failure:(nullable void (^)(NSError *error))failure
 {
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
 
     
     [self GET: URLString
@@ -70,8 +74,7 @@
             success:(nullable void (^)(id responseObject))success
             failure:(nullable void (^)(NSError *error))failure
 {
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     [self POST: URLString
     parameters: parameters
@@ -91,8 +94,7 @@
              success:(nullable void (^)(id responseObject))success
              failure:(nullable void (^)(NSError *error))failure
 {
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     [self DELETE:URLString parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success(responseObject);
@@ -271,8 +273,7 @@
                failure: (void (^)(NSString *errorMessage))failure
 {
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        firstName, @"first_name",
@@ -341,8 +342,7 @@
                 failure: (void (^)(NSString *errorMessage))failure
 {
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     [self GET:[NSString stringWithFormat:@"users/password-reset?email=%@", email] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success(@{@"message":@"Password has been successfully changed"});
@@ -359,8 +359,7 @@
            failure: (void (^)(NSString *errorMessage))failure
 {
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     NSDictionary *parameters = @{@"pin":pin, @"email":email, @"new_password":newPassword};
     
@@ -493,8 +492,7 @@
           failure: (void (^)(NSString *errorMessage))failure
 {
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        imageURL, @"photo_url",
@@ -660,8 +658,7 @@
                   failure(MSG_DISCONNECT_INTERNET);
               }];*/
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     
 //    [self GET: @"projects/given-to"
@@ -695,8 +692,7 @@
             failure: (void (^)(NSString *errorMessage))failure
 {
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     NSString *path = [NSString stringWithFormat:@"projects/%@", f.feed_id];
     
@@ -1041,8 +1037,7 @@
 
 - (void) readActivity: (int) activity_id
 {
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     NSString *path = [NSString stringWithFormat:@"users/%i/notifications/%i", [AppEngine sharedInstance].currentUser.user_id, activity_id];
     [self PATCH:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -1158,8 +1153,7 @@
 
     NSString *path = [NSString stringWithFormat:@"users/%d/followers", following_id];
     
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     
     [self POST:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -1186,8 +1180,7 @@
               success: (void (^)(User* followerUser, User* followingUser))success
               failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     NSString *path = [NSString stringWithFormat:@"users/%d/followers", following_id];
     
@@ -1298,8 +1291,7 @@
             failure: (void (^)(NSString *errorMessage))failure
 {
 
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     [self POST:[NSString stringWithFormat:@"projects/%@/abuse-reports", f.feed_id] parameters:@{@"message":@"Test user"} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success();
@@ -1324,8 +1316,7 @@
             success: (void (^)(void))success
             failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *apiToken = [[NSUserDefaults standardUserDefaults] valueForKey:@"api_token"];
-    [self.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", apiToken] forHTTPHeaderField:@"Authorization"];
+    [self addTokenIfExist];
     
     [self POST:[NSString stringWithFormat:@"users/%i/abuse-reports", u.user_id] parameters:@{@"message":@"Test user"} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success();

@@ -84,7 +84,7 @@
     
     // USER DEFAULTS
     NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"-1", @"stripe_userid",@"-1",@"devicetoken",@"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNjh9.1ynooVdTHcw6HaN4ZUtPR1ukhjzRiMDBBCXWyp5AKpU", @"api_token",
+                                 @"-1", @"stripe_userid",@"-1",@"devicetoken",@"", @"api_token",
                                  nil];
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];

@@ -841,7 +841,7 @@
                                                       handler:^(UIAlertAction * _Nonnull action) {
                                                          
                                                           [[NSUserDefaults standardUserDefaults] setValue:@"-1" forKey:@"stripe_userid"];
-                                                          [[NSUserDefaults standardUserDefaults] setValue:@"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxNjh9.1ynooVdTHcw6HaN4ZUtPR1ukhjzRiMDBBCXWyp5AKpU" forKey:@"api_token"];
+                                                          [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"api_token"];
                                                           [[NSUserDefaults standardUserDefaults] synchronize];
                                                           
                                                           [AppEngine sharedInstance].currentUser = nil;
