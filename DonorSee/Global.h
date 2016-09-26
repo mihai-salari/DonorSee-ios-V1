@@ -32,8 +32,8 @@
 //#define     kAPIBaseURLString                   @"https://donorsee-api-staging.herokuapp.com/"
 
 
-//#define     kAPIBaseURLString                   @"https://api.donorsee.com/"
-#define     kAPIBaseURLString                   @"https://api-staging.donorsee.com"
+#define     kAPIBaseURLString                   @"https://api.donorsee.com/"
+//#define     kAPIBaseURLString                   @"https://api-staging.donorsee.com"
 
 
 #define     APP_STORE_URL                       @"https://itunes.apple.com/us/app/donorsee/id1093861994?ls=1&mt=8"
