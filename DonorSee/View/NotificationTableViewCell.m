@@ -138,11 +138,17 @@
     //Message.
     NSString* filterUsername = [a.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
     NSString* message;
+    int currentUserID = [AppEngine sharedInstance].currentUser.user_id;
+    
     
     if([a.type isEqualToString:@"give"])
     {
-        
-        message = [NSString stringWithFormat: @"!%@ gave !$%d to this project", filterUsername, a.gift_amount_cents/100];
+        if (a.recipient.user_id == currentUserID){
+            message = [NSString stringWithFormat: @"!%@ gave !$%d to this project", filterUsername, a.gift_amount_cents/100];
+        }
+        else{
+            message = [NSString stringWithFormat: @"!%@ gave to this project", filterUsername];
+        }
     }
     else if([a.type isEqualToString:@"fund"])
     {
