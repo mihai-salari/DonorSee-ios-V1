@@ -20,12 +20,8 @@
         self.property = property;
         self.keyPath = keyPath;
 
-        FEMMapBlock passthroughMap = ^(id value) {
-            return value;
-        };
-
-        _map = map ?: passthroughMap;
-        _reverseMap = reverseMap ?: passthroughMap;
+        _map = [map copy];
+        _reverseMap = [reverseMap copy];
     }
 
     return self;
@@ -33,6 +29,16 @@
 
 + (instancetype)mappingOfProperty:(NSString *)property toKeyPath:(NSString *)keyPath map:(FEMMapBlock)map reverseMap:(FEMMapBlock)reverseMap {
     return [[self alloc] initWithProperty:property keyPath:keyPath map:map reverseMap:reverseMap];
+}
+
+- (instancetype)initWithProperty:(NSString *)property keyPath:(nullable NSString *)keyPath {
+    return [self initWithProperty:property keyPath:keyPath map:NULL reverseMap:NULL];
+}
+
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+    return [[self.class allocWithZone:zone] initWithProperty:self.property keyPath:self.keyPath map:_map reverseMap:_reverseMap];
 }
 
 #pragma mark - Description
@@ -50,11 +56,19 @@
 #pragma mark - Mapping
 
 - (id)mapValue:(id)value {
-    return _map(value);
+    if (_map != NULL) {
+        return _map(value);
+    }
+
+    return value;
 }
 
 - (id)reverseMapValue:(id)value {
-    return _reverseMap(value);
+    if (_reverseMap != NULL) {
+        return _reverseMap(value);
+    }
+
+    return value;
 }
 
 @end
@@ -97,7 +111,7 @@
 + (instancetype)mappingOfURLProperty:(NSString *)property toKeyPath:(NSString *)keyPath {
     return [FEMAttribute mappingOfProperty:property toKeyPath:keyPath map:^id(id value) {
         return [value isKindOfClass:NSString.class] ? [NSURL URLWithString:value] : NSNull.null;
-    }                           reverseMap:^id(NSURL *value) {
+    } reverseMap:^id(NSURL *value) {
         return [value absoluteString];
     }];
 }

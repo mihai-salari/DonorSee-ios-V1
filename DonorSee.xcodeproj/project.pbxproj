@@ -185,6 +185,7 @@
 		457D1E681D91A7EA00127F3C /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
 		610AE77298E1481F47BB26D0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DE070191DA64A2D0089CC47 /* DonorSee.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DonorSee.entitlements; sourceTree = "<group>"; };
 		9F2936A71D0BA0AD000A485D /* StripeDonateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StripeDonateViewController.h; sourceTree = "<group>"; };
 		9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StripeDonateViewController.m; sourceTree = "<group>"; };
 		9F42C6A41D65EFB30011C0D8 /* StripeSignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StripeSignupViewController.h; sourceTree = "<group>"; };
@@ -639,6 +640,7 @@
 		F87AE41C1C83739C00FE9417 /* DonorSee */ = {
 			isa = PBXGroup;
 			children = (
+				6DE070191DA64A2D0089CC47 /* DonorSee.entitlements */,
 				F87AE4341C83D45900FE9417 /* Helper */,
 				F87AE4351C83D45900FE9417 /* Model */,
 				F87AE4381C83D45900FE9417 /* View */,
@@ -895,7 +897,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F87AE4311C83739C00FE9417 /* Build configuration list for PBXNativeTarget "DonorSee" */;
 			buildPhases = (
-				A1AB73C8E5949AC70B78432F /* 📦 Check Pods Manifest.lock */,
+				A1AB73C8E5949AC70B78432F /* [CP] Check Pods Manifest.lock */,
 				70BCDD2E94CA0FA97203452C /* [CP] Check Pods Manifest.lock */,
 				F87AE4161C83739C00FE9417 /* Sources */,
 				F87AE4171C83739C00FE9417 /* Frameworks */,
@@ -921,12 +923,13 @@
 		F87AE4121C83739C00FE9417 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = miroslave;
 				TargetAttributes = {
 					F87AE4191C83739C00FE9417 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 33V6UA2S4N;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1121,19 +1124,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		A1AB73C8E5949AC70B78432F /* 📦 Check Pods Manifest.lock */ = {
+		A1AB73C8E5949AC70B78432F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		F56E74C72A2836312859F61A /* 📦 Embed Pods Frameworks */ = {
@@ -1264,8 +1267,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
@@ -1288,7 +1293,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "8215460e-7c02-41e2-b77c-c467365190a8";
@@ -1309,8 +1314,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
@@ -1327,7 +1334,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "8215460e-7c02-41e2-b77c-c467365190a8";
 				SDKROOT = iphoneos;
@@ -1339,8 +1346,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C7C81B38A09C8727FA0A9F75 /* Pods-DonorSee.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
 				ENABLE_BITCODE = NO;
@@ -1385,7 +1393,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d1f26ef2-b102-4a42-8bd3-0c4eea1051ec";
+				PROVISIONING_PROFILE = "a0e96e17-89e2-4dc6-9303-7994d94161ce";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1393,8 +1402,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
 				ENABLE_BITCODE = NO;
@@ -1440,6 +1450,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "d6738288-6fcc-4b89-a818-b07281c7b936";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

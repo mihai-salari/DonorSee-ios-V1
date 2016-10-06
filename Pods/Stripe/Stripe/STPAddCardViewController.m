@@ -29,7 +29,6 @@
 #import "STPRememberMeTermsView.h"
 #import "UIBarButtonItem+Stripe.h"
 #import "UINavigationBar+Stripe_Theme.h"
-#import "UIViewController+Stripe_Alerts.h"
 #import "StripeError.h"
 #import "UIViewController+Stripe_Promises.h"
 #import "UIView+Stripe_FirstResponder.h"
@@ -37,6 +36,8 @@
 #import "STPRememberMePaymentCell.h"
 #import "STPAnalyticsClient.h"
 #import "STPColorUtils.h"
+#import "STPWeakStrongMacros.h"
+#import "STPLocalizationUtils.h"
 
 @interface STPAddCardViewController ()<STPPaymentCardTextFieldDelegate, STPAddressViewModelDelegate, STPAddressFieldTableViewCellDelegate, STPSwitchTableViewCellDelegate, UITableViewDelegate, UITableViewDataSource, STPSMSCodeViewControllerDelegate, STPRememberMePaymentCellDelegate>
 @property(nonatomic)STPPaymentConfiguration *configuration;
@@ -107,7 +108,7 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
     _addressViewModel = [[STPAddressViewModel alloc] initWithRequiredBillingFields:configuration.requiredBillingAddressFields];
     _addressViewModel.delegate = self;
     _checkoutAPIClient = [[STPCheckoutAPIClient alloc] initWithPublishableKey:configuration.publishableKey];
-    self.title = NSLocalizedString(@"Add a Card", nil);
+    self.title = STPLocalizedString(@"Add a Card", @"Title for Add a Card view");
 }
 
 - (void)viewDidLoad {
@@ -118,7 +119,7 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
     [self.view addSubview:tableView];
     self.tableView = tableView;
     
-    self.backItem = [UIBarButtonItem stp_backButtonItemWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
+    self.backItem = [UIBarButtonItem stp_backButtonItemWithTitle:STPLocalizedString(@"Back", @"Text for back button") style:UIBarButtonItemStylePlain target:self action:@selector(cancel:)];
     self.cancelItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
     
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(nextPressed:)];
@@ -144,15 +145,20 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
     self.addressViewModel.previousField = paymentCell;
     
     self.rememberMeCell = [[STPSwitchTableViewCell alloc] init];
-    [self.rememberMeCell configureWithLabel:NSLocalizedString(@"Save for use in other apps", nil) delegate:self];
+    [self.rememberMeCell configureWithLabel:STPLocalizedString(@"Save for use in other apps", @"Label for the switch to enable Remember Me") delegate:self];
     [self reloadRememberMeCellAnimated:NO];
     
     self.rememberMePhoneCell = [[STPAddressFieldTableViewCell alloc] initWithType:STPAddressFieldTypePhone contents:nil lastInList:YES delegate:self];
-    self.rememberMePhoneCell.caption = NSLocalizedString(@"Phone", nil);
+    self.rememberMePhoneCell.caption = STPLocalizedString(@"Phone", nil);
     self.rememberMePhoneCell.contents = self.prefilledInformation.phone;
     
     self.rememberMeTermsView = [STPRememberMeTermsView new];
     self.rememberMeTermsView.textView.alpha = 0;
+    WEAK(self);
+    self.rememberMeTermsView.pushViewControllerBlock = ^(UIViewController *vc) {
+        STRONG(self);
+        [self.navigationController pushViewController:vc animated:YES];
+    };
     
     self.activityIndicator = [[STPPaymentActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20.0f, 20.0f)];
     
@@ -166,10 +172,10 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
     [self updateAppearance];
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(endEditing)]];
-    
-    __weak typeof(self) weakself = self;
+
     [self.checkoutAPIClient.bootstrapPromise onCompletion:^(__unused id value, __unused NSError *error) {
-        [weakself reloadRememberMeCellAnimated:YES];
+        STRONG(self);
+        [self reloadRememberMeCellAnimated:YES];
     }];
 }
 
@@ -293,20 +299,22 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
     self.loading = YES;
     STPCardParams *cardParams = self.paymentCell.paymentField.cardParams;
     cardParams.address = self.addressViewModel.address;
+    cardParams.currency = self.managedAccountCurrency;
     if (self.checkoutAccountCard) {
-        __weak typeof(self) weakself = self;
+        WEAK(self);
         [[[self.checkoutAPIClient createTokenWithAccount:self.checkoutAccount] onSuccess:^(STPToken *token) {
-            __strong typeof(weakself) strongself = weakself;
-            [strongself.delegate addCardViewController:strongself didCreateToken:token completion:^(NSError * _Nullable error) {
+            STRONG(self);
+            [self.delegate addCardViewController:self didCreateToken:token completion:^(NSError * _Nullable error) {
                 if (error) {
-                    [strongself handleCheckoutTokenError:error];
+                    [self handleCheckoutTokenError:error];
                 }
                 else {
                     self.loading = NO;
                 }
             }];
         }] onFailure:^(NSError *error) {
-            [weakself handleCardTokenError:error];
+            STRONG(self);
+            [self handleCardTokenError:error];
         }];
     } else if (cardParams) {
         [self.apiClient createTokenWithCard:cardParams completion:^(STPToken *token, NSError *tokenError) {
@@ -335,25 +343,33 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
 
 - (void)handleCheckoutTokenError:(__unused NSError *)error {
     self.loading = NO;
-    NSArray *tuples = @[
-                        [STPAlertTuple tupleWithTitle:NSLocalizedString(@"Enter card details manually", nil) style:STPAlertStyleDefault action:^{
-                            [self.paymentCell clear];
-                        }],
-                        ];
-    [self stp_showAlertWithTitle:NSLocalizedString(@"There was an error submitting your autofilled card details.", nil)
-                         message:nil
-                          tuples:tuples];
+
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:STPLocalizedString(@"There was an error submitting your autofilled card details.", nil)
+                                                                             message:nil 
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:STPLocalizedString(@"Enter card details manually", nil) 
+                                                        style:UIAlertActionStyleDefault 
+                                                      handler:^(UIAlertAction * _Nonnull __unused action) {
+                                                          [self.paymentCell clear];
+                                                      }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)handleCardTokenError:(NSError *)error {
     self.loading = NO;
     [[self firstEmptyField] becomeFirstResponder];
-    NSArray *tuples = @[
-                        [STPAlertTuple tupleWithTitle:NSLocalizedString(@"OK", nil) style:STPAlertStyleCancel action:nil],
-                        ];
-    [self stp_showAlertWithTitle:error.localizedDescription
-                         message:error.localizedFailureReason
-                          tuples:tuples];
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:error.localizedDescription
+                                                                             message:error.localizedFailureReason 
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:STPLocalizedString(@"OK", nil) 
+                                                        style:UIAlertActionStyleCancel 
+                                                      handler:nil]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)setCheckoutAccountCard:(STPCard *)checkoutAccountCard {
@@ -416,6 +432,16 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
 
 #pragma mark - STPAddressViewModelDelegate
 
+- (void)addressViewModel:(__unused STPAddressViewModel *)addressViewModel addedCellAtIndex:(NSUInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:STPPaymentCardBillingAddressSection];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)addressViewModel:(__unused STPAddressViewModel *)addressViewModel removedCellAtIndex:(NSUInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:STPPaymentCardBillingAddressSection];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 - (void)addressViewModelDidChange:(__unused STPAddressViewModel *)addressViewModel {
     [self updateDoneButton];
 }
@@ -437,25 +463,32 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
     if (self.checkoutAccount || self.configuration.smsAutofillDisabled || self.lookupSucceeded) {
         return;
     }
-    __weak typeof(self) weakself = self;
+    WEAK(self);
     if ([STPEmailAddressValidator stringIsValidEmailAddress:email]) {
         [self.emailCell.activityIndicator setAnimating:YES animated:YES];
         [[[[self.stp_didAppearPromise voidFlatMap:^STPPromise * _Nonnull{
-            return [weakself.checkoutAPIClient lookupEmail:email];
+            STRONG(self);
+            return [self.checkoutAPIClient lookupEmail:email];
         }] flatMap:^STPPromise * _Nonnull(STPCheckoutAccountLookup *lookup) {
-            weakself.lookupSucceeded = YES;
-            weakself.checkoutLookup = lookup;
-            return [weakself.checkoutAPIClient sendSMSToAccountWithEmail:lookup.email];
+            STRONG(self);
+            self.lookupSucceeded = YES;
+            self.checkoutLookup = lookup;
+            return [self.checkoutAPIClient sendSMSToAccountWithEmail:lookup.email];
         }] onSuccess:^(STPCheckoutAPIVerification *verification) {
-            STPSMSCodeViewController *codeViewController = [[STPSMSCodeViewController alloc] initWithCheckoutAPIClient:self.checkoutAPIClient verification:verification redactedPhone:self.checkoutLookup.redactedPhone];
+            STRONG(self);
+            STPSMSCodeViewController *codeViewController = [[STPSMSCodeViewController alloc] initWithCheckoutAPIClient:self.checkoutAPIClient 
+                                                                                                          verification:verification 
+                                                                                                         redactedPhone:self.checkoutLookup.redactedPhone];
             codeViewController.theme = self.theme;
             codeViewController.delegate = self;
             UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:codeViewController];
             [nav.navigationBar stp_setTheme:self.theme];
-            [weakself presentViewController:nav animated:YES completion:nil];
+            nav.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self presentViewController:nav animated:YES completion:nil];
         }] onCompletion:^(__unused id value, NSError *error) {
+            STRONG(self);
             if (![error stp_isURLSessionCancellationError]) {
-                [weakself.emailCell.activityIndicator setAnimating:NO animated:YES];
+                [self.emailCell.activityIndicator setAnimating:NO animated:YES];
             }
         }];
     }
@@ -492,7 +525,7 @@ static NSInteger STPPaymentCardRememberMeSection = 3;
 #pragma mark - UITableView
 
 - (void)reloadRememberMeCellAnimated:(BOOL)animated {
-    BOOL disabled = (!self.checkoutAPIClient.readyForLookups || self.checkoutAccount || self.configuration.smsAutofillDisabled || self.lookupSucceeded) && (self.rememberMePhoneCell.contentView.alpha < FLT_EPSILON || self.rememberMePhoneCell.superview == nil);
+    BOOL disabled = (!self.checkoutAPIClient.readyForLookups || self.checkoutAccount || self.configuration.smsAutofillDisabled || self.lookupSucceeded || self.managedAccountCurrency) && (self.rememberMePhoneCell.contentView.alpha < FLT_EPSILON || self.rememberMePhoneCell.superview == nil);
     [UIView animateWithDuration:(0.2f * animated) animations:^{
         self.rememberMeCell.contentView.alpha = disabled ? 0 : 1;
     } completion:^(__unused BOOL finished) {

@@ -1,7 +1,4 @@
-//
-// Created by zen on 14/05/15.
-// Copyright (c) 2015 Yalantis. All rights reserved.
-//
+// For License please refer to LICENSE file in the root of FastEasyMapping project
 
 #import "FEMMappingUtility.h"
 #import "FEMMapping.h"
@@ -10,7 +7,9 @@ void FEMMappingApply(FEMMapping *mapping, void (^apply)(FEMMapping *object)) {
     apply(mapping);
 
     for (FEMRelationship *relationship in mapping.relationships) {
-        FEMMappingApply(relationship.mapping, apply);
+        if (![relationship.mapping isEqual:mapping]) {
+            FEMMappingApply(relationship.mapping, apply);
+        }
     }
 }
 

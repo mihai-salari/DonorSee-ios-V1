@@ -1050,6 +1050,8 @@
 
 - (void) readNotification: (int) notification_id
 {
+    [self addTokenIfExist];
+    
     NSString *path = [NSString stringWithFormat:@"activity_api/read_notification.php?notification_id=%i", notification_id];
     [self PostRequest: path
            parameters: nil
@@ -1070,6 +1072,7 @@
 - (void) getNotifications: (void (^)(NSArray* notifications))success
                  failure: (void (^)(NSString *errorMessage))failure
 {
+    [self addTokenIfExist];
     
     NSString *path = [NSString stringWithFormat:@"activity_api/get_notification.php?user_id=%i", [AppEngine sharedInstance].currentUser.user_id];
     
@@ -1102,7 +1105,8 @@
 - (void) getMyActivities: (void (^)(NSArray* arrActivities))success
                  failure: (void (^)(NSString *errorMessage))failure
 {
-    NSString *path = [NSString stringWithFormat:@"users/%i/notifications?limit=100", [AppEngine sharedInstance].currentUser.user_id];
+    
+    NSString *path = [NSString stringWithFormat:@"users/%i/notifications", [AppEngine sharedInstance].currentUser.user_id];
     
     [self GETRequest: path
            parameters: nil
@@ -1125,6 +1129,7 @@
                       success: (void (^)(NSArray* arrActivities, Feed* feed))success
                       failure: (void (^)(NSString *errorMessage))failure
 {
+    
     NSString *path = [NSString stringWithFormat:@"projects/%@/timeline", f.feed_id];
     
     [self GETRequest: path
@@ -1243,6 +1248,7 @@
                    success: (void (^)(void))success
                    failure: (void (^)(NSString *errorMessage))failure
 {
+    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     [parameters setValue:message forKey:@"message"];
     if (arrPhotos.count > 0) {
@@ -1346,8 +1352,7 @@
 - (void) getUnReadCountInfo: (int) user_id
              success: (void (^)(NSDictionary *dicUser))success
              failure: (void (^)(NSString *errorMessage))failure
-{
-    
+{        
     NSString *path = [NSString stringWithFormat:@"users/%i/notifications/unread/count", user_id];
     
     [self GETRequest:path parameters:nil success:^(id responseObject) {

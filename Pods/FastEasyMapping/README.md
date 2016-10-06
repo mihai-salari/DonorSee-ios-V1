@@ -1,6 +1,7 @@
 # FastEasyMapping
 
-[![Build Status](https://travis-ci.org/Yalantis/FastEasyMapping.png)](https://travis-ci.org/Yalantis/FastEasyMapping)
+[![Build Status](https://travis-ci.org/Yalantis/FastEasyMapping.svg)](https://travis-ci.org/Yalantis/FastEasyMapping)
+[![codecov.io](https://codecov.io/github/Yalantis/FastEasyMapping/coverage.svg?branch=master)](https://codecov.io/github/Yalantis/FastEasyMapping?branch=master)
 
 ### Note
 This is a fork of [EasyMapping](https://github.com/EasyMapping/EasyMapping), a flexible and easy framework for JSON mapping.
@@ -14,11 +15,11 @@ It turns out, that almost all popular libraries for JSON mapping are SLOW. The m
 
 # Installation
 
-#### Cocoapods:
+#### CocoaPods:
 ```ruby
 #Podfile
 platform :ios, '7.0'
-pod 'FastEasyMapping', '~> 1.0'
+pod 'FastEasyMapping', '~> 1.1'
 ```
 or add as a static library.
 
@@ -461,18 +462,20 @@ In the example above there is an issue: what if our database doesn't contain `Ca
 @implementation Website (Mapping)
 
 + (FEMMapping *)defaultMapping {
-	FEMMapping *mapping = [[FEMMapping alloc] initWithEntityName:@"Website"];
-	mapping.primaryKey = @"identifier";
-	[mapping addAttributesFromDictionary:@{@"identifier": @"id", @"title": @"title"}];
+    FEMMapping *mapping = [[FEMMapping alloc] initWithEntityName:@"Website"];
+    mapping.primaryKey = @"identifier";
+    [mapping addAttributesFromDictionary:@{@"identifier": @"id", @"title": @"title"}];
 
-	FEMMapping *categoryMapping = [[FEMMapping alloc] initWithEntityName:@"Category"];
-	categoryMapping.primaryKey = @"identifier";
-	categoryMapping.weak = YES;
+    FEMMapping *categoryMapping = [[FEMMapping alloc] initWithEntityName:@"Category"];
+    categoryMapping.primaryKey = @"identifier";
     [categoryMapping addAttributeWithProperty:@"identifier" keyPath:nil];
 
-	[mapping addRelationshipMapping:categoryMapping property:@"category" keyPath:@"category"];
+    FEMRelationship *categoryRelationship = [[FEMRelationship alloc] initWithProperty:@"category" keyPath:@"category" mapping:categoryMapping];
+    categoryRelationship.weak = YES;
 
-	return mapping;
+    [mapping addRelationship:categoryRelationship];
+
+    return mapping;
 }
 
 @end

@@ -20,7 +20,6 @@
 #import "FEMMappingUtility.h"
 #import "FEMRepresentationUtility.h"
 #import "FEMTypeIntrospection.h"
-#import "FEMTypes.h"
 
 FOUNDATION_EXPORT double FastEasyMappingVersionNumber;
 FOUNDATION_EXPORT const unsigned char FastEasyMappingVersionString[];

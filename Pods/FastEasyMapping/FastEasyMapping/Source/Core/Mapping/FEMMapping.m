@@ -4,7 +4,10 @@
 #import "FEMManagedObjectMapping.h"
 #import "FEMObjectMapping.h"
 
-@implementation FEMMapping
+@implementation FEMMapping  {
+    NSMutableDictionary *_attributeMap;
+    NSMutableDictionary *_relationshipMap;
+}
 
 #pragma mark - Init
 
@@ -48,6 +51,35 @@
     }
     
     return self;
+}
+
+#pragma mark - NSCopying
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+    FEMMapping *mapping = nil;
+    if (self.objectClass) {
+        mapping = [[self.class allocWithZone:zone] initWithObjectClass:self.objectClass];
+    } else {
+        mapping = [[self.class allocWithZone:zone] initWithEntityName:self.entityName];
+    }
+    
+    mapping.rootPath = self.rootPath;
+    mapping.primaryKey = self.primaryKey;
+    
+    for (FEMAttribute *attribute in self.attributes) {
+        [mapping addAttribute:[attribute copy]];
+    }
+    
+    for (FEMRelationship *relationship in self.relationships) {
+        // recursive mapping copy will lead to infinite recursive copying
+        if (relationship.mapping == self) {
+            [mapping addRecursiveRelationshipMappingForProperty:relationship.property keypath:relationship.keyPath];
+        } else {
+            [mapping addRelationship:[relationship copy]];
+        }
+    }
+    
+    return mapping;
 }
 
 #pragma mark - Attribute Mapping
@@ -96,6 +128,20 @@
 
 - (NSArray *)relationships {
 	return [_relationshipMap allValues];
+}
+
+- (void)setEntityName:(NSString *)entityName {
+    _entityName = [entityName copy];
+    if (_entityName) {
+        _objectClass = nil;
+    }
+}
+
+- (void)setObjectClass:(Class)objectClass {
+    _objectClass = objectClass;
+    if (_objectClass) {
+        _entityName = nil;
+    }
 }
 
 #pragma mark -
@@ -154,15 +200,27 @@
     [self addRelationship:relationship];
 }
 
+- (void)addRecursiveRelationshipMappingForProperty:(NSString *)property keypath:(NSString *)keyPath {
+    FEMRelationship *relationship = [[FEMRelationship alloc] initWithProperty:property keyPath:keyPath mapping:self];
+    [self addRelationship:relationship];
+}
+
 - (void)addToManyRelationshipMapping:(FEMMapping *)mapping forProperty:(NSString *)property keyPath:(NSString *)keyPath {
     FEMRelationship *relationship = [[FEMRelationship alloc] initWithProperty:property keyPath:keyPath mapping:mapping];
     relationship.toMany = YES;
     [self addRelationship:relationship];
 }
 
+- (void)addRecursiveToManyRelationshipForProperty:(nonnull NSString *)property keypath:(nullable NSString *)keyPath
+{
+    FEMRelationship *relationship = [[FEMRelationship alloc] initWithProperty:property keyPath:keyPath mapping:self];
+    relationship.toMany = YES;
+    [self addRelationship:relationship];
+}
+
 @end
 
-@implementation FEMMapping (FEMManagedObjectMapping_Deprecated)
+@implementation FEMMapping (Deprecated)
 
 + (FEMMapping *)mappingForEntityName:(NSString *)entityName {
     FEMMapping *mapping = [[FEMMapping alloc] initWithEntityName:entityName];
@@ -184,9 +242,6 @@
     return mapping;
 }
 
-@end
-
-@implementation FEMMapping (FEMObjectMapping_Deprecated)
 
 + (FEMMapping *)mappingForClass:(Class)objectClass configuration:(void (^)(FEMObjectMapping *mapping))configuration {
     FEMMapping *mapping = [[FEMMapping alloc] initWithObjectClass:objectClass];

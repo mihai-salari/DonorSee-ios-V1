@@ -95,13 +95,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  The amount of money you're requesting from the user, in the smallest currency unit for the selected currency. For example, to indicate $10 USD, use 1000 (i.e. 1000 cents). For more information see https://stripe.com/docs/api#charge_object-amount . This value must be present and greater than zero in order for Apple Pay to be automatically enabled.
+ *
+ *  @note You should only set either this or `paymentSummaryItems`, not both. The other will be automatically calculated on demand using your `paymentCurrency`. 
  */
 @property(nonatomic)NSInteger paymentAmount;
 
 /**
  *  The three-letter currency code for the currency of the payment (i.e. USD, GBP, JPY, etc). Defaults to USD.
+ *
+ *  @note Changing this property may change the return value of `paymentAmount` or `paymentSummaryItems` (whichever one you didn't directly set yourself).
  */
 @property(nonatomic, copy)NSString *paymentCurrency;
+
+/**
+ *  If you support Apple Pay, you can optionally set the PKPaymentSummaryItems you want to display here instead of using `paymentAmount`. Note that the grand total (the amount of the last summary item) must be greater than zero.
+ *  If not set, a single summary item will be automatically generated using `paymentAmount` and your configuration's `companyName`.
+ *  @see PKPaymentRequest for more information
+ *
+ *  @note You should only set either this or `paymentAmount`, not both. The other will be automatically calculated on demand using your `paymentCurrency.`
+ *
+ *  @warning `PKPaymentSummaryItem` is only available in iOS8+. If you support iOS 7 you should do a runtime availability check before accessing or setting this property. 
+ */
+@property(nonatomic, copy)NSArray<PKPaymentSummaryItem *> *paymentSummaryItems NS_AVAILABLE_IOS(8_0);
+
+/**
+ *  The presentation style used for all view controllers presented modally by the context.
+ *  Since custom transition styles are not supported, you should set this to either
+ *  `UIModalPresentationFullScreen`, `UIModalPresentationPageSheet`, or `UIModalPresentationFormSheet`.
+ *  The default value is `UIModalPresentationFullScreen`.
+ */
+@property(nonatomic, assign) UIModalPresentationStyle modalPresentationStyle;
 
 /**
  *  If `paymentContext:didFailToLoadWithError:` is called on your delegate, you can in turn call this method to try loading again (if that hasn't been called, calling this will do nothing). If retrying in turn fails, `paymentContext:didFailToLoadWithError:` will be called again (and you can again call this to keep retrying, etc).
@@ -156,6 +179,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param paymentContext The context that succeeded
  *  @param paymentResult  Information associated with the payment that you can pass to your server. You should go to your backend API with this payment result and make a charge to complete the payment, passing `paymentResult.source.stripeID` as the `source` parameter to the create charge method and your customer's ID as the `customer` parameter (see stripe.com/docs/api#charge_create for more info). Once that's done call the `completion` block with any error that occurred (or none, if the charge succeeded). @see STPPaymentResult.h
  *  @param completion     Call this block when you're done creating a charge (or subscription, etc) on your backend. If it succeeded, call `completion(nil)`. If it failed with an error, call `completion(error)`.
+ *
+ *  @note If you are on Swift 3, you must declare the completion block as `@escaping` or Xcode will give you a protocol conformance error. https://bugs.swift.org/browse/SR-2597
  */
 - (void)paymentContext:(STPPaymentContext *)paymentContext
 didCreatePaymentResult:(STPPaymentResult *)paymentResult
