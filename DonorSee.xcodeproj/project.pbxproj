@@ -10,6 +10,8 @@
 		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
 		457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 457D1E681D91A7EA00127F3C /* Entitlements.plist */; };
+		4919CA691DA7E8E800E48ED7 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4919CA681DA7E8E800E48ED7 /* PlayerViewController.m */; };
+		4919CA6B1DA7E9AE00E48ED7 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4919CA6A1DA7E9AE00E48ED7 /* AVKit.framework */; };
 		49ED71A3D06D46BB608AA3A7 /* Pods_DonorSee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */; };
 		9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */; };
 		9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */; };
@@ -183,6 +185,10 @@
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		457447431D8AEA8F005A7E5C /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		457D1E681D91A7EA00127F3C /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
+		4919CA651DA7E6F600E48ED7 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		4919CA671DA7E8E800E48ED7 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewController.h; path = View/PlayerViewController.h; sourceTree = "<group>"; };
+		4919CA681DA7E8E800E48ED7 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewController.m; path = View/PlayerViewController.m; sourceTree = "<group>"; };
+		4919CA6A1DA7E9AE00E48ED7 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
 		610AE77298E1481F47BB26D0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DE070191DA64A2D0089CC47 /* DonorSee.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DonorSee.entitlements; sourceTree = "<group>"; };
@@ -425,6 +431,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4919CA6B1DA7E9AE00E48ED7 /* AVKit.framework in Frameworks */,
 				F84932EB1C8CC0F600F0DDC1 /* AVFoundation.framework in Frameworks */,
 				F84932E91C8CC0EB00F0DDC1 /* CoreMedia.framework in Frameworks */,
 				F84932E71C8CC0E400F0DDC1 /* CoreLocation.framework in Frameworks */,
@@ -477,9 +484,21 @@
 			name = Web;
 			sourceTree = "<group>";
 		};
+		4919CA6C1DA7EB4B00E48ED7 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				4919CA671DA7E8E800E48ED7 /* PlayerViewController.h */,
+				4919CA681DA7E8E800E48ED7 /* PlayerViewController.m */,
+			);
+			name = Player;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		BD3947E22B0A270A5AFEEA5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4919CA6A1DA7E9AE00E48ED7 /* AVKit.framework */,
+				4919CA651DA7E6F600E48ED7 /* MediaPlayer.framework */,
 				F84932EA1C8CC0F600F0DDC1 /* AVFoundation.framework */,
 				F84932E81C8CC0EB00F0DDC1 /* CoreMedia.framework */,
 				F84932E51C8CC0D900F0DDC1 /* SafariServices.framework */,
@@ -814,7 +833,6 @@
 				F854F9B41C859EFA0080D03A /* MainTabBarViewController.h */,
 				F854F9B51C859EFA0080D03A /* MainTabBarViewController.m */,
 				9F96713F1D31439300F756BF /* UITabBarItem+CustomBadge.h */,
-				9F9671401D31439300F756BF /* UITabBarItem+CustomBadge.m */,
 				F83305011C932E27004D11F1 /* Base */,
 				F83E83621C9AAAA800A40334 /* Auth */,
 				F87AE4471C83D90500FE9417 /* Home */,
@@ -824,6 +842,8 @@
 				F8F5F8FA1C845652002A54BA /* Profile */,
 				F848751E1CA583780044C12B /* Other */,
 				F85BEC6C1CA1C34A0001AB66 /* Notification */,
+				4919CA6C1DA7EB4B00E48ED7 /* Player */,
+				9F9671401D31439300F756BF /* UITabBarItem+CustomBadge.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1211,6 +1231,7 @@
 				F8548C571C889C2E0003F01F /* SSAPullToRefreshAnimator.m in Sources */,
 				9FE2601B1D6EBBA7003C4D50 /* FollowersViewController.m in Sources */,
 				F83F44051C990EB300FF2264 /* CustomSTTweetLabel.m in Sources */,
+				4919CA691DA7E8E800E48ED7 /* PlayerViewController.m in Sources */,
 				F892616D1CA8D29E00F97DD5 /* WebDonateViewController.m in Sources */,
 				F8276B411C9084AE008D1B76 /* OtherUserViewController.m in Sources */,
 				F83A23B41C9FA191006F4D2B /* AuthView.m in Sources */,
