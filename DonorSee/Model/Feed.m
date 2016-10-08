@@ -222,14 +222,25 @@
 {
     NSString* imageUrl = @"";
     
-    if(_photo!=nil){
+    if(_videoURL!=nil){
+        imageUrl = [self extractPhotoURLFromVideo];
+    }else if(_photo!=nil){
         imageUrl = _photo;
-    }else if(_videoURL!=nil){
-        //todo extract url
-        imageUrl = _videoURL;
     }
     
     return  imageUrl;
+}
+
+- (NSString*) extractPhotoURLFromVideo {
+    NSString* result;
+    
+    NSRange lastDot = [_videoURL rangeOfString:@"." options:NSBackwardsSearch];
+    if(lastDot.location != NSNotFound) {
+        result = [_videoURL substringToIndex:lastDot.location];
+        result = [result stringByAppendingString:@".jpg"];
+    }
+    
+    return result;
 }
 
 - (NSString*) getFeedType

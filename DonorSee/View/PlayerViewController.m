@@ -19,30 +19,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _videoURL = [self getValidatedVideoUrl: _videoURL];
+    
     AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:_videoURL]];
     
     AVPlayerViewController *playerController = [[AVPlayerViewController alloc] init];
     playerController.player = player;
     playerController.showsPlaybackControls = YES;
-    [self addChildViewController:playerController];
-    
-    UIView *container = self.view;
-    UIView *subview = playerController.view;
-    
-    subview.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [container addSubview:subview];
-    
-    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:subview attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
-    NSLayoutConstraint *leading = [NSLayoutConstraint constraintWithItem:subview attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
-    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:subview attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
-    NSLayoutConstraint *trailing = [NSLayoutConstraint constraintWithItem:subview attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:container attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:0];
-    
-    [container addConstraints:@[top, leading, bottom, trailing]];
+    [self presentViewController:playerController animated:YES completion:nil];
+    playerController.view.frame = self.view.frame;
     
     [player play];
+}
 
+- (NSString*) getValidatedVideoUrl: (NSString*) videoURL {
+    NSString* result;
     
+    NSRange lastDot = [_videoURL rangeOfString:@"." options:NSBackwardsSearch];
+    if(lastDot.location != NSNotFound) {
+        result = [_videoURL substringToIndex:lastDot.location];
+        result = [result stringByAppendingString:@".mp4"];
+    }
+    
+    return result;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {

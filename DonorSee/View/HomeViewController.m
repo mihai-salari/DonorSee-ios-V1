@@ -17,6 +17,7 @@
 #import "BLKDelegateSplitter.h"
 #import "AppDelegate.h"
 #import "PlayerViewController.h"
+#import "VideoPlayer.h"
 
 @interface HomeViewController() <UITableViewDataSource, UITableViewDelegate, FeedTableViewCellDelegate, SquareCashStyleBarDelegate>
 {
@@ -525,11 +526,9 @@
 
 -(void)openPlayer: (NSString*) videoURL;
 {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    PlayerViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"PlayerViewController"];
-    //nextView.videoURL = @"https://res.cloudinary.com/donorsee/video/upload/v1475263379/development/cnds2bb57ff7yqf4h6wm.mp4";
-    nextView.videoURL = videoURL;
-    [self.navigationController pushViewController: nextView animated: YES];
+    VideoPlayer *videoPlayer = [[VideoPlayer alloc] init];
+    videoPlayer.viewController = self;
+    [videoPlayer playVideo: videoURL];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

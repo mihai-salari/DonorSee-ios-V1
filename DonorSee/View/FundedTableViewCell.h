@@ -12,6 +12,7 @@
 @protocol FundedTableViewCellDelegate <NSObject>
 @optional
 - (void) selectFeed: (Feed *) f;
+- (void) openPlayer: (NSString*) videoURL;
 @end
 
 @interface FundedTableViewCell : UITableViewCell
@@ -22,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *ivPhoto;
 @property (weak, nonatomic) IBOutlet UITextView *tvDescription;
 @property (weak, nonatomic) IBOutlet UILabel *lbInfo;
+@property (weak, nonatomic) IBOutlet UIButton *btPlayVideo;
 
 @property (retain, nonatomic) Event      *currentFeed;
 @property (nonatomic, retain) id        delegate;

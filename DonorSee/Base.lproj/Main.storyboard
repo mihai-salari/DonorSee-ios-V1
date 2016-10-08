@@ -3623,6 +3623,7 @@
                         <outlet property="tfAmount" destination="fUU-eD-HbG" id="w8n-mD-lPW"/>
                         <outlet property="tfMessage" destination="WP2-Hl-cz6" id="iJW-Fu-1bP"/>
                         <outlet property="toolBar" destination="Jlp-HN-p5g" id="0p6-SV-X5T"/>
+                        <outlet property="vDonateButtonMonthly" destination="qer-y4-qxB" id="LMQ-fp-Cd5"/>
                         <outlet property="viDonateBar" destination="aip-QC-Xfx" id="dyc-wg-xXl"/>
                         <outlet property="viDonateContainer" destination="TG6-xr-LUG" id="k3P-pb-YUS"/>
                         <outlet property="viFooter" destination="fJW-Zu-O6a" id="rDW-jy-8sf"/>

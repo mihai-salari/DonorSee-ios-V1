@@ -121,12 +121,6 @@
 
     lbGiveTitle.hidden = NO;
     
-    if([f.getFeedType isEqualToString:FEED_TYPE_MONTHLY]){
-        
-    }else{
-        
-    }
-    
     if(f.donated_amount >= f.pre_amount)
     {
         lbMaxPrice.hidden = YES;

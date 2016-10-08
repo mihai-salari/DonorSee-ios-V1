@@ -10,6 +10,7 @@
 		4378C3651DA7FD22009FE0E3 /* icon_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4378C3641DA7FD22009FE0E3 /* icon_play.png */; };
 		439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FD1DA8F95D0041DB44 /* icon_reccuring.png */; };
 		439047001DA915550041DB44 /* reccuring_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FF1DA915550041DB44 /* reccuring_white.png */; };
+		439047041DA96DC60041DB44 /* VideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 439047031DA96DC60041DB44 /* VideoPlayer.m */; };
 		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
 		457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 457D1E681D91A7EA00127F3C /* Entitlements.plist */; };
@@ -186,6 +187,8 @@
 		4378C3641DA7FD22009FE0E3 /* icon_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_play.png; sourceTree = "<group>"; };
 		439046FD1DA8F95D0041DB44 /* icon_reccuring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_reccuring.png; sourceTree = "<group>"; };
 		439046FF1DA915550041DB44 /* reccuring_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reccuring_white.png; sourceTree = "<group>"; };
+		439047031DA96DC60041DB44 /* VideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayer.m; sourceTree = "<group>"; };
+		439047051DA96E210041DB44 /* VideoPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPlayer.h; sourceTree = "<group>"; };
 		452510771D8CA31500B2AA29 /* NSString+Formats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Formats.h"; sourceTree = "<group>"; };
 		452510781D8CA31500B2AA29 /* NSString+Formats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Formats.m"; sourceTree = "<group>"; };
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -495,6 +498,8 @@
 			children = (
 				4919CA671DA7E8E800E48ED7 /* PlayerViewController.h */,
 				4919CA681DA7E8E800E48ED7 /* PlayerViewController.m */,
+				439047051DA96E210041DB44 /* VideoPlayer.h */,
+				439047031DA96DC60041DB44 /* VideoPlayer.m */,
 			);
 			name = Player;
 			path = ..;
@@ -1263,6 +1268,7 @@
 				F8AFB4A51CB7AB3E0060FAA1 /* SignUpViewController.m in Sources */,
 				F87AE41F1C83739C00FE9417 /* main.m in Sources */,
 				9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */,
+				439047041DA96DC60041DB44 /* VideoPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

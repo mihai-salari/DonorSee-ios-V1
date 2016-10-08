@@ -25,6 +25,7 @@
 #import "SignInViewController.h"
 #import "FollowersViewController.h"
 #import "NSString+Formats.h"
+#import "VideoPlayer.h"
 
 @interface ProfileViewController() <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, UploadTableViewCellDelegate, SettingsTableViewCellDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate, AuthViewDelegate>
 {
@@ -689,6 +690,9 @@
         Feed *objFeed=[[Feed alloc]init];
         objFeed.feed_id=[dic objectForKey:@"id"];
         objFeed.pre_amount=[[dic objectForKey:@"goal_amount_cents"] intValue];
+        objFeed.photo = [dic valueForKey:@"photo_url"];
+        objFeed.videoURL = [dic valueForKey:@"video_url"];
+        
         f.feed=objFeed;
        // objFeed.pre_amount=[dic objectForKey:@""];
         
@@ -1150,6 +1154,13 @@
     }
 
     
+}
+
+-(void)openPlayer: (NSString*) videoURL;
+{
+    VideoPlayer *videoPlayer = [[VideoPlayer alloc] init];
+    videoPlayer.viewController = self;
+    [videoPlayer playVideo: videoURL];
 }
 
 @end

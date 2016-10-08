@@ -14,6 +14,7 @@
 @synthesize tvDescription;
 @synthesize lbInfo;
 @synthesize currentFeed;
+@synthesize btPlayVideo;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -52,10 +53,20 @@
     
     currentFeed = f;
     //[ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.feed.photo]];
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.photo_urls]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.feed.getProjectImage]];
     lbInfo.text = [NSString stringWithFormat: @"%d%@ RAISED", (int)(progress * 100), @"%"];
     //lbInfo.text = [NSString stringWithFormat: @"%d%@ RAISED", (int)( f.gift_amount_cents/ 100), @"%"];
     tvDescription.text = f.message;//f.feed.feed_description;
+    
+    if(f.feed.videoURL != nil){
+        btPlayVideo.hidden = NO;
+    }else{
+        btPlayVideo.hidden = YES;
+    }
+}
+
+- (IBAction)onTapPlayVideo:(id)sender {
+    [self.delegate openPlayer:currentFeed.feed.videoURL];
 }
 
 - (void) onTapPhoto

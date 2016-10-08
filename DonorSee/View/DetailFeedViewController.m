@@ -82,6 +82,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *btDonate;
 @property (weak, nonatomic) IBOutlet UILabel *lbMonthlyDonation;
+@property (weak, nonatomic) IBOutlet UIStackView *vDonateButtonMonthly;
 
 @end
 
@@ -129,6 +130,9 @@
                                             action:@selector(handleSingleTap:)];
     [self.btDonate addGestureRecognizer:singleFingerTap];
     
+    //todo remove later
+    [_vDonateButtonMonthly removeFromSuperview];
+    _cancelRecurringView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -258,6 +262,7 @@
         _donateButtonView.hidden = NO;
        // [_cancelRecurringView removeFromSuperview];
         _cancelRecurringView.hidden = YES;
+        [_vDonateButtonMonthly removeFromSuperview];
     }
 }
 
