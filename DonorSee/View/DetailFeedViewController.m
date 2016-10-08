@@ -1354,15 +1354,24 @@
         
         [SVProgressHUD showWithStatus: @"Processing..." maskType: SVProgressHUDMaskTypeClear];
         
-        [[NetworkClient sharedClient] createGift:selectedFeed.feed_id amount:amount success:^(NSDictionary *dicDonate) {
+        NSString* gift_type = selectedFeed.getFeedType;
+        
+        [[NetworkClient sharedClient] createGift:
+                     selectedFeed.feed_id amount:amount
+                                       gift_type: gift_type
+                                         success:^(NSDictionary *dicDonate) {
             [SVProgressHUD dismiss];
             
              int donatedAmount = [dicDonate[@"amount_cents"] intValue];
              selectedFeed.donated_amount += donatedAmount;
-            selectedFeed.donated_count += 1;
+             selectedFeed.donated_count += 1;
              selectedFeed.is_gave = YES;
              [AppEngine sharedInstance].currentUser.pay_amount += donatedAmount;
-            
+                                             if([gift_type isEqualToString:FEED_TYPE_MONTHLY]){
+                                                 selectedFeed.amount_given_cents = donatedAmount;
+                                                 selectedFeed.is_monthly_giver = YES;
+                                                 [self updateUserDonationStatus];
+                                             }
             
             [[NSNotificationCenter defaultCenter] postNotificationName: NOTI_UPDATE_FUNDED_FEED object: selectedFeed];
             

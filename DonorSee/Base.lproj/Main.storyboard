@@ -590,18 +590,6 @@
                                                     <constraint firstAttribute="height" constant="45" id="Nvu-0S-l7Y"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4zk-PK-bVp">
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="180" id="Nv7-MU-V6n"/>
-                                                    <constraint firstAttribute="height" constant="30" id="rGp-0m-n0R"/>
-                                                </constraints>
-                                                <state key="normal" title="Play Video">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <segue destination="eda-QL-OXn" kind="show" identifier="PlayerViewController" id="PpR-wl-fYq"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -618,7 +606,6 @@
                                             <constraint firstItem="7V7-Dc-QZR" firstAttribute="centerX" secondItem="7bK-g4-i6Z" secondAttribute="centerX" id="cB6-c6-gnV"/>
                                             <constraint firstItem="Tyt-bn-7Zf" firstAttribute="top" secondItem="7V7-Dc-QZR" secondAttribute="bottom" constant="1" id="dOK-KA-IUr"/>
                                             <constraint firstItem="hkk-id-ru4" firstAttribute="top" secondItem="Qzr-2z-zNT" secondAttribute="bottom" constant="6" id="dpY-5v-r7g"/>
-                                            <constraint firstItem="owI-ys-s1z" firstAttribute="top" secondItem="4zk-PK-bVp" secondAttribute="bottom" constant="8" id="hij-Nn-wVJ"/>
                                             <constraint firstItem="q5T-O7-6mV" firstAttribute="top" secondItem="hkk-id-ru4" secondAttribute="bottom" constant="8" id="ju7-uI-9Tk"/>
                                             <constraint firstItem="0aS-HC-VHH" firstAttribute="top" secondItem="Tyt-bn-7Zf" secondAttribute="bottom" constant="15" id="nq0-AO-Vct"/>
                                             <constraint firstItem="0aS-HC-VHH" firstAttribute="centerX" secondItem="7bK-g4-i6Z" secondAttribute="centerX" constant="-4.5" id="tWk-Kc-1pw"/>
@@ -626,7 +613,6 @@
                                             <constraint firstAttribute="height" constant="667" id="uxW-jz-9ZR"/>
                                             <constraint firstItem="owI-ys-s1z" firstAttribute="top" secondItem="7bK-g4-i6Z" secondAttribute="top" constant="84" id="wXX-Cy-8p0"/>
                                             <constraint firstItem="hkk-id-ru4" firstAttribute="centerX" secondItem="7bK-g4-i6Z" secondAttribute="centerX" constant="-4.5" id="yfJ-ql-s5J"/>
-                                            <constraint firstItem="4zk-PK-bVp" firstAttribute="centerX" secondItem="7bK-g4-i6Z" secondAttribute="centerX" id="zPI-1N-tsS"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">

@@ -240,6 +240,7 @@
 
 - (void) createGift: (NSString *) feed_id
              amount: (int) amount
+          gift_type: (NSString*) gift_type
             success: (void (^)(NSDictionary* dicDonate))success
             failure: (void (^)(NSString *errorMessage))failure;
 

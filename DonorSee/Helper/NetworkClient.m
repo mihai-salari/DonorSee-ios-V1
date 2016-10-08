@@ -739,7 +739,6 @@
 - (void) postDonate: (int) user_id
             feed_id: (NSString*) feed_id
              amount: (int) amount
-          gift_type: (NSString*) gift_type
             success: (void (^)(NSDictionary* dicDonate))success
             failure: (void (^)(NSString *errorMessage))failure
 {
@@ -747,7 +746,6 @@
                                        feed_id, @"feed_id",
                                        [NSNumber numberWithInt: amount], @"amount",
                                        [NSNumber numberWithInt: user_id], @"user_id",
-                                       gift_type, @"gift_type",
                                        nil];
     
     [self PostRequest: @"donate_api/post_donate.php"
@@ -816,10 +814,15 @@
 
 - (void) createGift: (NSString *) feed_id
              amount: (int) amount
+          gift_type: (NSString*) gift_type
             success: (void (^)(NSDictionary* dicDonate))success
             failure: (void (^)(NSString *errorMessage))failure
 {
-    [self PostRequest:[NSString stringWithFormat:@"projects/%@/gifts", feed_id] parameters:@{@"amount_cents":[NSNumber numberWithInt:amount*100]} success:^(id responseObject) {
+    [self PostRequest:[NSString stringWithFormat:@"projects/%@/gifts", feed_id]
+           parameters:@{@"amount_cents":[NSNumber numberWithInt:amount*100],
+                        @"gift_type":gift_type
+                        }
+              success:^(id responseObject) {
         success(responseObject);
     } failure:^(NSError *error) {
         failure(MSG_DISCONNECT_INTERNET);
@@ -833,7 +836,6 @@
          source_stripe_id: (NSString*) source_stripe_id
              stripe_token: (NSString *) stripe_token
                    amount: (int) amount
-                gift_type: (NSString*) gift_type
                   success: (void (^)(NSDictionary* dicDonate))success
                   failure: (void (^)(NSString *errorMessage))failure
 {
@@ -845,7 +847,6 @@
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     int fee = amount * 100 * 0.07;
     NSDictionary *parameters = @{@"amount":[NSNumber numberWithInt:amount*100],
-                                // @"gift_type":gift_type,
                                  @"currency":@"usd",
                                  @"source":stripe_token,
                                  @"destination":source_stripe_id,
@@ -856,7 +857,7 @@
     [manager POST:STRIPE_CONNECT_CHARGES_URL parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         //NSLog(@"success!");
         
-        [self postDonate:user_id feed_id:feed_id amount:amount gift_type:gift_type success:success failure:failure];
+        [self postDonate:user_id feed_id:feed_id amount:amount success:success failure:failure];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failure(MSG_DISCONNECT_INTERNET);
