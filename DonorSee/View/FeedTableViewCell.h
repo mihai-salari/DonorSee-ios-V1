@@ -16,6 +16,7 @@
 - (void) selectUser: (User*) user;
 - (void) followUser: (User*) user;
 - (void) unfollowUser: (User*) user;
+- (void) openPlayer: (NSString*) videoURL;
 @end
 
 @interface FeedTableViewCell : UITableViewCell

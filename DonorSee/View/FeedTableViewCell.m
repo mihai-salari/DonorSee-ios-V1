@@ -7,6 +7,7 @@
 //
 
 #import "FeedTableViewCell.h"
+#import "PlayerViewController.h"
 //#import "JAmazonS3ClientManager.h"
 @import CircleProgressView;
 
@@ -26,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet CircleProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIButton           *btHeart;
 @property (weak, nonatomic) IBOutlet UIImageView        *ivGave;
+@property (weak, nonatomic) IBOutlet UIButton *playVideoButton;
+@property (weak, nonatomic) IBOutlet UIButton *ivPlayVideo;
 
 @end
 
@@ -85,6 +88,8 @@
     progressView.trackBackgroundColor = [UIColor whiteColor];
     progressView.trackBorderColor = [UIColor whiteColor];
     progressView.trackFillColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
+    
+    
 }
 
 - (void) setDonateFeed: (Feed*) f isDetail: (BOOL) isDetail
@@ -93,8 +98,14 @@
     
     [self initUI];
     
-    NSURL* urlPhoto = [NSURL URLWithString: f.photo];
+    NSURL* urlPhoto = [NSURL URLWithString: f.getProjectImage];
     [ivFeed sd_setImageWithURL: urlPhoto];
+    
+    if(currentFeed.videoURL == nil){
+        _ivPlayVideo.hidden = YES;
+    }else{
+        _ivPlayVideo.hidden = NO;
+    }
     
     lbDescription.text = f.feed_description;
     
@@ -109,10 +120,26 @@
     [ivUserAvatar sd_setImageWithURL: [NSURL URLWithString: f.postUser.avatar] placeholderImage: [UIImage imageNamed: @"default-profile-pic.png"]];
 
     lbGiveTitle.hidden = NO;
+    
+    if([f.getFeedType isEqualToString:FEED_TYPE_MONTHLY]){
+        
+    }else{
+        
+    }
+    
     if(f.donated_amount >= f.pre_amount)
     {
         lbMaxPrice.hidden = YES;
-        lbGiveTitle.hidden = YES;
+    
+        if([f.getFeedType isEqualToString:FEED_TYPE_MONTHLY]){
+            lbGiveTitle.text = @"MONTH";
+            [lbGiveTitle setFont:[UIFont systemFontOfSize:7]];
+            lbGiveTitle.hidden = NO;
+        }else{
+            lbGiveTitle.hidden = YES;
+        }
+
+        
         [btGive setTitle: @"FUNDED!" forState: UIControlStateNormal];
     }
     else
@@ -120,7 +147,15 @@
         lbMaxPrice.hidden = NO;
         lbGiveTitle.hidden = NO;
         [btGive setTitle: @"" forState: UIControlStateNormal];
-        lbGiveTitle.text = @"LEFT";
+     
+        if([f.getFeedType isEqualToString:FEED_TYPE_MONTHLY]){
+            lbGiveTitle.text = @"LEFT/\nMONTH";
+            [lbGiveTitle setFont:[UIFont systemFontOfSize:7]];
+        }else{
+            lbGiveTitle.text = @"LEFT";
+            [lbGiveTitle setFont:[UIFont systemFontOfSize:10]];
+        }
+        
         if (f.donated_amount == 0) {
             lbMaxPrice.text = [NSString stringWithFormat: @"$%d", f.pre_amount/100];
         } else {
@@ -202,6 +237,10 @@
     {
         [self.delegate donateFeed: currentFeed];
     }
+}
+
+- (IBAction)playVideoClick:(id)sender {
+    [self.delegate openPlayer:currentFeed.videoURL];
 }
 
 - (void) onTapPhoto

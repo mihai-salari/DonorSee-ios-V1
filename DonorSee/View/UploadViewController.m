@@ -47,6 +47,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintScrollHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintPhotoHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintContentTop;
+@property (weak, nonatomic) IBOutlet UISwitch *switchRecurring;
 @end
 
 
@@ -130,6 +131,17 @@
     [ivPhoto sd_setImageWithURL: [NSURL URLWithString: objFeed.photo]];
     tvDescription.text=objFeed.feed_description;
     tfPrice.text=[NSString stringWithFormat:@"%d",objFeed.pre_amount/100];
+    if(objFeed.gift_type != nil && [objFeed.gift_type isEqualToString:FEED_TYPE_MONTHLY] ){
+        _switchRecurring.on = YES;
+    }else{
+        _switchRecurring.on = NO;
+    }
+    
+    if(objFeed.donated_user_count>0){
+        _switchRecurring.enabled = NO;
+    }else{
+        _switchRecurring.enabled = YES;
+    }
 }
 - (IBAction)UpdateButtonPress:(UIButton *)sender
 {
@@ -315,11 +327,13 @@
     [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
         [SVProgressHUD dismiss];
         if ([photoInfo objectForKey:@"secure_url"]) {
+            NSString *gift_type = [self getFeedType];
             NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
             [[NetworkClient sharedClient] postFeed: secureUrl
                                        description: text
                                             amount: amount
                                            user_id: [AppEngine sharedInstance].currentUser.user_id
+                                         feed_type: gift_type
                                            success:^(NSDictionary *dicFeed, NSDictionary* dicUser) {
                                                
                                                [SVProgressHUD dismiss];
@@ -351,18 +365,38 @@
         [SVProgressHUD dismiss];
     }];
 }
+
+- (NSString*) getFeedType
+{
+    if(_switchRecurring.isOn){
+        return FEED_TYPE_MONTHLY;
+    }else{
+        return FEED_TYPE_DEFAULT;
+    }
+}
+
 - (void) UpdateMypostedFeed: (UIImage*) image description: (NSString*) text amount: (int) amount
 {
     [SVProgressHUD showWithStatus: @"Updating..." maskType: SVProgressHUDMaskTypeClear];
     
     NSString *imageKey = [AppEngine getImageName];
     NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
+    NSString* newFeedType = [self getFeedType];
+    NSString* oldFeedType = objFeed.getFeedType;
+    
+    if([newFeedType isEqualToString:oldFeedType]){
+        newFeedType = nil;
+    }
     
     [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
         [SVProgressHUD dismiss];
         if ([photoInfo objectForKey:@"secure_url"]) {
             NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
-            [[NetworkClient sharedClient] UpdatepostFeed:secureUrl description:text amount:amount user_id:[AppEngine sharedInstance].currentUser.user_id success:^(NSDictionary *dicFeed, NSDictionary *dicUser) {
+            [[NetworkClient sharedClient] UpdatepostFeed:secureUrl
+                                          description:text amount:amount
+                                          user_id:[AppEngine sharedInstance].currentUser.user_id
+                                        gift_type: newFeedType
+                                                 success:^(NSDictionary *dicFeed, NSDictionary *dicUser) {
                 [SVProgressHUD dismiss];
                 
                 /*

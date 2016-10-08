@@ -90,6 +90,8 @@
     //String
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"feed_description" toKeyPath:@"description"]];
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"photo" toKeyPath:@"photo_url"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"videoURL" toKeyPath:@"video_url"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"gift_type" toKeyPath:@"gift_type"]];
 
     // Date
     [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"created_at"]];

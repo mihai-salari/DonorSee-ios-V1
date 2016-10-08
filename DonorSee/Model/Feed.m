@@ -19,6 +19,7 @@
         self.feed_id = [dicFeed valueForKey: @"feed_id"];
         self.feed_description = [dicFeed valueForKey: @"description"];
         self.photo = [dicFeed valueForKey: @"photo"];
+        self.videoURL = [dicFeed valueForKey:@"video_url"];
         self.pre_amount = [[dicFeed valueForKey: @"pre_amount"] intValue];
         self.donated_amount = [[dicFeed valueForKey: @"donated_amount"] intValue];
         self.post_user_id = [[dicFeed valueForKey: @"post_user_id"] intValue];
@@ -40,6 +41,7 @@
         self.feed_id = [objFeed valueForKey: @"feed_id"];
         self.feed_description = [objFeed valueForKey: @"feed_description"];
         self.photo = [objFeed valueForKey: @"photo"];
+        self.videoURL = [objFeed valueForKey:@"video_url"];
         self.pre_amount = [[objFeed valueForKey: @"pre_amount"] intValue];
         self.donated_amount = [[objFeed valueForKey: @"donated_amount"] intValue];
         self.post_user_id = [[objFeed valueForKey: @"post_user_id"] intValue];
@@ -59,6 +61,7 @@
         self.feed_id = [dicFeed valueForKey: @"id"];
         self.feed_description = [dicFeed valueForKey: @"description"];
         self.photo = [dicFeed valueForKey: @"photo"];
+        self.videoURL = [dicFeed valueForKey:@"video_url"];
         self.pre_amount = [[dicFeed valueForKey: @"goal_amount"] intValue];
         //self.donated_amount = [[dicFeed valueForKey: @"donated_amount"] intValue];
         self.post_user_id = [[ownerUser valueForKey: @"id"] intValue];
@@ -95,6 +98,7 @@
         self.feed_id = [dicFeed valueForKey: @"feed_id"];
         self.feed_description = [dicFeed valueForKey: @"description"];
         self.photo = [dicFeed valueForKey: @"photo"];
+        self.videoURL = [dicFeed valueForKey:@"video_url"];
         self.pre_amount = [[dicFeed valueForKey: @"pre_amount"] intValue];
         self.donated_amount = [[dicFeed valueForKey: @"donated_amount"] intValue];
         self.post_user_id = [[dicFeed valueForKey: @"post_user_id"] intValue];
@@ -205,5 +209,29 @@
     
     return NO;
 }
+
+- (NSString*) getProjectImage
+{
+    NSString* imageUrl = @"";
+    
+    if(_photo!=nil){
+        imageUrl = _photo;
+    }else if(_videoURL!=nil){
+        //todo extract url
+        imageUrl = _videoURL;
+    }
+    
+    return  imageUrl;
+}
+
+- (NSString*) getFeedType
+{
+    if(_gift_type == nil){
+        return FEED_TYPE_DEFAULT;
+    }else{
+        return _gift_type;
+    }
+}
+
 
 @end

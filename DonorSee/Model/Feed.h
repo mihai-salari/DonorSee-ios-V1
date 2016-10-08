@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSNumber          *owner_id;
 @property (nonatomic, strong) NSString          *feed_description;
 @property (nonatomic, strong) NSString          *photo;
+@property (nonatomic, strong) NSString          *videoURL;
 @property (nonatomic, assign) NSString          *register_date;
 @property (nonatomic, strong) NSDate            *created_at;
 @property (nonatomic, assign) int               pre_amount;
@@ -29,6 +30,7 @@
 @property (nonatomic, assign) BOOL              is_gave;
 @property (nonatomic, assign) BOOL              is_follower;
 @property (nonatomic, strong) NSString          *stripe_user_id;
+@property (nonatomic, strong) NSString          *gift_type;
 
 
 - (id) initWithHomeFeed: (NSDictionary*) dicFeed;
@@ -41,4 +43,6 @@
 - (User*) getUserInfo: (int) index;
 - (DONATED_STATUS) getDonatedStatus;
 - (BOOL) isCreatedByCurrentUser;
+- (NSString*) getProjectImage;
+- (NSString*) getFeedType;
 @end

@@ -462,6 +462,7 @@
       description: (NSString*) description
            amount: (int) amount
           user_id: (int) user_id
+        feed_type: (NSString*) feed_type
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure
 {
@@ -469,6 +470,7 @@
                                        imageURL, @"photo_url",
                                        description, @"description",
                                        [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
+                                       feed_type, @"gift_type",
                                        nil];
     
     [self PostRequest: @"projects"
@@ -488,6 +490,7 @@
       description: (NSString*) description
            amount: (int) amount
           user_id: (int) user_id
+        gift_type: (NSString*) gift_type
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure
 {
@@ -499,6 +502,9 @@
                                        description, @"description",
                                        [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
                                        nil];
+    if(gift_type!=nil){
+        [parameters setObject:gift_type  forKey:@"gift_type"];
+    }
     
     NSLog(@"%d",[AppEngine sharedInstance].currentUser.lastSelectedId);
     [self PATCH:[NSString stringWithFormat:@"projects/%i",[AppEngine sharedInstance].currentUser.lastSelectedId] parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)

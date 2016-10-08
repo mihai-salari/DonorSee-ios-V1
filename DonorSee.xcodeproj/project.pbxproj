@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4378C3651DA7FD22009FE0E3 /* icon_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4378C3641DA7FD22009FE0E3 /* icon_play.png */; };
+		439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FD1DA8F95D0041DB44 /* icon_reccuring.png */; };
 		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
 		457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 457D1E681D91A7EA00127F3C /* Entitlements.plist */; };
@@ -180,6 +182,8 @@
 
 /* Begin PBXFileReference section */
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4378C3641DA7FD22009FE0E3 /* icon_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_play.png; sourceTree = "<group>"; };
+		439046FD1DA8F95D0041DB44 /* icon_reccuring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_reccuring.png; sourceTree = "<group>"; };
 		452510771D8CA31500B2AA29 /* NSString+Formats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Formats.h"; sourceTree = "<group>"; };
 		452510781D8CA31500B2AA29 /* NSString+Formats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Formats.m"; sourceTree = "<group>"; };
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -744,6 +748,8 @@
 		F87AE4371C83D45900FE9417 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				439046FD1DA8F95D0041DB44 /* icon_reccuring.png */,
+				4378C3641DA7FD22009FE0E3 /* icon_play.png */,
 				BB09F2651D7BE3C5004F5AEE /* share_icon@2x.png */,
 				BB09F2661D7BE3C5004F5AEE /* share_icon@3x.png */,
 				F855D8361CD7B3E100473E93 /* btn_gray_back.png */,
@@ -950,6 +956,7 @@
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = 33V6UA2S4N;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1046,6 +1053,7 @@
 				F83E837A1C9AC1AE00A40334 /* tab_upload_normal@2x.png in Resources */,
 				F85C818D1CA0093400D0DBE5 /* Owhite_share_icon.png in Resources */,
 				F8F5F8F81C8451BD002A54BA /* btn_sign_fb.png in Resources */,
+				4378C3651DA7FD22009FE0E3 /* icon_play.png in Resources */,
 				F83E838A1C9AC49200A40334 /* tab_profile_sel@2x.png in Resources */,
 				F84F3E301CAC2F4D007E26E0 /* flag_icon.png in Resources */,
 				F85C81821C9FEFDE00D0DBE5 /* feed_overlay.png in Resources */,
@@ -1075,6 +1083,7 @@
 				F83E83851C9AC41500A40334 /* tab_upload_sel.png in Resources */,
 				F8E29C5B1C83DDC0003CAFD2 /* profile.png in Resources */,
 				F8E29C611C83DFA0003CAFD2 /* donate_feed_test.jpg in Resources */,
+				439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */,
 				F83E83751C9AC0C100A40334 /* tab_donate_normal.png in Resources */,
 				F855D8381CD7B3E100473E93 /* btn_gray_back.png in Resources */,
 				F86454571CA082F400615361 /* withdraw_icon.png in Resources */,
@@ -1371,7 +1380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1414,7 +1423,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a0e96e17-89e2-4dc6-9303-7994d94161ce";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -1427,7 +1436,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1470,7 +1479,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "d6738288-6fcc-4b89-a818-b07281c7b936";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

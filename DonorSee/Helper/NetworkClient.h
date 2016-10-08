@@ -71,6 +71,7 @@
       description: (NSString*) description
            amount: (int) amount
           user_id: (int) user_id
+        feed_type: (NSString*) feed_type
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure;
 
@@ -78,6 +79,7 @@
             description: (NSString*) description
                  amount: (int) amount
                 user_id: (int) user_id
+              gift_type: (NSString*) gift_type
                 success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
                 failure: (void (^)(NSString *errorMessage))failure;
 

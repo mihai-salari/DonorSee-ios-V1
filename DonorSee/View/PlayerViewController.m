@@ -19,7 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:@"https://res.cloudinary.com/donorsee/video/upload/v1475263379/development/cnds2bb57ff7yqf4h6wm.mp4"]];
+    AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:_videoURL]];
     
     AVPlayerViewController *playerController = [[AVPlayerViewController alloc] init];
     playerController.player = player;

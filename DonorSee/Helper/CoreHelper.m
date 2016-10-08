@@ -394,6 +394,7 @@
     
     [object setValue: f.feed_id forKey:@"feed_id"];
     [object setValue: f.photo forKey:@"photo"];
+    [object setValue: f.videoURL forKey:@"video_url"];
     [object setValue: f.feed_description forKey:@"feed_description"];
     [object setValue: [NSNumber numberWithFloat: f.pre_amount] forKey:@"pre_amount"];
     [object setValue: [NSNumber numberWithFloat: f.donated_amount] forKey:@"donated_amount"];

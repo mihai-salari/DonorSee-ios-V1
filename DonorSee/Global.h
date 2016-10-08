@@ -155,4 +155,8 @@ typedef void(^J_DID_COMPLETE_CALL_BACK_BLOCK)(NSString *obj);//NSObject *obj
 #define     NOTI_UPDATE_FOLLOW_FEED                 @"NotificationUpdatedFeed"
 #define     NOTI_UPDATE_FOLLOW_USER                 @"NotificationUpdatedUser"
 
+#define     FEED_TYPE_DEFAULT                       @"one-time"
+#define     FEED_TYPE_MONTHLY                       @"monthly"
+
+
 #endif /* Global_h */
