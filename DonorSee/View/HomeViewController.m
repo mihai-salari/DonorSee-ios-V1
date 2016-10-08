@@ -589,8 +589,9 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     CGFloat pullDistance = MAX(0.0, -self.refreshControl.frame.origin.y);
-    CGFloat pullRatio = MIN( MAX(pullDistance, 0.0), REFRESH_POINT) / REFRESH_POINT;
-    if (pullRatio >= 1.0) {
+  //  CGFloat pullRatio = MIN( MAX(pullDistance, 0.0), REFRESH_POINT) / REFRESH_POINT;
+   // if (pullRatio >= 1.0) {
+    if(pullDistance>=50){
         if (!self.refreshControl.isRefreshing)
         {
             [self.refreshControl beginRefreshing];

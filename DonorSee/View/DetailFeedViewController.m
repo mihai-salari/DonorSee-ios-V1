@@ -128,12 +128,14 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self.btDonate addGestureRecognizer:singleFingerTap];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 //The event handling method
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
@@ -236,6 +238,7 @@
     }
     
     tfAmount.inputAccessoryView = toolBar;
+    [self loadFeed];
     [self loadActivities];
 }
 
@@ -283,10 +286,6 @@
     progressView.trackBorderColor = [UIColor whiteColor];
     progressView.trackFillColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
     
-    //Amit
-    if (_isVisibleFromNotification) {
-        [self loadFeed];
-    }
     /*
     //Fill out Info.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -352,6 +351,8 @@
     }
     
     [tbActivity reloadData];
+    
+    [self updateUserDonationStatus];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tbActivity beginUpdates];

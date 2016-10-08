@@ -3487,67 +3487,63 @@
                                                     <outlet property="delegate" destination="8BM-9h-2N2" id="PTM-Pl-M5N"/>
                                                 </connections>
                                             </textField>
-                                        </subviews>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstItem="fUU-eD-HbG" firstAttribute="leading" secondItem="aip-QC-Xfx" secondAttribute="leading" constant="19" id="0lw-uk-95B"/>
-                                            <constraint firstAttribute="height" constant="67" id="0uV-39-e1E"/>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="67" id="4fw-2c-wHP"/>
-                                            <constraint firstItem="a1K-Uq-IY4" firstAttribute="leading" secondItem="aip-QC-Xfx" secondAttribute="leading" constant="19" id="9Nv-ns-Hqe"/>
-                                            <constraint firstAttribute="bottom" secondItem="fUU-eD-HbG" secondAttribute="bottom" constant="9" id="BPr-b6-InV"/>
-                                            <constraint firstItem="a1K-Uq-IY4" firstAttribute="top" secondItem="aip-QC-Xfx" secondAttribute="top" constant="8" id="hd9-la-X1L"/>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="4fw-2c-wHP"/>
-                                            </mask>
-                                        </variation>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gTF-qg-bx9">
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vZV-o7-bLF">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gTF-qg-bx9">
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEND MONEY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KQ6-1L-kvq">
-                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qer-y4-qxB">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vZV-o7-bLF">
                                                         <subviews>
-                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="reccuring_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-fS-zij">
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="20" id="GE9-Q4-EhG"/>
-                                                                    <constraint firstAttribute="height" constant="20" id="v0t-UR-R94"/>
-                                                                </constraints>
-                                                            </imageView>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MONTHLY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hxz-Zt-YWS">
-                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEND MONEY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KQ6-1L-kvq">
+                                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
+                                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qer-y4-qxB">
+                                                                <subviews>
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="reccuring_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-fS-zij">
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="18" id="Pr3-nM-8Sa"/>
+                                                                            <constraint firstAttribute="height" constant="18" id="oSJ-Yg-2ss"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MONTHLY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hxz-Zt-YWS">
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                            </stackView>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="qer-y4-qxB" firstAttribute="leading" secondItem="vZV-o7-bLF" secondAttribute="leading" constant="18" id="GM0-4s-Hbq"/>
+                                                        </constraints>
                                                     </stackView>
                                                 </subviews>
-                                            </stackView>
+                                                <color key="backgroundColor" red="0.031372549019607843" green="0.45882352941176469" blue="0.49019607843137253" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstItem="vZV-o7-bLF" firstAttribute="centerX" secondItem="gTF-qg-bx9" secondAttribute="centerX" id="RCN-63-fDv"/>
+                                                    <constraint firstItem="vZV-o7-bLF" firstAttribute="centerY" secondItem="gTF-qg-bx9" secondAttribute="centerY" id="o8K-AL-mEn"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.031372549019607843" green="0.45882352941176469" blue="0.49019607843137253" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstItem="vZV-o7-bLF" firstAttribute="leading" secondItem="gTF-qg-bx9" secondAttribute="leading" constant="53" id="4I3-BJ-Aun"/>
-                                            <constraint firstItem="vZV-o7-bLF" firstAttribute="top" secondItem="gTF-qg-bx9" secondAttribute="top" constant="19" id="AXF-Jt-AoE"/>
-                                            <constraint firstAttribute="bottom" secondItem="vZV-o7-bLF" secondAttribute="bottom" constant="23" id="ohY-kF-Vli"/>
-                                            <constraint firstAttribute="trailing" secondItem="vZV-o7-bLF" secondAttribute="trailing" constant="53" id="ydZ-YR-zJ2"/>
+                                            <constraint firstItem="gTF-qg-bx9" firstAttribute="leading" secondItem="fUU-eD-HbG" secondAttribute="trailing" constant="15" id="IRn-xo-RSH"/>
+                                            <constraint firstItem="a1K-Uq-IY4" firstAttribute="leading" secondItem="fUU-eD-HbG" secondAttribute="leading" id="Laz-28-6NM"/>
+                                            <constraint firstItem="fUU-eD-HbG" firstAttribute="top" secondItem="aip-QC-Xfx" secondAttribute="top" constant="28" id="QcN-oB-asf"/>
+                                            <constraint firstItem="a1K-Uq-IY4" firstAttribute="top" secondItem="aip-QC-Xfx" secondAttribute="topMargin" id="a8r-zE-QrE"/>
+                                            <constraint firstAttribute="bottom" secondItem="gTF-qg-bx9" secondAttribute="bottom" id="hdk-Sq-TGD"/>
+                                            <constraint firstItem="gTF-qg-bx9" firstAttribute="top" secondItem="aip-QC-Xfx" secondAttribute="top" id="ln2-Pm-X9Q"/>
+                                            <constraint firstAttribute="trailing" secondItem="gTF-qg-bx9" secondAttribute="trailing" id="m4D-Gu-Toh"/>
+                                            <constraint firstItem="a1K-Uq-IY4" firstAttribute="leading" secondItem="aip-QC-Xfx" secondAttribute="leading" constant="19" id="o9Q-Q5-glw"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="aip-QC-Xfx" firstAttribute="leading" secondItem="TG6-xr-LUG" secondAttribute="leading" constant="28" id="0kK-7R-Gy8"/>
-                                    <constraint firstAttribute="trailing" secondItem="aip-QC-Xfx" secondAttribute="trailing" constant="29" id="72l-BS-68J"/>
                                     <constraint firstAttribute="height" constant="86" id="74S-v4-6LH"/>
-                                    <constraint firstItem="aip-QC-Xfx" firstAttribute="centerY" secondItem="TG6-xr-LUG" secondAttribute="centerY" id="H5B-dR-6Jy"/>
-                                    <constraint firstItem="gTF-qg-bx9" firstAttribute="leading" secondItem="fUU-eD-HbG" secondAttribute="trailing" constant="15" id="S3I-dD-1bv"/>
-                                    <constraint firstAttribute="bottom" secondItem="gTF-qg-bx9" secondAttribute="bottom" id="bM9-94-GCb"/>
-                                    <constraint firstAttribute="trailing" secondItem="gTF-qg-bx9" secondAttribute="trailing" id="dMm-LJ-UN9"/>
+                                    <constraint firstItem="aip-QC-Xfx" firstAttribute="centerY" secondItem="TG6-xr-LUG" secondAttribute="centerY" id="DCk-0m-rSP"/>
+                                    <constraint firstItem="aip-QC-Xfx" firstAttribute="centerX" secondItem="TG6-xr-LUG" secondAttribute="centerX" id="cdm-6o-5RK"/>
+                                    <constraint firstItem="aip-QC-Xfx" firstAttribute="leading" secondItem="TG6-xr-LUG" secondAttribute="leading" constant="24" id="iRR-ON-sdR"/>
+                                    <constraint firstItem="aip-QC-Xfx" firstAttribute="top" secondItem="TG6-xr-LUG" secondAttribute="top" constant="10" id="wSn-6U-Vtr"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lq0-42-ew3">
