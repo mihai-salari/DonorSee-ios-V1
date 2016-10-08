@@ -76,7 +76,12 @@
 @property(nonatomic, strong, readwrite) NSString *environment;
 @property(nonatomic, assign, readwrite) BOOL acceptCreditCards;
 @property(nonatomic, strong, readwrite) PayPalConfiguration *payPalConfig;
+@property (weak, nonatomic) IBOutlet UIView *cancelRecurringView;
 
+@property (weak, nonatomic) IBOutlet UIView *donateButtonView;
+
+@property (weak, nonatomic) IBOutlet UIView *btDonate;
+@property (weak, nonatomic) IBOutlet UILabel *lbMonthlyDonation;
 
 @end
 
@@ -118,12 +123,82 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.btDonate addGestureRecognizer:singleFingerTap];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+//The event handling method
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    [self onDonate];
+}
+
+- (void) onDonate{
+    [self hideKeyboard];
+    
+    if (!selectedFeed.postUser.can_receive_gifts) {
+        [self presentViewController:[AppEngine showAlertWithText:@"Project owner doesn't have stripe account linked so cant recieve funds as of now"] animated:YES completion:nil];
+        return;
+    }
+    
+    
+    float amount = [tfAmount.text floatValue];
+    if(amount < MIN_PRICE || amount > MAX_PRICE)
+    {
+        [self presentViewController: [AppEngine showAlertWithText: [NSString stringWithFormat: @"Enter any price from $%d ~ $%d", MIN_PRICE, MAX_PRICE]] animated: YES completion: nil];
+        return;
+    }
+    
+    if([AppEngine sharedInstance].currentUser != nil)
+    {
+        [self showPaymentOption];
+    }
+    else
+    {
+        [self showSignupPage];
+    }
+}
+
+- (IBAction)actionCancelRecurring:(id)sender {
+    
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle: nil message: MSG_CANCEL_MONTHLY_DONATION preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertAction* okAction = [UIAlertAction actionWithTitle: @"Yes" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self cancelRecurringDonation];
+    }];
+    
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle: @"No" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    
+    [alert addAction: okAction];
+    [alert addAction: cancelAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+
+}
+
+- (void) cancelRecurringDonation {
+    [SVProgressHUD showWithStatus: @"Cancelling..." maskType: SVProgressHUDMaskTypeClear];
+    
+    NSString *project_id = selectedFeed.feed_id;
+    [[NetworkClient sharedClient] cancelMonthlyDonation:project_id success:^(NSDictionary *info) {
+        selectedFeed.is_monthly_giver = NO;
+        selectedFeed.amount_given_cents = 0;
+        [SVProgressHUD dismiss];
+        [self updateUserDonationStatus];
+    } failure:^(NSString *errorMessage) {
+        [SVProgressHUD dismiss];
+        [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
+    }];
+
+}
+
 
 - (void) initMember
 {
@@ -136,6 +211,7 @@
     
     selectedPhotoIndex = -1;
     
+    [self updateUserDonationStatus];
     [self initPaypal];
     [self initHeaderUI];
     [self initFooterUI];
@@ -167,6 +243,19 @@
 {
     [super viewWillAppear: animated];
 
+}
+
+- (void) updateUserDonationStatus{
+    if(selectedFeed.is_monthly_giver){
+       // [_donateButtonView removeFromSuperview];
+        _donateButtonView.hidden = YES;
+        _cancelRecurringView.hidden = NO;
+        _lbMonthlyDonation.text = [NSString stringWithFormat:@"You are giving $%d monthly to this project", selectedFeed.amount_given_cents / 100];
+    }else{
+        _donateButtonView.hidden = NO;
+       // [_cancelRecurringView removeFromSuperview];
+        _cancelRecurringView.hidden = YES;
+    }
 }
 
 #pragma mark - Header.
@@ -1079,6 +1168,7 @@
     UINavigationController *stripeNavController = [[UINavigationController alloc] initWithRootViewController:stripeController];
     stripeController.delegate = self;
     stripeController.amount = [NSDecimalNumber decimalNumberWithString:tfAmount.text];
+    stripeController.gift_type = selectedFeed.getFeedType;
     [self presentViewController:stripeNavController animated:YES completion:nil];
 }
 
@@ -1192,11 +1282,13 @@
         
         //Update Server.
         int amount = [tfAmount.text intValue];
+        NSString* gift_type = selectedFeed.getFeedType;
         
         [SVProgressHUD showWithStatus: @"Processing..." maskType: SVProgressHUDMaskTypeClear];
         [[NetworkClient sharedClient] postDonate: [AppEngine sharedInstance].currentUser.user_id
                                          feed_id: selectedFeed.feed_id
                                           amount: amount
+                                       gift_type:gift_type
                                          success:^(NSDictionary *dicDonate) {
                                              
                                              [SVProgressHUD dismiss];

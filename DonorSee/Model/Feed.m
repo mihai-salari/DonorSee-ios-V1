@@ -29,6 +29,8 @@
         self.donated_count = [dicFeed[@"donated_count"] intValue];
         self.is_gave = [dicFeed[@"is_gave"] boolValue];
         self.stripe_user_id = [dicFeed valueForKey:@"stripe_user_id"];
+        self.is_monthly_giver = [dicFeed[@"is_monthly_giver"] boolValue];
+        self.amount_given_cents = [dicFeed[@"amount_given_cents"] intValue];
     }
     return self;
 }
@@ -46,6 +48,8 @@
         self.donated_amount = [[objFeed valueForKey: @"donated_amount"] intValue];
         self.post_user_id = [[objFeed valueForKey: @"post_user_id"] intValue];
         self.register_date = [objFeed valueForKey: @"created_at"];
+        self.is_monthly_giver = [[objFeed valueForKey: @"is_monthly_giver"] boolValue];
+        self.amount_given_cents = [[objFeed valueForKey:@"amount_given_cents"] intValue];
         self.arrUsers = [NSMutableArray array];
     }
     return self;
@@ -61,6 +65,8 @@
         self.feed_id = [dicFeed valueForKey: @"id"];
         self.feed_description = [dicFeed valueForKey: @"description"];
         self.photo = [dicFeed valueForKey: @"photo"];
+        self.is_monthly_giver = [dicFeed[@"is_monthly_giver"] boolValue];
+        self.amount_given_cents = [dicFeed[@"amount_given_cents"] intValue];
         self.videoURL = [dicFeed valueForKey:@"video_url"];
         self.pre_amount = [[dicFeed valueForKey: @"goal_amount"] intValue];
         //self.donated_amount = [[dicFeed valueForKey: @"donated_amount"] intValue];
@@ -99,6 +105,8 @@
         self.feed_description = [dicFeed valueForKey: @"description"];
         self.photo = [dicFeed valueForKey: @"photo"];
         self.videoURL = [dicFeed valueForKey:@"video_url"];
+        self.is_monthly_giver = [dicFeed[@"is_monthly_giver"] boolValue];
+        self.amount_given_cents = [dicFeed[@"amount_given_cents"] intValue];
         self.pre_amount = [[dicFeed valueForKey: @"pre_amount"] intValue];
         self.donated_amount = [[dicFeed valueForKey: @"donated_amount"] intValue];
         self.post_user_id = [[dicFeed valueForKey: @"post_user_id"] intValue];

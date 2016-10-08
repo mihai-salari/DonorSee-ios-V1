@@ -86,6 +86,9 @@
     
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_gave" toKeyPath:@"user.is_giver"]];
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_follower" toKeyPath:@"user.is_follower"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"is_monthly_giver" toKeyPath:@"user.is_monthly_giver"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"amount_given_cents" toKeyPath:@"user.amount_given_cents"]];
+    
     
     //String
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"feed_description" toKeyPath:@"description"]];

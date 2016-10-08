@@ -158,5 +158,7 @@ typedef void(^J_DID_COMPLETE_CALL_BACK_BLOCK)(NSString *obj);//NSObject *obj
 #define     FEED_TYPE_DEFAULT                       @"one-time"
 #define     FEED_TYPE_MONTHLY                       @"monthly"
 
+#define     MSG_CANCEL_MONTHLY_DONATION             @"Are you sure you want to cancel monthly donation to this project?"
+
 
 #endif /* Global_h */

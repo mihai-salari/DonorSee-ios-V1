@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4378C3651DA7FD22009FE0E3 /* icon_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4378C3641DA7FD22009FE0E3 /* icon_play.png */; };
 		439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FD1DA8F95D0041DB44 /* icon_reccuring.png */; };
+		439047001DA915550041DB44 /* reccuring_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FF1DA915550041DB44 /* reccuring_white.png */; };
 		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
 		457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 457D1E681D91A7EA00127F3C /* Entitlements.plist */; };
@@ -184,6 +185,7 @@
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4378C3641DA7FD22009FE0E3 /* icon_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_play.png; sourceTree = "<group>"; };
 		439046FD1DA8F95D0041DB44 /* icon_reccuring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_reccuring.png; sourceTree = "<group>"; };
+		439046FF1DA915550041DB44 /* reccuring_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reccuring_white.png; sourceTree = "<group>"; };
 		452510771D8CA31500B2AA29 /* NSString+Formats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Formats.h"; sourceTree = "<group>"; };
 		452510781D8CA31500B2AA29 /* NSString+Formats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Formats.m"; sourceTree = "<group>"; };
 		457447421D8AEA8F005A7E5C /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -748,6 +750,7 @@
 		F87AE4371C83D45900FE9417 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				439046FF1DA915550041DB44 /* reccuring_white.png */,
 				439046FD1DA8F95D0041DB44 /* icon_reccuring.png */,
 				4378C3641DA7FD22009FE0E3 /* icon_play.png */,
 				BB09F2651D7BE3C5004F5AEE /* share_icon@2x.png */,
@@ -1025,6 +1028,7 @@
 				F855D8391CD7B3E100473E93 /* logo_image.png in Resources */,
 				F8F5F90E1C8498A8002A54BA /* login_bg.png in Resources */,
 				F84149571C9C4FBC005272D2 /* Oshare_icon.png in Resources */,
+				439047001DA915550041DB44 /* reccuring_white.png in Resources */,
 				F8E29C521C83D9A0003CAFD2 /* FeedTableViewCell.xib in Resources */,
 				F8E29C5E1C83DDC0003CAFD2 /* upload@2x.png in Resources */,
 				F841495D1C9C58B5005272D2 /* rate_us.png in Resources */,
@@ -1389,7 +1393,7 @@
 				);
 				GCC_PREFIX_HEADER = "DonorSee/DonorSee-Prefix.pch";
 				INFOPLIST_FILE = DonorSee/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/DonorSee/Helper/AWS",
@@ -1445,7 +1449,7 @@
 				);
 				GCC_PREFIX_HEADER = "DonorSee/DonorSee-Prefix.pch";
 				INFOPLIST_FILE = DonorSee/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/DonorSee/Helper/AWS",

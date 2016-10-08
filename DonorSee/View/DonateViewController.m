@@ -180,11 +180,13 @@
         
         //Update Server.
         int amount = [tfAmount.text intValue];
+        NSString* gift_type = selectedFeed.getFeedType;
         
         [SVProgressHUD showWithStatus: @"Processing..." maskType: SVProgressHUDMaskTypeClear];
         [[NetworkClient sharedClient] postDonate: [AppEngine sharedInstance].currentUser.user_id
                                          feed_id: selectedFeed.feed_id
                                           amount: amount
+                                       gift_type: gift_type
                                          success:^(NSDictionary *dicDonate) {
                                             
                                              [SVProgressHUD dismiss];

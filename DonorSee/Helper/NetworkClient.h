@@ -122,6 +122,7 @@
 - (void) postDonate: (int) user_id
             feed_id: (NSString*) feed_id
              amount: (int) amount
+          gift_type: (NSString*) gift_type
             success: (void (^)(NSDictionary* dicDonate))success
             failure: (void (^)(NSString *errorMessage))failure;
 
@@ -130,6 +131,7 @@
          source_stripe_id: (NSString*) source_stripe_id
              stripe_token: (NSString *) stripe_token
                    amount: (int) amount
+                gift_type: (NSString*) gift_type
                   success: (void (^)(NSDictionary* dicDonate))success
                   failure: (void (^)(NSString *errorMessage))failure;
 
@@ -260,5 +262,9 @@
 
 - (void) getStripeKey: (void (^)(NSDictionary* stripeInfo))success
               failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) cancelMonthlyDonation:(NSString*) project_id
+                       success: (void (^)(NSDictionary* cardInfo))success
+                       failure: (void (^)(NSString *errorMessage))failure;
 
 @end

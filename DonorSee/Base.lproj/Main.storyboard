@@ -3458,7 +3458,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.078431372550000003" green="0.45882352939999999" blue="0.48627450979999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.078431372549019607" green="0.45882352941176469" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="4cC-kh-Ntm" firstAttribute="centerX" secondItem="8nB-1s-PcI" secondAttribute="centerX" id="0ut-69-mb9"/>
                                     <constraint firstAttribute="height" constant="78" id="5TU-Nk-1I2"/>
@@ -3501,35 +3501,56 @@
                                                     <outlet property="delegate" destination="8BM-9h-2N2" id="PTM-Pl-M5N"/>
                                                 </connections>
                                             </textField>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OS3-Ut-k2D">
-                                                <color key="backgroundColor" red="0.031372549020000001" green="0.45882352939999999" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
-                                                <state key="normal" title="SEND MONEY">
-                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="actionDonate:" destination="8BM-9h-2N2" eventType="touchUpInside" id="UxM-vq-onR"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="fUU-eD-HbG" firstAttribute="leading" secondItem="aip-QC-Xfx" secondAttribute="leading" constant="19" id="0lw-uk-95B"/>
                                             <constraint firstAttribute="height" constant="67" id="0uV-39-e1E"/>
-                                            <constraint firstAttribute="trailing" secondItem="OS3-Ut-k2D" secondAttribute="trailing" id="158-FC-zfS"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="67" id="4fw-2c-wHP"/>
                                             <constraint firstItem="a1K-Uq-IY4" firstAttribute="leading" secondItem="aip-QC-Xfx" secondAttribute="leading" constant="19" id="9Nv-ns-Hqe"/>
                                             <constraint firstAttribute="bottom" secondItem="fUU-eD-HbG" secondAttribute="bottom" constant="9" id="BPr-b6-InV"/>
-                                            <constraint firstAttribute="bottom" secondItem="OS3-Ut-k2D" secondAttribute="bottom" id="L3G-Gv-rKS"/>
-                                            <constraint firstItem="OS3-Ut-k2D" firstAttribute="leading" secondItem="fUU-eD-HbG" secondAttribute="trailing" constant="25" id="Oow-9T-PCa"/>
                                             <constraint firstItem="a1K-Uq-IY4" firstAttribute="top" secondItem="aip-QC-Xfx" secondAttribute="top" constant="8" id="hd9-la-X1L"/>
-                                            <constraint firstItem="OS3-Ut-k2D" firstAttribute="top" secondItem="aip-QC-Xfx" secondAttribute="top" id="zge-KX-Vn6"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="4fw-2c-wHP"/>
                                             </mask>
                                         </variation>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gTF-qg-bx9">
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vZV-o7-bLF">
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SEND MONEY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KQ6-1L-kvq">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="qer-y4-qxB">
+                                                        <subviews>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="reccuring_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-fS-zij">
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="20" id="GE9-Q4-EhG"/>
+                                                                    <constraint firstAttribute="height" constant="20" id="v0t-UR-R94"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MONTHLY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hxz-Zt-YWS">
+                                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.031372549019607843" green="0.45882352941176469" blue="0.49019607843137253" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="vZV-o7-bLF" firstAttribute="leading" secondItem="gTF-qg-bx9" secondAttribute="leading" constant="53" id="4I3-BJ-Aun"/>
+                                            <constraint firstItem="vZV-o7-bLF" firstAttribute="top" secondItem="gTF-qg-bx9" secondAttribute="top" constant="19" id="AXF-Jt-AoE"/>
+                                            <constraint firstAttribute="bottom" secondItem="vZV-o7-bLF" secondAttribute="bottom" constant="23" id="ohY-kF-Vli"/>
+                                            <constraint firstAttribute="trailing" secondItem="vZV-o7-bLF" secondAttribute="trailing" constant="53" id="ydZ-YR-zJ2"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3538,35 +3559,79 @@
                                     <constraint firstAttribute="trailing" secondItem="aip-QC-Xfx" secondAttribute="trailing" constant="29" id="72l-BS-68J"/>
                                     <constraint firstAttribute="height" constant="86" id="74S-v4-6LH"/>
                                     <constraint firstItem="aip-QC-Xfx" firstAttribute="centerY" secondItem="TG6-xr-LUG" secondAttribute="centerY" id="H5B-dR-6Jy"/>
+                                    <constraint firstItem="gTF-qg-bx9" firstAttribute="leading" secondItem="fUU-eD-HbG" secondAttribute="trailing" constant="15" id="S3I-dD-1bv"/>
+                                    <constraint firstAttribute="bottom" secondItem="gTF-qg-bx9" secondAttribute="bottom" id="bM9-94-GCb"/>
+                                    <constraint firstAttribute="trailing" secondItem="gTF-qg-bx9" secondAttribute="trailing" id="dMm-LJ-UN9"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lq0-42-ew3">
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AC9-Ep-BwH">
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are giving $200 monthly to this project" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VaY-3W-5hZ">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EPd-2m-fyv">
+                                                <color key="backgroundColor" red="0.078431372549019607" green="0.45882352941176469" blue="0.48627450980392156" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="120" id="CWF-la-sFg"/>
+                                                    <constraint firstAttribute="height" constant="48" id="tzN-f5-7YK"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                                <state key="normal" title="CANCEL">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="actionCancelRecurring:" destination="8BM-9h-2N2" eventType="touchUpInside" id="4bw-zA-DEW"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.031372549019607843" green="0.45882352941176469" blue="0.49019607843137253" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="AC9-Ep-BwH" secondAttribute="bottom" constant="8" id="1bd-qt-Y2k"/>
+                                    <constraint firstItem="AC9-Ep-BwH" firstAttribute="leading" secondItem="lq0-42-ew3" secondAttribute="leading" constant="14" id="Oul-oq-JEe"/>
+                                    <constraint firstAttribute="trailing" secondItem="AC9-Ep-BwH" secondAttribute="trailing" constant="14" id="emv-xm-nZ3"/>
+                                    <constraint firstItem="AC9-Ep-BwH" firstAttribute="top" secondItem="lq0-42-ew3" secondAttribute="top" constant="8" id="kGc-tx-ceO"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="vcw-2a-WKt" firstAttribute="top" secondItem="vkb-6l-HS8" secondAttribute="bottom" constant="85" id="2DL-hn-5gh"/>
+                            <constraint firstItem="lq0-42-ew3" firstAttribute="leading" secondItem="Jz6-dH-ep2" secondAttribute="leading" id="2Dk-z0-iUl"/>
+                            <constraint firstItem="lq0-42-ew3" firstAttribute="top" secondItem="8nB-1s-PcI" secondAttribute="bottom" id="2TZ-pd-j8s"/>
                             <constraint firstItem="8nB-1s-PcI" firstAttribute="leading" secondItem="Jz6-dH-ep2" secondAttribute="leading" id="3PW-A9-fLR"/>
                             <constraint firstItem="vcw-2a-WKt" firstAttribute="top" secondItem="TG6-xr-LUG" secondAttribute="bottom" id="6aQ-6t-Sgh"/>
-                            <constraint firstItem="vkb-6l-HS8" firstAttribute="top" secondItem="8nB-1s-PcI" secondAttribute="bottom" id="GQz-E2-N3y"/>
-                            <constraint firstAttribute="trailing" secondItem="vkb-6l-HS8" secondAttribute="trailing" id="Kdk-VZ-rRh"/>
+                            <constraint firstItem="vkb-6l-HS8" firstAttribute="leading" secondItem="lq0-42-ew3" secondAttribute="leading" id="EgK-6r-2cB"/>
+                            <constraint firstItem="vkb-6l-HS8" firstAttribute="trailing" secondItem="lq0-42-ew3" secondAttribute="trailing" id="OIt-6u-BfP"/>
                             <constraint firstItem="8nB-1s-PcI" firstAttribute="top" secondItem="Jz6-dH-ep2" secondAttribute="top" id="dGe-ji-UMR"/>
+                            <constraint firstItem="vcw-2a-WKt" firstAttribute="top" secondItem="vkb-6l-HS8" secondAttribute="bottom" constant="85" id="nVJ-PG-1r3"/>
                             <constraint firstAttribute="trailing" secondItem="TG6-xr-LUG" secondAttribute="trailing" id="q5R-bM-2D6"/>
                             <constraint firstItem="TG6-xr-LUG" firstAttribute="leading" secondItem="Jz6-dH-ep2" secondAttribute="leading" id="suK-8e-wg0"/>
-                            <constraint firstItem="vkb-6l-HS8" firstAttribute="leading" secondItem="Jz6-dH-ep2" secondAttribute="leading" id="u7x-c2-SAt"/>
                             <constraint firstAttribute="trailing" secondItem="8nB-1s-PcI" secondAttribute="trailing" id="uw9-zf-0rT"/>
+                            <constraint firstItem="vkb-6l-HS8" firstAttribute="top" secondItem="8nB-1s-PcI" secondAttribute="bottom" constant="61" id="w5c-gN-gAY"/>
+                            <constraint firstAttribute="trailing" secondItem="lq0-42-ew3" secondAttribute="trailing" id="xxV-bP-8m2"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btDonate" destination="gTF-qg-bx9" id="Qai-i7-a7A"/>
                         <outlet property="btDone" destination="8Fh-AG-LRg" id="jvI-w9-1OK"/>
                         <outlet property="btFollowUp" destination="1ts-ca-MEw" id="SO1-sb-6bu"/>
                         <outlet property="btGive" destination="5Aa-1T-ync" id="LR6-vK-iTy"/>
                         <outlet property="btTrash" destination="yHw-WJ-wNc" id="1zF-fF-JOQ"/>
+                        <outlet property="cancelRecurringView" destination="lq0-42-ew3" id="Klr-Hp-lHJ"/>
                         <outlet property="constraitDonateContainerBottom" destination="6aQ-6t-Sgh" id="kds-S4-WIf"/>
+                        <outlet property="donateButtonView" destination="TG6-xr-LUG" id="LFX-ae-yv4"/>
                         <outlet property="ivFeed" destination="Iko-26-SaM" id="shL-7s-qcI"/>
                         <outlet property="ivUserAvatar" destination="ux5-cG-6XY" id="W8v-JO-qxd"/>
                         <outlet property="lbDescription" destination="52G-up-2Lw" id="9ad-ty-LpC"/>
                         <outlet property="lbDonatedCount" destination="iM3-Og-gFu" id="mt8-8k-Wml"/>
                         <outlet property="lbGiveTitle" destination="8zP-aS-dF7" id="Xhn-yh-dyT"/>
                         <outlet property="lbMaxPrice" destination="EiF-MZ-3Uc" id="Wjr-N9-kNA"/>
+                        <outlet property="lbMonthlyDonation" destination="VaY-3W-5hZ" id="stn-xf-4Cj"/>
                         <outlet property="lbPostTime" destination="eFj-1P-HQA" id="Mf9-WX-SKv"/>
                         <outlet property="lbRaisedAmount" destination="7vk-YO-chm" id="qQ5-nR-5zL"/>
                         <outlet property="lbUsername" destination="pRc-wz-3Po" id="eQ5-iP-s2h"/>
@@ -3889,7 +3954,7 @@
                     </items>
                 </toolbar>
             </objects>
-            <point key="canvasLocation" x="2618.5" y="-1013.5"/>
+            <point key="canvasLocation" x="2618.4000000000001" y="-1014.2428785607198"/>
         </scene>
         <!--Web Donate View Controller-->
         <scene sceneID="g8e-k2-NdM">
@@ -4088,6 +4153,7 @@
         <image name="logo_image.png" width="717" height="458"/>
         <image name="password_icon.png" width="52" height="61"/>
         <image name="profile_pic.png" width="95" height="106"/>
+        <image name="reccuring_white.png" width="45" height="45"/>
         <image name="right_arrow.png" width="25" height="45"/>
         <image name="setting_icon.png" width="100" height="100"/>
         <image name="small_logo.png" width="274" height="74"/>

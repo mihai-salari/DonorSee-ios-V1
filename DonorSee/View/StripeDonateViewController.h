@@ -20,6 +20,7 @@
 @interface StripeDonateViewController : BaseViewController
 
 @property (nonatomic) NSDecimalNumber *amount;
+@property (nonatomic) NSString        *gift_type;
 
 @property (nonatomic, weak) id<StripePaymentViewControllerDelegate> delegate;
 

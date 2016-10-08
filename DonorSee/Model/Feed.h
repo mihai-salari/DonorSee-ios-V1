@@ -31,6 +31,8 @@
 @property (nonatomic, assign) BOOL              is_follower;
 @property (nonatomic, strong) NSString          *stripe_user_id;
 @property (nonatomic, strong) NSString          *gift_type;
+@property (nonatomic, assign) BOOL              is_monthly_giver;
+@property (nonatomic, assign) int               amount_given_cents;
 
 
 - (id) initWithHomeFeed: (NSDictionary*) dicFeed;
