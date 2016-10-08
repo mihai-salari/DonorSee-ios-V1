@@ -18,6 +18,7 @@
 #import "WebDonateViewController.h"
 #import "StripeDonateViewController.h"
 #import "SignInViewController.h"
+#import "VideoPlayer.h"
 
 @import ALCameraViewController;
 @import CircleProgressView;
@@ -39,6 +40,7 @@
     NSString                    *postusername;
     UIImage                    *postuserAvatar;
 }
+@property (weak, nonatomic) IBOutlet UIButton *btnPlayVideo;
 
 @property (nonatomic, weak) IBOutlet UIView             *viHeader;
 @property (weak, nonatomic) IBOutlet UIImageView        *ivUserAvatar;
@@ -188,6 +190,11 @@
     [self presentViewController:alert animated:YES completion:nil];
 
 }
+- (IBAction)onPlayVideoTap:(id)sender {
+    VideoPlayer *videoPlayer = [[VideoPlayer alloc] init];
+    videoPlayer.viewController = self;
+    [videoPlayer playVideo: selectedFeed.videoURL];
+}
 
 - (void) cancelRecurringDonation {
     [SVProgressHUD showWithStatus: @"Cancelling..." maskType: SVProgressHUDMaskTypeClear];
@@ -313,7 +320,7 @@
     lbDonatedCount.text = [NSString stringWithFormat: @"%d %@", selectedFeed.donated_count, giftTitle];
     lbRaisedAmount.text = [NSString stringWithFormat: @"$%d RAISED", selectedFeed.donated_amount/100];
     
-    NSURL* urlPhoto = [NSURL URLWithString: selectedFeed.photo];
+    NSURL* urlPhoto = [NSURL URLWithString: selectedFeed.getProjectImage];
     [ivFeed sd_setImageWithURL: urlPhoto];
     
     lbDescription.text = selectedFeed.feed_description;
@@ -353,6 +360,12 @@
         [btGive setTitle: @"" forState: UIControlStateNormal];
         lbGiveTitle.text = @"LEFT";
         lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (selectedFeed.pre_amount/100 - selectedFeed.donated_amount/100)];
+    }
+    
+    if(selectedFeed.videoURL!=nil){
+        _btnPlayVideo.hidden = NO;
+    }else{
+        _btnPlayVideo.hidden = YES;
     }
     
     [tbActivity reloadData];

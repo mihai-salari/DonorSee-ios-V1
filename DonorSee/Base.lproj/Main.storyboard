@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="IEL-6a-hlG">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -3604,6 +3603,7 @@
                         <outlet property="btFollowUp" destination="1ts-ca-MEw" id="SO1-sb-6bu"/>
                         <outlet property="btGive" destination="5Aa-1T-ync" id="LR6-vK-iTy"/>
                         <outlet property="btTrash" destination="yHw-WJ-wNc" id="1zF-fF-JOQ"/>
+                        <outlet property="btnPlayVideo" destination="9DQ-Ef-Xbj" id="v3m-rs-edp"/>
                         <outlet property="cancelRecurringView" destination="lq0-42-ew3" id="Klr-Hp-lHJ"/>
                         <outlet property="constraitDonateContainerBottom" destination="6aQ-6t-Sgh" id="kds-S4-WIf"/>
                         <outlet property="donateButtonView" destination="TG6-xr-LUG" id="LFX-ae-yv4"/>
@@ -3905,6 +3905,16 @@
                                 <constraint firstItem="iM3-Og-gFu" firstAttribute="leading" secondItem="Uft-fh-8GR" secondAttribute="trailing" constant="24" id="uf9-2E-71H"/>
                             </constraints>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9DQ-Ef-Xbj">
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="RoK-UE-e4h"/>
+                                <constraint firstAttribute="width" constant="50" id="wAa-Zj-fYz"/>
+                            </constraints>
+                            <state key="normal" image="icon_play.png"/>
+                            <connections>
+                                <action selector="onPlayVideoTap:" destination="8BM-9h-2N2" eventType="touchUpInside" id="zbP-TZ-4XQ"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -3917,6 +3927,8 @@
                         <constraint firstItem="52G-up-2Lw" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="29" id="OGE-rZ-3e7"/>
                         <constraint firstItem="bIi-KE-tC6" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" id="T7u-XF-Liy"/>
                         <constraint firstItem="Gd8-kw-ofk" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" id="VHn-KQ-HKI"/>
+                        <constraint firstItem="9DQ-Ef-Xbj" firstAttribute="centerX" secondItem="bIi-KE-tC6" secondAttribute="centerX" id="Zgq-DR-Ixa"/>
+                        <constraint firstItem="9DQ-Ef-Xbj" firstAttribute="top" secondItem="bIi-KE-tC6" secondAttribute="bottom" constant="50" id="bv3-8o-fmm"/>
                         <constraint firstItem="52G-up-2Lw" firstAttribute="top" secondItem="7sK-vm-gJ8" secondAttribute="bottom" constant="20" id="feA-US-aYC"/>
                         <constraint firstAttribute="trailing" secondItem="7sK-vm-gJ8" secondAttribute="trailing" constant="11" id="gMD-cn-7aP"/>
                         <constraint firstItem="Gd8-kw-ofk" firstAttribute="top" secondItem="52G-up-2Lw" secondAttribute="bottom" constant="13" id="hqJ-Xf-qn1"/>
@@ -4130,6 +4142,7 @@
         <image name="gray_user_pic.png" width="53" height="60"/>
         <image name="heart.png" width="100" height="100"/>
         <image name="heart_sel.png" width="100" height="100"/>
+        <image name="icon_play.png" width="84" height="96"/>
         <image name="icon_reccuring.png" width="44" height="44"/>
         <image name="info.png" width="28" height="28"/>
         <image name="login_bg.png" width="735" height="1307"/>
