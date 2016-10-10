@@ -240,7 +240,7 @@
         if (a.message != nil) {
             CGSize textSize = [self getActivityTextSize:a.message];
             
-            fy += textSize.height;
+            fy += textSize.height + 10;
         }
         
         if(a.getMedia.count > 0)
