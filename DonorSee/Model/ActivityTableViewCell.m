@@ -7,6 +7,7 @@
 //
 
 #import "ActivityTableViewCell.h"
+#import "MediaFile.h"
 
 
 @implementation ActivityTableViewCell
@@ -96,28 +97,49 @@
             [v removeFromSuperview];
         }
         
-        if(event.photo_urls != nil && event.photo_urls.length > 0)
+        NSMutableArray *mediaArray = event.getMedia;
+        
+        if(mediaArray != nil)
         {
             float fx = 0;
             float fy = 0;
             float fw = viPhotoContainer.frame.size.width;
             float fOffset = 10.0;
             
-            NSArray *photos = [event.photo_urls componentsSeparatedByString:@","];
-            
-            
-            for(NSString* photoKey in photos)
+            int playButtonDimen = 50;
+            int index = 0;
+            for(MediaFile* media in mediaArray)
             {
+                NSString* thumbnailURL = media.getThumbnailURL;
                 UIImageView* ivCell = [[UIImageView alloc] initWithFrame: CGRectMake(fx, fy, fw, fw)];
                 ivCell.backgroundColor = [UIColor lightGrayColor];
                 ivCell.layer.masksToBounds = YES;
                 ivCell.layer.cornerRadius = 10.0;
                 ivCell.contentMode = UIViewContentModeScaleAspectFill;
-                [ivCell sd_setImageWithURL: [NSURL URLWithString: photoKey]];
+                [ivCell sd_setImageWithURL: [NSURL URLWithString: thumbnailURL]];
                 [viPhotoContainer addSubview: ivCell];
                 
+                if(media.mediaType == VIDEO){
+                    int playButtonY = fy + (fw/2 - playButtonDimen/2);
+                    int playButtonX = fx + (fw/2 - playButtonDimen/2);
+                    UIImageView* ivPlayVideo = [[UIImageView alloc] initWithFrame: CGRectMake(playButtonX, playButtonY, playButtonDimen, playButtonDimen)];
+                    ivPlayVideo.layer.masksToBounds = YES;
+                    UIImage *img = [UIImage imageNamed:@"icon_play"];
+                    [ivPlayVideo setImage:img];
+                    [viPhotoContainer addSubview: ivPlayVideo];
+                
+                    ivPlayVideo.userInteractionEnabled = YES;
+                
+                    UITapGestureRecognizer *gestureVideoPlay = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapVideo:)];
+                    gestureVideoPlay.delegate = self;
+                    ivPlayVideo.tag = index;
+                    [ivPlayVideo addGestureRecognizer:gestureVideoPlay];
+                }
+                
                 fy += fw + fOffset;
+                index ++;
             }
+
             
             viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x, viPhotoContainer.frame.origin.y, viPhotoContainer.frame.size.width, fy);
         
@@ -147,11 +169,18 @@
         viPhotoContainer.hidden = YES;
     }
     
-    
     lbMessage.text = message;
     [self layoutIfNeeded];
 }
 
+
+- (void) onTapVideo :(UITapGestureRecognizer *)gr
+{
+    UIImageView *theTappedImageView = (UIImageView *)gr.view;
+    MediaFile* media = currentEvent.getMedia[theTappedImageView.tag];
+    NSString* videoURL = media.mediaURL;
+    [self.delegate openPlayer:videoURL];
+}
 
 - (void) onTapUser
 {

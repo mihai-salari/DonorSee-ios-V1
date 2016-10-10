@@ -85,6 +85,7 @@
 @property (weak, nonatomic) IBOutlet UIView *btDonate;
 @property (weak, nonatomic) IBOutlet UILabel *lbMonthlyDonation;
 @property (weak, nonatomic) IBOutlet UIStackView *vDonateButtonMonthly;
+@property (weak, nonatomic) IBOutlet UIButton *btnCancelRecurringGift;
 
 @end
 
@@ -132,9 +133,6 @@
                                             action:@selector(handleSingleTap:)];
     [self.btDonate addGestureRecognizer:singleFingerTap];
     
-    //todo remove later
-    [_vDonateButtonMonthly removeFromSuperview];
-    _cancelRecurringView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -191,9 +189,14 @@
 
 }
 - (IBAction)onPlayVideoTap:(id)sender {
+    [self openPlayer:selectedFeed.videoURL];
+}
+
+- (void) openPlayer: (NSString*) videoURL{
     VideoPlayer *videoPlayer = [[VideoPlayer alloc] init];
     videoPlayer.viewController = self;
-    [videoPlayer playVideo: selectedFeed.videoURL];
+    [videoPlayer playVideo: videoURL];
+
 }
 
 - (void) cancelRecurringDonation {
@@ -261,13 +264,13 @@
 
 - (void) updateUserDonationStatus{
     if(selectedFeed.is_monthly_giver){
-       // [_donateButtonView removeFromSuperview];
         _donateButtonView.hidden = YES;
         _cancelRecurringView.hidden = NO;
+        _btnCancelRecurringGift.layer.cornerRadius = 10.0;
+        [_btnCancelRecurringGift setClipsToBounds:YES];
         _lbMonthlyDonation.text = [NSString stringWithFormat:@"You are giving $%d monthly to this project", selectedFeed.amount_given_cents / 100];
     }else{
         _donateButtonView.hidden = NO;
-       // [_cancelRecurringView removeFromSuperview];
         _cancelRecurringView.hidden = YES;
         [_vDonateButtonMonthly removeFromSuperview];
     }

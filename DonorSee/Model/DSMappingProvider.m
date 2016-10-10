@@ -166,8 +166,20 @@
     } reverseMap:^id _Nullable(id  _Nonnull value) {
         return nil;
     }];
+
+    FEMAttribute *videoAttribute = [[FEMAttribute alloc] initWithProperty:@"video_urls" keyPath:@"video_urls" map:^id _Nullable(id  _Nonnull value) {
+        if ([value isKindOfClass:[NSArray class]]) {
+            return [value componentsJoinedByString:@","];
+        }
+        
+        return nil;
+    } reverseMap:^id _Nullable(id  _Nonnull value) {
+        return nil;
+    }];
+
     
     [mapping addAttribute:photoAttribute];
+    [mapping addAttribute:videoAttribute];
     
     return mapping;
 }

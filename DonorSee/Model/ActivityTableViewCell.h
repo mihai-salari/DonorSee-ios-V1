@@ -13,9 +13,10 @@
 @protocol ActivityTableViewCellDelegate <NSObject>
 @optional
 - (void) selectUser: (User*) user;
+- (void) openPlayer: (NSString*) videoURL;
 @end
 
-@interface ActivityTableViewCell : UITableViewCell
+@interface ActivityTableViewCell : UITableViewCell <UIGestureRecognizerDelegate>
 {
     Activity            *currentActivity;
     Event               *currentEvent;
@@ -26,6 +27,7 @@
 @property (nonatomic, weak) IBOutlet UILabel                *lbTime;
 @property (nonatomic, weak) IBOutlet UILabel                *lbFollowMessage;
 @property (nonatomic, weak) IBOutlet UIView                 *viPhotoContainer;
+@property (weak, nonatomic) IBOutlet UIButton *btnPlayVideo;
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint     *constraitMessageLeft;
 @property (nonatomic, retain) id                            delegate;

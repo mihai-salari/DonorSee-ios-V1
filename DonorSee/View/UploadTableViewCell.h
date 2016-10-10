@@ -16,6 +16,7 @@
 - (void) followFeed: (Feed*) f;
 - (void) selectFeed: (Feed*) f;
 - (void) selectUser: (User*) user;
+- (void) openPlayer: (NSString*) videoURL;
 @end
 
 @interface UploadTableViewCell : UITableViewCell
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UIButton               *btSmall2;
 @property (weak, nonatomic) IBOutlet UIButton               *btBig;
 @property (weak, nonatomic) IBOutlet UILabel                *lbInfo;
+@property (weak, nonatomic) IBOutlet UIButton *btnPlayVideo;
 
 @property (strong, nonatomic) id            delegate;
 

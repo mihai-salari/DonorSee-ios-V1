@@ -28,4 +28,8 @@
 @property (nonatomic, assign) int               gift_amount_cents;
 
 @property (nonatomic, strong) NSString          *photo_urls;
+@property (nonatomic, strong) NSString          *video_urls;
+- (NSMutableArray*) getMedia;
 @end
+
+
