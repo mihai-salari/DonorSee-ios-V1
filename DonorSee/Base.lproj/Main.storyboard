@@ -3606,6 +3606,8 @@
                         <outlet property="btnCancelRecurringGift" destination="EPd-2m-fyv" id="kOU-JH-qxn"/>
                         <outlet property="btnPlayVideo" destination="9DQ-Ef-Xbj" id="v3m-rs-edp"/>
                         <outlet property="cancelRecurringView" destination="lq0-42-ew3" id="Klr-Hp-lHJ"/>
+                        <outlet property="constraintTableBottom" destination="nVJ-PG-1r3" id="PIi-se-1OQ"/>
+                        <outlet property="constraintTableTop" destination="w5c-gN-gAY" id="TSu-Uf-TiP"/>
                         <outlet property="constraitDonateContainerBottom" destination="6aQ-6t-Sgh" id="kds-S4-WIf"/>
                         <outlet property="donateButtonView" destination="TG6-xr-LUG" id="LFX-ae-yv4"/>
                         <outlet property="ivFeed" destination="Iko-26-SaM" id="shL-7s-qcI"/>

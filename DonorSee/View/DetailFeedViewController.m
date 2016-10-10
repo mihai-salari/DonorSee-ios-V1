@@ -87,6 +87,9 @@
 @property (weak, nonatomic) IBOutlet UIStackView *vDonateButtonMonthly;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancelRecurringGift;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableBottom;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableTop;
+
 @end
 
 @implementation DetailFeedViewController
@@ -265,14 +268,25 @@
 - (void) updateUserDonationStatus{
     if(selectedFeed.is_monthly_giver){
         _donateButtonView.hidden = YES;
+        _constraintTableTop.constant = 61;
+        _constraintTableBottom.constant = 0;
         _cancelRecurringView.hidden = NO;
         _btnCancelRecurringGift.layer.cornerRadius = 10.0;
         [_btnCancelRecurringGift setClipsToBounds:YES];
         _lbMonthlyDonation.text = [NSString stringWithFormat:@"You are giving $%d monthly to this project", selectedFeed.amount_given_cents / 100];
+        _vDonateButtonMonthly.hidden = NO;
     }else{
+        _constraintTableTop.constant = 0;
+        _constraintTableBottom.constant = 85;
         _donateButtonView.hidden = NO;
         _cancelRecurringView.hidden = YES;
-        [_vDonateButtonMonthly removeFromSuperview];
+    }
+    
+    if([selectedFeed.gift_type isEqualToString: FEED_TYPE_MONTHLY]){
+        _vDonateButtonMonthly.hidden = NO;
+    }else{
+        _vDonateButtonMonthly.hidden = YES;
+
     }
 }
 
@@ -350,10 +364,20 @@
     [ivUserAvatar sd_setImageWithURL: [NSURL URLWithString: selectedFeed.postUser.avatar] placeholderImage: [UIImage imageNamed: @"default-profile-pic.png"]];
     
     lbGiveTitle.hidden = NO;
+    
     if(selectedFeed.donated_amount >= selectedFeed.pre_amount)
     {
         lbMaxPrice.hidden = YES;
-        lbGiveTitle.hidden = YES;
+        
+        if([selectedFeed.getFeedType isEqualToString:FEED_TYPE_MONTHLY]){
+            lbGiveTitle.text = @"MONTH";
+            [lbGiveTitle setFont:[UIFont systemFontOfSize:7]];
+            lbGiveTitle.hidden = NO;
+        }else{
+            lbGiveTitle.hidden = YES;
+        }
+        
+        
         [btGive setTitle: @"FUNDED!" forState: UIControlStateNormal];
     }
     else
@@ -361,10 +385,23 @@
         lbMaxPrice.hidden = NO;
         lbGiveTitle.hidden = NO;
         [btGive setTitle: @"" forState: UIControlStateNormal];
-        lbGiveTitle.text = @"LEFT";
-        lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (selectedFeed.pre_amount/100 - selectedFeed.donated_amount/100)];
+        
+        if([selectedFeed.getFeedType isEqualToString:FEED_TYPE_MONTHLY]){
+            lbGiveTitle.text = @"LEFT/\nMONTH";
+            [lbGiveTitle setFont:[UIFont systemFontOfSize:7]];
+        }else{
+            lbGiveTitle.text = @"LEFT";
+            [lbGiveTitle setFont:[UIFont systemFontOfSize:10]];
+        }
+        
+        if (selectedFeed.donated_amount == 0) {
+            lbMaxPrice.text = [NSString stringWithFormat: @"$%d", selectedFeed.pre_amount/100];
+        } else {
+            lbMaxPrice.text = [NSString stringWithFormat: @"$%d", (selectedFeed.pre_amount/100 - selectedFeed.donated_amount/100)];
+        }
+        
     }
-    
+
     if(selectedFeed.videoURL!=nil){
         _btnPlayVideo.hidden = NO;
     }else{
