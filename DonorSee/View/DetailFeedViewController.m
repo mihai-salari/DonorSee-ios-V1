@@ -135,7 +135,6 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self.btDonate addGestureRecognizer:singleFingerTap];
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -222,6 +221,10 @@
 - (void) initMember
 {
     [super initMember];
+    
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
+
     lbMaxPrice.text = @"$";
     
     arrActivities = [[NSMutableArray alloc] init];

@@ -41,6 +41,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
     // Do any additional setup after loading the view.
     isChangedAvatar = NO;
     

@@ -95,6 +95,8 @@
 - (void) setDonateFeed: (Feed*) f isDetail: (BOOL) isDetail
 {
     currentFeed = f;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
     
     [self initUI];
     

@@ -142,6 +142,9 @@
 {
     [super initMember];
     
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadAllFeeds)
                                                  name:NOTI_UPDATE_FUNDED_FEED

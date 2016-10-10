@@ -62,6 +62,9 @@
 }
 
 - (void) setEvent:(Event *)event {
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+
     currentEvent = event;
     [self initUI];
     
@@ -106,7 +109,9 @@
         {
             float fx = 0;
             float fy = 0;
+            
             float fw = viPhotoContainer.frame.size.width;
+            
             float fOffset = 10.0;
             
             int playButtonDimen = 50;
@@ -122,7 +127,7 @@
                 [ivCell sd_setImageWithURL: [NSURL URLWithString: thumbnailURL]];
                 [viPhotoContainer addSubview: ivCell];
                 
-                if(media.mediaType == VIDEO){//
+                if(media.mediaType == VIDEO){
                     int playButtonY = fy + (fw/2 - playButtonDimen/2);
                     int playButtonX = fx + (fw/2 - playButtonDimen/2);
                     UIImageView* ivPlayVideo = [[UIImageView alloc] initWithFrame: CGRectMake(playButtonX, playButtonY, playButtonDimen, playButtonDimen)];
@@ -142,10 +147,8 @@
                 fy += fw + fOffset;
                 index ++;
             }
-
             
             viPhotoContainer.frame = CGRectMake(viPhotoContainer.frame.origin.x, viPhotoContainer.frame.origin.y, viPhotoContainer.frame.size.width, fy);
-        
         }
     }
     
@@ -173,6 +176,8 @@
     }
     
     lbMessage.text = message;
+    
+    [self setNeedsLayout];
     [self layoutIfNeeded];
 }
 
