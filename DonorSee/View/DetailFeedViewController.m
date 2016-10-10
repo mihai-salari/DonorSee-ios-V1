@@ -135,6 +135,8 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self.btDonate addGestureRecognizer:singleFingerTap];
+    
+   // self.tbActivity.tableHeaderView = viHeader;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -519,8 +521,8 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+   // return ivFeed.frame.size.height + viInfo.frame.size.height + lbDescription.frame.size.height + progressView.frame.size.height;
     return viInfo.frame.origin.y + viInfo.frame.size.height;
-//    return viHeader.frame.size.height;
 }
 
 - (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
@@ -530,7 +532,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return viFooter.frame.size.height;
+    return 70;// viFooter.frame.size.height;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

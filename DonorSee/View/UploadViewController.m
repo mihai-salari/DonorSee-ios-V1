@@ -125,7 +125,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    self.scMain.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height - 50);
+    self.scMain.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height+50);
 }
 
 -(IBAction)BackButtonPress:(id)sender
