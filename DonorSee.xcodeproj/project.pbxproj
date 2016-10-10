@@ -1389,9 +1389,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_BITCODE = NO;
+				CURRENT_PROJECT_VERSION = "";
+				DEVELOPMENT_TEAM = 33V6UA2S4N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DonorSee/Helper/AWS",
@@ -1435,6 +1436,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "";
 			};
 			name = Debug;
 		};
@@ -1447,7 +1449,8 @@
 				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Gret Glyer (33V6UA2S4N)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_BITCODE = NO;
+				CURRENT_PROJECT_VERSION = "";
+				DEVELOPMENT_TEAM = 33V6UA2S4N;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/DonorSee/Helper/AWS",
@@ -1491,6 +1494,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "";
 			};
 			name = Release;
 		};
