@@ -189,9 +189,14 @@
 
 }
 - (IBAction)onPlayVideoTap:(id)sender {
+    [self openPlayer:selectedFeed.videoURL];
+}
+
+- (void) openPlayer: (NSString*) videoURL{
     VideoPlayer *videoPlayer = [[VideoPlayer alloc] init];
     videoPlayer.viewController = self;
-    [videoPlayer playVideo: selectedFeed.videoURL];
+    [videoPlayer playVideo: videoURL];
+
 }
 
 - (void) cancelRecurringDonation {

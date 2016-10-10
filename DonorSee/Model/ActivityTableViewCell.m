@@ -97,25 +97,26 @@
             [v removeFromSuperview];
         }
         
-        if(event.photo_urls != nil && event.photo_urls.length > 0)
+        NSMutableArray *mediaArray = event.getMedia;
+        
+        if(mediaArray != nil)
         {
             float fx = 0;
             float fy = 0;
             float fw = viPhotoContainer.frame.size.width;
             float fOffset = 10.0;
             
-            NSMutableArray *mediaArray = event.getMedia;
-            
             int playButtonDimen = 50;
             int index = 0;
             for(MediaFile* media in mediaArray)
             {
+                NSString* thumbnailURL = media.getThumbnailURL;
                 UIImageView* ivCell = [[UIImageView alloc] initWithFrame: CGRectMake(fx, fy, fw, fw)];
                 ivCell.backgroundColor = [UIColor lightGrayColor];
                 ivCell.layer.masksToBounds = YES;
                 ivCell.layer.cornerRadius = 10.0;
                 ivCell.contentMode = UIViewContentModeScaleAspectFill;
-                [ivCell sd_setImageWithURL: [NSURL URLWithString: media.getThumbnailURL]];
+                [ivCell sd_setImageWithURL: [NSURL URLWithString: thumbnailURL]];
                 [viPhotoContainer addSubview: ivCell];
                 
                 if(media.mediaType == VIDEO){
@@ -125,13 +126,12 @@
                     ivPlayVideo.layer.masksToBounds = YES;
                     UIImage *img = [UIImage imageNamed:@"icon_play"];
                     [ivPlayVideo setImage:img];
-                    ivPlayVideo.accessibilityIdentifier = media.mediaURL;
                     [viPhotoContainer addSubview: ivPlayVideo];
                 
-                ivPlayVideo.userInteractionEnabled = YES;
+                    ivPlayVideo.userInteractionEnabled = YES;
                 
                     UITapGestureRecognizer *gestureVideoPlay = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapVideo:)];
-                gestureVideoPlay.delegate = self;
+                    gestureVideoPlay.delegate = self;
                     ivPlayVideo.tag = index;
                     [ivPlayVideo addGestureRecognizer:gestureVideoPlay];
                 }
@@ -177,9 +177,9 @@
 - (void) onTapVideo :(UITapGestureRecognizer *)gr
 {
     UIImageView *theTappedImageView = (UIImageView *)gr.view;
-   // NSInteger* index = theTappedImageView.tag;
-    //NSString* videoURL = currentEvent.getMedia[index];
-   // [self.delegate openPlayer:videoURL];
+    MediaFile* media = currentEvent.getMedia[theTappedImageView.tag];
+    NSString* videoURL = media.mediaURL;
+    [self.delegate openPlayer:videoURL];
 }
 
 - (void) onTapUser
