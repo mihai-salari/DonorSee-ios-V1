@@ -66,6 +66,9 @@
 {
     [super initMember];
     
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
+    
     lbUsername.text = self.selectedUser.name;
     
     ivProfile.layer.masksToBounds = YES;
