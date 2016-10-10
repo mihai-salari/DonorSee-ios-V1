@@ -121,7 +121,7 @@
 //        btSmall2.hidden = YES;
     }
 
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.photo]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: f.getProjectImage]];
     [lbDescription setDetectionBlock:^(STTweetHotWord hotWord, NSString *string, NSString *protocol, NSRange range)
      {
          if(hotWord == STTweetCustom)
@@ -150,6 +150,15 @@
 
          }
      }];
+    
+    if(currentFeed.videoURL == nil){
+        _btnPlayVideo.hidden = YES;
+    }else{
+        _btnPlayVideo.hidden = NO;
+    }
+}
+- (IBAction)actionPlayVideo:(id)sender {
+    [self.delegate openPlayer:currentFeed.videoURL];
 }
 
 - (NSString*) getUsernameString: (NSArray*) array

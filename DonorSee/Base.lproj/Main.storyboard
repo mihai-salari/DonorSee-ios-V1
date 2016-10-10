@@ -3603,6 +3603,7 @@
                         <outlet property="btFollowUp" destination="1ts-ca-MEw" id="SO1-sb-6bu"/>
                         <outlet property="btGive" destination="5Aa-1T-ync" id="LR6-vK-iTy"/>
                         <outlet property="btTrash" destination="yHw-WJ-wNc" id="1zF-fF-JOQ"/>
+                        <outlet property="btnCancelRecurringGift" destination="EPd-2m-fyv" id="kOU-JH-qxn"/>
                         <outlet property="btnPlayVideo" destination="9DQ-Ef-Xbj" id="v3m-rs-edp"/>
                         <outlet property="cancelRecurringView" destination="lq0-42-ew3" id="Klr-Hp-lHJ"/>
                         <outlet property="constraitDonateContainerBottom" destination="6aQ-6t-Sgh" id="kds-S4-WIf"/>
