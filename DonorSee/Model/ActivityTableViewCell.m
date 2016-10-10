@@ -43,6 +43,9 @@
     lbMessage.fontText = [UIFont fontWithName: FONT_LIGHT size: 14.0];
     lbMessage.fontUsername = [UIFont fontWithName: FONT_MEDIUM size: 14.0];
     [lbMessage updateTextAttribute];
+    
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
 }
 
 #pragma mark -
@@ -119,7 +122,7 @@
                 [ivCell sd_setImageWithURL: [NSURL URLWithString: thumbnailURL]];
                 [viPhotoContainer addSubview: ivCell];
                 
-                if(media.mediaType == VIDEO){
+                if(media.mediaType == VIDEO){//
                     int playButtonY = fy + (fw/2 - playButtonDimen/2);
                     int playButtonX = fx + (fw/2 - playButtonDimen/2);
                     UIImageView* ivPlayVideo = [[UIImageView alloc] initWithFrame: CGRectMake(playButtonX, playButtonY, playButtonDimen, playButtonDimen)];
