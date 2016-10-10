@@ -128,7 +128,7 @@
 //--------Amit
 -(void)setInformationOfProject
 {
-    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: objFeed.photo]];
+    [ivPhoto sd_setImageWithURL: [NSURL URLWithString: objFeed.getProjectImage]];
     tvDescription.text=objFeed.feed_description;
     tfPrice.text=[NSString stringWithFormat:@"%d",objFeed.pre_amount/100];
     if(objFeed.gift_type != nil && [objFeed.gift_type isEqualToString:FEED_TYPE_MONTHLY] ){
@@ -206,10 +206,10 @@
     tfPrice.text = @"";
     ivAddPhoto.hidden = NO;
     
-    constraintScrollHeight.constant = 525.0;
-    constraintPhotoHeight.constant = 185.0;
-    constraintContentTop.constant = 185.0;
-    [self.view layoutIfNeeded];
+//    constraintScrollHeight.constant = 525.0;
+//    constraintPhotoHeight.constant = 185.0;
+ //   constraintContentTop.constant = 185.0;
+//    [self.view layoutIfNeeded];
 }
 
 - (void) captureImage: (UIImage*) image
@@ -667,10 +667,10 @@
     }
     else
     {
-        constraintContentTop.constant = self.view.frame.size.width;
-        constraintPhotoHeight.constant = self.view.frame.size.width;
-        constraintScrollHeight.constant = 700;
-        [self.view layoutIfNeeded];
+//        constraintContentTop.constant = self.view.frame.size.width;
+//       // constraintPhotoHeight.constant = self.view.frame.size.width;
+//        constraintScrollHeight.constant = 700;
+//        [self.view layoutIfNeeded];
     }
     
     if(tfPrice.text == nil || [tfPrice.text length] == 0) isValid = NO;
