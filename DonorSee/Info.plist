@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2</string>
+	<string>2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -49,7 +49,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>2</string>
 	<key>FacebookAppID</key>
 	<string>1565790217067778</string>
 	<key>FacebookDisplayName</key>
@@ -108,11 +108,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera usage description</string>
+	<string>Allow camera usage</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location usage description</string>
+	<string>Allow location usage</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photos usage description</string>
+	<string>Allow photos usage</string>
 	<key>Pushwoosh_APPID</key>
 	<string>AB8AB-68B4E</string>
 	<key>UILaunchStoryboardName</key>

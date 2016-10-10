@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <frame key="frameInset" width="320" height="215"/>
+                <frame key="frameInset" width="320" height="215.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default-profile-pic.png" translatesAutoresizingMaskIntoConstraints="NO" id="g4L-vy-Xgj">
@@ -45,10 +45,7 @@
                             <constraint firstAttribute="height" constant="14" id="iAd-AF-K6s"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Here are more pictures of this familiy!" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvt-LU-pu8">
-                        <constraints>
-                            <constraint firstAttribute="height" constant="21" id="PBj-ho-bch"/>
-                        </constraints>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Here are more pictures of this familiy! " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvt-LU-pu8">
                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -61,7 +58,6 @@
                     <constraint firstItem="lCI-JX-gse" firstAttribute="centerY" secondItem="a92-HR-pga" secondAttribute="centerY" id="4CP-ZJ-udk"/>
                     <constraint firstItem="g4L-vy-Xgj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="13" id="Cj6-tM-Ol8"/>
                     <constraint firstItem="GuS-Ue-kcN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="53" id="DBk-00-MTr"/>
-                    <constraint firstItem="GuS-Ue-kcN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="79" id="DCX-n9-xOT"/>
                     <constraint firstItem="g4L-vy-Xgj" firstAttribute="top" secondItem="dcy-6X-mLg" secondAttribute="top" id="GPf-DM-zzA"/>
                     <constraint firstItem="Tvt-LU-pu8" firstAttribute="leading" secondItem="GuS-Ue-kcN" secondAttribute="leading" id="IYt-d8-Vpf"/>
                     <constraint firstAttribute="bottomMargin" secondItem="GuS-Ue-kcN" secondAttribute="bottom" constant="-1" id="JIN-yr-FNn"/>
