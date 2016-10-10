@@ -243,10 +243,9 @@
             fy += textSize.height;
         }
         
-        if(a.photo_urls.length > 0)
+        if(a.getMedia.count > 0)
         {
-            NSArray *photos = [a.photo_urls componentsSeparatedByString:@","];
-            fy += [photos count] * (imageWidth + fOffset) ;
+            fy += a.getMedia.count * (imageWidth + fOffset) ;
         }
         
         
