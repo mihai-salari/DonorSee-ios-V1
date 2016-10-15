@@ -38,13 +38,13 @@
     UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:4];
     
     [tabBarItem0 setImageInsets:  UIEdgeInsetsMake(5, 0, -5, 0)];
-    [tabBarItem0 setImage: [[UIImage imageNamed: @"menu_explore.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
-    [tabBarItem1 setSelectedImage: [[UIImage imageNamed: @"menu_explore.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem0 setImage: [[UIImage imageNamed: @"tab_donate_normal.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem0 setSelectedImage: [[UIImage imageNamed: @"tab_donate_sel.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
 
     
     [tabBarItem1 setImageInsets:  UIEdgeInsetsMake(5, 0, -5, 0)];
-    [tabBarItem1 setImage: [[UIImage imageNamed: @"tab_donate_normal.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
-    [tabBarItem1 setSelectedImage: [[UIImage imageNamed: @"tab_donate_sel.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem1 setImage: [[UIImage imageNamed: @"tab_explore_normal.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem1 setSelectedImage: [[UIImage imageNamed: @"tab_explore_sel.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
     
     [tabBarItem2 setImageInsets:  UIEdgeInsetsMake(5, 0, -5, 0)];
     [tabBarItem2 setImage: [[UIImage imageNamed: @"tab_upload_normal.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
@@ -63,6 +63,8 @@
     
     self.tabBar.frame = CGRectMake(0, self.view.frame.size.height - TAB_BAR_HEIGHT, self.view.frame.size.width, TAB_BAR_HEIGHT);
     [[UITabBar appearance] setBackgroundColor:[UIColor colorWithRed: 56.0/255.0f green: 56.0f/255.0f blue: 58.0f/255.0f alpha: 1.0f]];
+    
+   self.selectedIndex = 1;
 }
 
 - (UITabBarItem *)getNotificationTabItem {
