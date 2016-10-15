@@ -31,10 +31,16 @@
     
     UITabBar *tabBar = self.tabBar;
     
-    UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:0];
-    UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:1];
-    UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:2];
-    UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:3];
+    UITabBarItem *tabBarItem0 = [tabBar.items objectAtIndex:0];
+    UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:1];
+    UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:2];
+    UITabBarItem *tabBarItem3 = [tabBar.items objectAtIndex:3];
+    UITabBarItem *tabBarItem4 = [tabBar.items objectAtIndex:4];
+    
+    [tabBarItem0 setImageInsets:  UIEdgeInsetsMake(5, 0, -5, 0)];
+    [tabBarItem0 setImage: [[UIImage imageNamed: @"menu_explore.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
+    [tabBarItem1 setSelectedImage: [[UIImage imageNamed: @"menu_explore.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];
+
     
     [tabBarItem1 setImageInsets:  UIEdgeInsetsMake(5, 0, -5, 0)];
     [tabBarItem1 setImage: [[UIImage imageNamed: @"tab_donate_normal.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal]];

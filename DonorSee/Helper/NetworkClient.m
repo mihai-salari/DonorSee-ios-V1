@@ -627,6 +627,30 @@
               }];
 }
 
+- (void) getStaffPicksFeeds: (int) limit
+                     offset: (int) offset
+                    success: (void (^)(NSArray *arrFeed))success
+                    failure: (void (^)(NSString *errorMessage))failure
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       [NSNumber numberWithInt: offset], @"offset",
+                                       [NSNumber numberWithInt: limit], @"limit",
+                                       nil];
+    
+    [self GETRequest: @"projects/staff-picks"
+          parameters: parameters
+             success:^(id responseObject) {
+                 
+                 FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                 NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                 success(arrFeeds);
+             } failure:^(NSError *error) {
+                 
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
+
+}
+
 - (void) getMyFeeds: (int) user_id
             success: (void (^)(NSArray *arrFeed))success
             failure: (void (^)(NSString *errorMessage))failure;

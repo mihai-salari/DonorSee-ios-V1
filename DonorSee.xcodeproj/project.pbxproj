@@ -11,6 +11,10 @@
 		439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FD1DA8F95D0041DB44 /* icon_reccuring.png */; };
 		439047001DA915550041DB44 /* reccuring_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FF1DA915550041DB44 /* reccuring_white.png */; };
 		439047041DA96DC60041DB44 /* VideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 439047031DA96DC60041DB44 /* VideoPlayer.m */; };
+		43E425EC1DB22434007893ED /* menu_explore.png in Resources */ = {isa = PBXBuildFile; fileRef = 43E425EB1DB22434007893ED /* menu_explore.png */; };
+		43E425F01DB2261D007893ED /* StaffPicksGlobalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E425EF1DB2261D007893ED /* StaffPicksGlobalViewController.m */; };
+		43E425F31DB23C28007893ED /* StaffPicksGlobalStyleBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E425F21DB23C28007893ED /* StaffPicksGlobalStyleBar.m */; };
+		43E425F51DB25C7D007893ED /* staff_picks.png in Resources */ = {isa = PBXBuildFile; fileRef = 43E425F41DB25C7D007893ED /* staff_picks.png */; };
 		43EE04661DAB7DB700A285C9 /* MediaFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 43EE04651DAB7DB700A285C9 /* MediaFile.m */; };
 		452510791D8CA31500B2AA29 /* NSString+Formats.m in Sources */ = {isa = PBXBuildFile; fileRef = 452510781D8CA31500B2AA29 /* NSString+Formats.m */; };
 		457447441D8AEA8F005A7E5C /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457447431D8AEA8F005A7E5C /* WebViewController.m */; };
@@ -190,6 +194,12 @@
 		439046FF1DA915550041DB44 /* reccuring_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reccuring_white.png; sourceTree = "<group>"; };
 		439047031DA96DC60041DB44 /* VideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayer.m; sourceTree = "<group>"; };
 		439047051DA96E210041DB44 /* VideoPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPlayer.h; sourceTree = "<group>"; };
+		43E425EB1DB22434007893ED /* menu_explore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_explore.png; sourceTree = "<group>"; };
+		43E425EE1DB2261D007893ED /* StaffPicksGlobalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaffPicksGlobalViewController.h; sourceTree = "<group>"; };
+		43E425EF1DB2261D007893ED /* StaffPicksGlobalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaffPicksGlobalViewController.m; sourceTree = "<group>"; };
+		43E425F11DB23C12007893ED /* StaffPicksGlobalStyleBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StaffPicksGlobalStyleBar.h; sourceTree = "<group>"; };
+		43E425F21DB23C28007893ED /* StaffPicksGlobalStyleBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaffPicksGlobalStyleBar.m; sourceTree = "<group>"; };
+		43E425F41DB25C7D007893ED /* staff_picks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = staff_picks.png; sourceTree = "<group>"; };
 		43EE04651DAB7DB700A285C9 /* MediaFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaFile.m; sourceTree = "<group>"; };
 		43EE04671DAB7E0500A285C9 /* MediaFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
 		452510771D8CA31500B2AA29 /* NSString+Formats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Formats.h"; sourceTree = "<group>"; };
@@ -478,6 +488,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		43E425ED1DB225C1007893ED /* StaffPicksGlobal */ = {
+			isa = PBXGroup;
+			children = (
+				43E425EE1DB2261D007893ED /* StaffPicksGlobalViewController.h */,
+				43E425EF1DB2261D007893ED /* StaffPicksGlobalViewController.m */,
+				43E425F11DB23C12007893ED /* StaffPicksGlobalStyleBar.h */,
+				43E425F21DB23C28007893ED /* StaffPicksGlobalStyleBar.m */,
+			);
+			name = StaffPicksGlobal;
+			sourceTree = "<group>";
+		};
 		452510761D8CA2DC00B2AA29 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -760,6 +781,8 @@
 		F87AE4371C83D45900FE9417 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				43E425F41DB25C7D007893ED /* staff_picks.png */,
+				43E425EB1DB22434007893ED /* menu_explore.png */,
 				439046FF1DA915550041DB44 /* reccuring_white.png */,
 				439046FD1DA8F95D0041DB44 /* icon_reccuring.png */,
 				4378C3641DA7FD22009FE0E3 /* icon_play.png */,
@@ -848,6 +871,7 @@
 		F87AE4381C83D45900FE9417 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				43E425ED1DB225C1007893ED /* StaffPicksGlobal */,
 				457447411D8AEA50005A7E5C /* Web */,
 				F854F9B41C859EFA0080D03A /* MainTabBarViewController.h */,
 				F854F9B51C859EFA0080D03A /* MainTabBarViewController.m */,
@@ -1038,6 +1062,7 @@
 				F855D8391CD7B3E100473E93 /* logo_image.png in Resources */,
 				F8F5F90E1C8498A8002A54BA /* login_bg.png in Resources */,
 				F84149571C9C4FBC005272D2 /* Oshare_icon.png in Resources */,
+				43E425EC1DB22434007893ED /* menu_explore.png in Resources */,
 				439047001DA915550041DB44 /* reccuring_white.png in Resources */,
 				F8E29C521C83D9A0003CAFD2 /* FeedTableViewCell.xib in Resources */,
 				F8E29C5E1C83DDC0003CAFD2 /* upload@2x.png in Resources */,
@@ -1082,6 +1107,7 @@
 				F8E29C591C83DDC0003CAFD2 /* donate.png in Resources */,
 				F842144A1CABE42C0021EABB /* gave_icon.png in Resources */,
 				BB8C5B251D7B452C007403EE /* white_share_icon.png in Resources */,
+				43E425F51DB25C7D007893ED /* staff_picks.png in Resources */,
 				F8B3B2F81CBD431E00506AB1 /* edit_profile.png in Resources */,
 				F83E83711C9ABD5300A40334 /* bottom_tab_bar_bg@2x.png in Resources */,
 				F8E29C651C83E001003CAFD2 /* facebook.png in Resources */,
@@ -1254,6 +1280,7 @@
 				F83E83651C9AAAC900A40334 /* SignInViewController.m in Sources */,
 				F8548C571C889C2E0003F01F /* SSAPullToRefreshAnimator.m in Sources */,
 				9FE2601B1D6EBBA7003C4D50 /* FollowersViewController.m in Sources */,
+				43E425F01DB2261D007893ED /* StaffPicksGlobalViewController.m in Sources */,
 				F83F44051C990EB300FF2264 /* CustomSTTweetLabel.m in Sources */,
 				4919CA691DA7E8E800E48ED7 /* PlayerViewController.m in Sources */,
 				F892616D1CA8D29E00F97DD5 /* WebDonateViewController.m in Sources */,
@@ -1268,6 +1295,7 @@
 				F854F9BB1C85AB700080D03A /* Feed.m in Sources */,
 				F8F5F9061C845A6C002A54BA /* User.m in Sources */,
 				F84F1A6A1CA3969200881428 /* PhotoCellView.m in Sources */,
+				43E425F31DB23C28007893ED /* StaffPicksGlobalStyleBar.m in Sources */,
 				F87AE4401C83D6CF00FE9417 /* HomeViewController.m in Sources */,
 				F8F5F9031C845A4E002A54BA /* Model.xcdatamodeld in Sources */,
 				F8483B1D1C901BE0003C86E9 /* ShareViewController.m in Sources */,

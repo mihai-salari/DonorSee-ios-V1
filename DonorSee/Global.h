@@ -108,6 +108,7 @@ typedef enum
 
 typedef enum
 {
+    HOME_STAFF_PICKS,
     HOME_GLOBAL,
     HOME_PERSONAL,
     

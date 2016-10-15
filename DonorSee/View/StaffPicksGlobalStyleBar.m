@@ -1,14 +1,15 @@
 //
-//  SquareCashStyleBar.m
-//  BLKFlexibleHeightBar Demo
+//  StaffPicksGlobalStyleBar.m
+//  DonorSee
 //
-//  Created by Bryan Keller on 2/19/15.
-//  Copyright (c) 2015 Bryan Keller. All rights reserved.
+//  Created by Bogdan on 10/15/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
-#import "SquareCashStyleBar.h"
+#import <Foundation/Foundation.h>
+#import "StaffPicksGlobalStyleBar.h"
 
-@implementation SquareCashStyleBar
+@implementation StaffPicksGlobalStyleBar
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -90,38 +91,59 @@
     bottomBorderView.backgroundColor = [UIColor colorWithRed:151.0/255.0 green:151.0/255.0 blue:151.0/255.0 alpha:1];
     [whiteBarView addSubview:bottomBorderView];
     
-    //Personal.
-    int personalIconWidth = 29;
-    int personalTitleWidth = 150;
+    UIView *leftVerticalDividerView = [[UIView alloc] initWithFrame:CGRectMake(initialWhiteBarLayoutAttributes.size.width/2.0, 0, 0.5, initialWhiteBarLayoutAttributes.size.height)];
+    leftVerticalDividerView.backgroundColor = [UIColor colorWithRed:151.0/255.0 green:151.0/255.0 blue:151.0/255.0 alpha:1];
+    [whiteBarView addSubview:leftVerticalDividerView];
     
-    UIImageView* ivPersonal = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"personal_icon.png"]];
-    int ivPersonalX = initialWhiteBarLayoutAttributes.size.width/2.0 - (personalIconWidth + personalTitleWidth)/2.0;
+    //Staff picks.
+    UIImageView* ivStaffPicks = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"staff_picks.png"]];
+    ivStaffPicks.frame = CGRectMake(40, 15, 23, 28);
+    [whiteBarView addSubview: ivStaffPicks];
     
-    ivPersonal.frame = CGRectMake(ivPersonalX, 17, personalIconWidth, 23);
-    [whiteBarView addSubview: ivPersonal];
+    lbStaffPick = [[UILabel alloc] initWithFrame: CGRectMake(70, 15, 100, 28)];
+    lbStaffPick.textAlignment = NSTextAlignmentLeft;
+    lbStaffPick.text = @"STAFF PICKS";
+    [whiteBarView addSubview: lbStaffPick];
     
-    lbPersonal = [[UILabel alloc] initWithFrame: CGRectMake(ivPersonalX + 40, 15, personalTitleWidth, 28)];
-    lbPersonal.textAlignment = NSTextAlignmentLeft;
-    lbPersonal.text = @"PERSONAL FEED";
-    [whiteBarView addSubview: lbPersonal];
+    UIButton* btStaffPicks = [[UIButton alloc] initWithFrame: CGRectMake(0, 0, self.frame.size.width/2.0, 58)];
+    [btStaffPicks addTarget: self action: @selector(onTapCategory:) forControlEvents: UIControlEventTouchUpInside];
+    btStaffPicks.tag = 0;
+    [whiteBarView addSubview: btStaffPicks];
+
     
-    UIButton* btPersonal = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width/2.0, 0, self.frame.size.width/2.0, 58)];
-    [btPersonal addTarget: self action: @selector(onTapCategory:) forControlEvents: UIControlEventTouchUpInside];
-    btPersonal.tag = 1;
-    [whiteBarView addSubview: btPersonal];
+    //Global.
+    UIImageView* ivGlobal = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"global_icon.png"]];
+    ivGlobal.frame = CGRectMake(40 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 25, 23);
+    [whiteBarView addSubview: ivGlobal];
+    
+    lbGlobal = [[UILabel alloc] initWithFrame: CGRectMake(80 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28)];
+    lbGlobal.textAlignment = NSTextAlignmentLeft;
+    lbGlobal.text = @"GLOBAL";
+    [whiteBarView addSubview: lbGlobal];
+    
+    UIButton* btGlobal = [[UIButton alloc] initWithFrame: CGRectMake(self.frame.size.width/2.0, 0, self.frame.size.width/2.0, 58)];
+    [btGlobal addTarget: self action: @selector(onTapCategory:) forControlEvents: UIControlEventTouchUpInside];
+    btGlobal.tag = 1;
+    [whiteBarView addSubview: btGlobal];
+    
     
     if(IS_IPHONE_5)
     {
-        ivPersonal.frame = CGRectMake(20 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
-        lbPersonal.frame = CGRectMake(60 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
+        ivGlobal.frame = CGRectMake(27, 15, 23, 28);
+        lbGlobal.frame = CGRectMake(60, 15, 80, 28);
+        
+        ivStaffPicks.frame = CGRectMake(20 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
+        lbStaffPick.frame = CGRectMake(60 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
     }
     else if(IS_IPHONE_4_OR_LESS)
     {
-    
-        ivPersonal.frame = CGRectMake(15 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
-        lbPersonal.frame = CGRectMake(55 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
+        ivGlobal.frame = CGRectMake(22, 15, 23, 28);
+        lbGlobal.frame = CGRectMake(55, 15, 80, 28);
+        
+        ivStaffPicks.frame = CGRectMake(15 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
+        lbStaffPick.frame = CGRectMake(55 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
     }
-
+    
     
     selectedIndex = 0;
     [self updateButtons];
@@ -129,12 +151,19 @@
 
 - (void) updateButtons
 {
-    lbPersonal.textColor = [UIColor colorWithRed: 186.0/255.0 green: 186.0/255.0 blue: 186.0/255.0 alpha: 1.0];
-    lbPersonal.font = [UIFont fontWithName: FONT_LIGHT size: 15.0];
+    lbGlobal.textColor = [UIColor colorWithRed: 186.0/255.0 green: 186.0/255.0 blue: 186.0/255.0 alpha: 1.0];
+    lbStaffPick.textColor = [UIColor colorWithRed: 186.0/255.0 green: 186.0/255.0 blue: 186.0/255.0 alpha: 1.0];
+    lbGlobal.font = [UIFont fontWithName: FONT_LIGHT size: 15.0];
+    lbStaffPick.font = [UIFont fontWithName: FONT_LIGHT size: 15.0];
     
-    if(selectedIndex == 0){
-        lbPersonal.textColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
-        lbPersonal.font = [UIFont fontWithName: FONT_MEDIUM size: 15.0];
+    if(selectedIndex == 0)
+    {
+        lbStaffPick.textColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
+        lbStaffPick.font = [UIFont fontWithName: FONT_MEDIUM size: 15.0];
+    } else {
+        lbGlobal.textColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
+        lbGlobal.font = [UIFont fontWithName: FONT_MEDIUM size: 15.0];
+
     }
 }
 

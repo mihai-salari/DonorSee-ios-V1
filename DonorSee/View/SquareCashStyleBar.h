@@ -17,7 +17,6 @@
 
 @interface SquareCashStyleBar : BLKFlexibleHeightBar
 {
-    UILabel                 *lbGlobal;
     UILabel                 *lbPersonal;
     
     int                     selectedIndex;

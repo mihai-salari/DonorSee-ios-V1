@@ -1,25 +1,24 @@
 //
-//  HomeViewController.m
+//  StaffPicksGlobalViewController.m
 //  DonorSee
 //
-//  Created by star on 2/29/16.
-//  Copyright © 2016 DonorSee LLC. All rights reserved.
+//  Created by Bogdan on 10/15/16.
+//  Copyright © 2016 miroslave. All rights reserved.
 //
 
-#import "HomeViewController.h"
+#import "StaffPicksGlobalViewController.h"
 #import "FeedTableViewCell.h"
-#import <SVPullToRefresh/SVPullToRefresh.h>
-//#import "JAmazonS3ClientManager.h"
-#import "DonateViewController.h"
 
-#import "SquareCashStyleBar.h"
+#import <SVPullToRefresh/SVPullToRefresh.h>
 #import "FacebookStyleBarBehaviorDefiner.h"
+#import "StaffPicksGlobalStyleBar.h"
 #import "BLKDelegateSplitter.h"
 #import "AppDelegate.h"
 #import "PlayerViewController.h"
 #import "VideoPlayer.h"
+#import "DonateViewController.h"
 
-@interface HomeViewController() <UITableViewDataSource, UITableViewDelegate, FeedTableViewCellDelegate, SquareCashStyleBarDelegate>
+@interface StaffPicksGlobalViewController () <UITableViewDataSource, UITableViewDelegate, FeedTableViewCellDelegate, StaffPicksGlobalStyleBarDelegate>
 {
     int                         offsetGlobal;
     BOOL                        isEndedGlobal;
@@ -27,20 +26,23 @@
     
     int                         offsetPersonal;
     BOOL                        isEndedPersonal;
-    float                       scrollOffsetPersonal;
+    float                       scrollOffsetStaffPicks;
     
-    NSMutableArray              *arrPersonal;
+    NSMutableArray              *arrStaffPicks;
+    NSMutableArray              *arrGlobal;
     
     int                         type;
 }
+
 
 @property (strong, nonatomic) UIRefreshControl                  *refreshControl;
 @property (strong, nonatomic) UIView                            *refreshView;
 @property (strong, nonatomic) UIImageView                       *refreshIcon;
 @property (nonatomic) BOOL                                      isRefreshAnimating;
+@property (weak, nonatomic) IBOutlet UITableView *tbMain;
 
 @property (weak, nonatomic) IBOutlet UIView                     *viFooter;
-@property (strong, nonatomic) SquareCashStyleBar                  *topBar;
+@property (strong, nonatomic) StaffPicksGlobalStyleBar                  *topBar;
 @property (nonatomic) BLKDelegateSplitter *delegateSplitter;
 @property (nonatomic, weak) IBOutlet UILabel                    *lbEmpty;
 
@@ -48,31 +50,35 @@
 @end
 
 
-@implementation HomeViewController
+@implementation StaffPicksGlobalViewController
+
 @synthesize viFooter;
 @synthesize topBar;
 @synthesize lbEmpty;
+@synthesize tbMain;
 
 - (void) initMember
 {
     [super initMember];
     
-    type = HOME_PERSONAL;
+    type = HOME_STAFF_PICKS;
     
-    arrPersonal = [[NSMutableArray alloc] init];
+    arrGlobal = [[NSMutableArray alloc] init];
+    arrStaffPicks = [[NSMutableArray alloc] init];
     _followedUserIds = @[];
     
     [self.tbMain.infiniteScrollingView setCustomView: viFooter forState:SVInfiniteScrollingStateStopped];
-    __weak HomeViewController *weakSelf = self;
+    __weak StaffPicksGlobalViewController *weakSelf = self;
     [self.tbMain addInfiniteScrollingWithActionHandler:^{
         [weakSelf loadFeedsFromServer: NO];
     }];
-
+    
     [self initHeaderView];
     
     [self.tbMain registerNib: [UINib nibWithNibName: @"FeedTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([FeedTableViewCell class])];
+    self.tbMain.rowHeight = [FeedTableViewCell getHeight];
     self.tbMain.contentInset = UIEdgeInsetsMake(110, 0.0, viFooter.frame.size.height, 0.0);
-
+    
     [self initRefreshControl];
     
     isEndedGlobal = NO;
@@ -81,7 +87,7 @@
     
     isEndedPersonal = NO;
     offsetPersonal = 0;
-    scrollOffsetPersonal = 0;
+    scrollOffsetStaffPicks = 0;
     
     [self loadFeedsFromServer: YES];
     [self getUserFollowStatus];
@@ -91,7 +97,7 @@
 {
     [super viewDidAppear:animated];
     
-    if (arrPersonal.count > 0) {
+    if (arrGlobal.count > 0) {
         [self.tbMain reloadData];
     }
 }
@@ -99,7 +105,7 @@
 - (void) initHeaderView
 {
     //Top Bar.
-    topBar = [[SquareCashStyleBar alloc] initWithFrame:CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), 132.0)];
+    topBar = [[StaffPicksGlobalStyleBar alloc] initWithFrame:CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.frame), 132.0)];
     topBar.backgroundColor = COLOR_MAIN;
     topBar.delegate = self;
     [self.view addSubview: topBar];
@@ -111,6 +117,7 @@
     behaviorDefiner.thresholdNegativeDirection = 140.0;
     ((UIScrollView *)self.tbMain).delegate = behaviorDefiner;
     topBar.behaviorDefiner = behaviorDefiner;
+
     
     // Configure a separate UITableViewDelegate and UIScrollViewDelegate (optional)
     self.delegateSplitter = [[BLKDelegateSplitter alloc] initWithFirstDelegate:behaviorDefiner secondDelegate:self];
@@ -147,8 +154,15 @@
     if([notification.object isKindOfClass: [User class]])
     {
         User* user = notification.object;
-
-        for(Feed* item in arrPersonal)
+        for(Feed* item in arrGlobal)
+        {
+            if(item.post_user_id == user.user_id)
+            {
+                item.postUser = user;
+            }
+        }
+        
+        for(Feed* item in arrStaffPicks)
         {
             if(item.post_user_id == user.user_id)
             {
@@ -160,7 +174,7 @@
         
         offsetPersonal = 0;
         isEndedPersonal = NO;
-        [self loadPersonalFeeds: YES];
+        [self loadStaffPicksFeeds: YES];
     }
 }
 
@@ -173,21 +187,31 @@
     }
     else
     {
-        scrollOffsetPersonal = self.tbMain.contentOffset.y;
+        scrollOffsetStaffPicks = self.tbMain.contentOffset.y;
     }
     
     //Set New Type
     type = t;
     [self.tbMain reloadData];
     
-    if(type == HOME_PERSONAL)
+    if(type == HOME_GLOBAL)
+    {
+        self.tbMain.showsInfiniteScrolling = !isEndedGlobal;
+        [self.tbMain setContentOffset: CGPointMake(0, scrollOffsetGlobal) animated: NO];
+        
+        if([arrGlobal count] == 0)
+        {
+            [self loadGlobalFeeds: YES];
+        }
+    }
+    else
     {
         self.tbMain.showsInfiniteScrolling = !isEndedPersonal;
-        [self.tbMain setContentOffset: CGPointMake(0, scrollOffsetPersonal) animated: NO];
+        [self.tbMain setContentOffset: CGPointMake(0, scrollOffsetStaffPicks) animated: NO];
         
-        if([arrPersonal count] == 0)
+        if([arrStaffPicks count] == 0)
         {
-            [self loadPersonalFeeds: YES];
+            [self loadStaffPicksFeeds: YES];
         }
     }
     
@@ -252,16 +276,29 @@
     {
         Feed* f = notification.object;
         int index = 0;
-        for(Feed* item in arrPersonal)
+        for(Feed* item in arrStaffPicks)
         {
             if([item.feed_id isEqual: f.feed_id])
             {
-                [arrPersonal replaceObjectAtIndex: index withObject: f];
+                [arrStaffPicks replaceObjectAtIndex: index withObject: f];
                 break;
             }
             
             index ++;
         }
+        index = 0;
+       
+        for(Feed* item in arrGlobal)
+        {
+            if([item.feed_id isEqual: f.feed_id])
+            {
+                [arrGlobal replaceObjectAtIndex: index withObject: f];
+                break;
+            }
+            
+            index ++;
+        }
+
         
         [self.tbMain reloadData];
     }
@@ -275,61 +312,56 @@
 
 - (void) loadFeedsFromServer: (BOOL) isFirstLoading
 {
-    [self loadPersonalFeeds: isFirstLoading];
+    if(type == HOME_GLOBAL)
+    {
+        [self loadGlobalFeeds: isFirstLoading];
+    }
+    else
+    {
+        [self loadStaffPicksFeeds: isFirstLoading];
+    }
     
     [[AppDelegate getDelegate].mainTabBar updateNotificationBadge];
 }
 
-- (void) loadPersonalFeeds: (BOOL) isFirstLoading
+- (void) loadGlobalFeeds: (BOOL) isFirstLoading
 {
-    if([AppEngine sharedInstance].currentUser == nil) return;
-    
-    if(offsetPersonal == 0 && isFirstLoading)
+    if(offsetGlobal == 0 && isFirstLoading)
     {
         [SVProgressHUD show];
     }
-    [[NetworkClient sharedClient] getPersonalFeeds: FETCH_LIMIT
-                                            offset: offsetPersonal
+    [[NetworkClient sharedClient] getHomeFeeds: FETCH_LIMIT
+                                        offset: offsetGlobal
                                        success:^(NSArray *arrResult) {
                                            
                                            [SVProgressHUD dismiss];
                                            
-                                           if(offsetPersonal == 0)
+                                           if(offsetGlobal == 0)
                                            {
-                                               [arrPersonal removeAllObjects];
+                                               [arrGlobal removeAllObjects];
                                            }
                                            
                                            if(arrResult != nil && ![arrResult isKindOfClass: [NSNull class]])
                                            {
-                                               /*
-                                               for(NSDictionary* dicItem in arrResult)
-                                               {
-                                                   Feed* f = [[Feed alloc] initWithHomeFeed: dicItem];
-                                                   [[CoreHelper sharedInstance] addFeed: f];
-                                                   
-                                                   [arrPersonal addObject: f];
-                                               }*/
-                                               [arrPersonal addObjectsFromArray:arrResult];
+                                               [arrGlobal addObjectsFromArray:arrResult];
                                                
-                                               offsetPersonal += (int)[arrResult count];
+                                               offsetGlobal += (int)[arrResult count];
                                                if([arrResult count] > 0)
                                                {
-                                                   isEndedPersonal = NO;
+                                                   isEndedGlobal = NO;
                                                }
                                                else
                                                {
-                                                   isEndedPersonal = YES;
+                                                   isEndedGlobal = YES;
                                                }
                                            }
                                            else
                                            {
-                                               isEndedPersonal = YES;
+                                               isEndedGlobal = YES;
                                            }
                                            
-                                           [self checkEmptyText];
-                                           
                                            [self.tbMain.infiniteScrollingView stopAnimating];
-                                           self.tbMain.showsInfiniteScrolling = !isEndedPersonal;
+                                           self.tbMain.showsInfiniteScrolling = !isEndedGlobal;
                                            [self.tbMain reloadData];
                                            [self endRefresh];
                                            
@@ -338,6 +370,66 @@
                                            [self.tbMain.infiniteScrollingView stopAnimating];
                                            [self endRefresh];
                                        }];
+}
+
+- (void) loadStaffPicksFeeds: (BOOL) isFirstLoading
+{
+    if([AppEngine sharedInstance].currentUser == nil) return;
+    
+    if(offsetPersonal == 0 && isFirstLoading)
+    {
+        [SVProgressHUD show];
+    }
+    [[NetworkClient sharedClient] getStaffPicksFeeds:FETCH_LIMIT
+                                            offset: offsetPersonal
+                                           success:^(NSArray *arrResult) {
+                                               
+                                               [SVProgressHUD dismiss];
+                                               
+                                               if(offsetPersonal == 0)
+                                               {
+                                                   [arrStaffPicks removeAllObjects];
+                                               }
+                                               
+                                               if(arrResult != nil && ![arrResult isKindOfClass: [NSNull class]])
+                                               {
+                                                   /*
+                                                    for(NSDictionary* dicItem in arrResult)
+                                                    {
+                                                    Feed* f = [[Feed alloc] initWithHomeFeed: dicItem];
+                                                    [[CoreHelper sharedInstance] addFeed: f];
+                                                    
+                                                    [arrPersonal addObject: f];
+                                                    }*/
+                                                   [arrStaffPicks addObjectsFromArray:arrResult];
+                                                   
+                                                   offsetPersonal += (int)[arrResult count];
+                                                   if([arrResult count] > 0)
+                                                   {
+                                                       isEndedPersonal = NO;
+                                                   }
+                                                   else
+                                                   {
+                                                       isEndedPersonal = YES;
+                                                   }
+                                               }
+                                               else
+                                               {
+                                                   isEndedPersonal = YES;
+                                               }
+                                               
+                                               [self checkEmptyText];
+                                               
+                                               [self.tbMain.infiniteScrollingView stopAnimating];
+                                               self.tbMain.showsInfiniteScrolling = !isEndedPersonal;
+                                               [self.tbMain reloadData];
+                                               [self endRefresh];
+                                               
+                                           } failure:^(NSString *errorMessage) {
+                                               [SVProgressHUD dismiss];
+                                               [self.tbMain.infiniteScrollingView stopAnimating];
+                                               [self endRefresh];
+                                           }];
 }
 
 - (void) clearAllFeeds
@@ -352,10 +444,10 @@
 
 - (void) checkEmptyText
 {
-    if(type == HOME_PERSONAL)
+    if(type == HOME_STAFF_PICKS)
     {
         //Check Empty.
-        if([arrPersonal count] == 0)
+        if([arrStaffPicks count] == 0)
         {
             lbEmpty.hidden = NO;
         }
@@ -375,12 +467,21 @@
     if([notification.object isKindOfClass: [Feed class]])
     {
         Feed* f = notification.object;
-        
-        for(Feed* item in arrPersonal)
+        for(Feed* item in arrGlobal)
         {
             if([item.feed_id isEqual: f.feed_id])
             {
-                [arrPersonal removeObject: item];
+                [arrGlobal removeObject: item];
+                [self.tbMain reloadData];
+                break;
+            }
+        }
+        
+        for(Feed* item in arrStaffPicks)
+        {
+            if([item.feed_id isEqual: f.feed_id])
+            {
+                [arrStaffPicks removeObject: item];
                 [self.tbMain reloadData];
                 break;
             }
@@ -393,7 +494,14 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return arrPersonal.count;
+    if(type == HOME_GLOBAL)
+    {
+        return arrGlobal.count;
+    }
+    else
+    {
+        return arrStaffPicks.count;
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -401,7 +509,15 @@
     FeedTableViewCell *cell = (FeedTableViewCell*)[tableView dequeueReusableCellWithIdentifier: NSStringFromClass([FeedTableViewCell class]) forIndexPath:indexPath];
     cell.delegate = self;
     
-    Feed* f = [arrPersonal objectAtIndex: indexPath.row];
+    Feed* f;
+    if(type == HOME_GLOBAL)
+    {
+        f = [arrGlobal objectAtIndex: indexPath.row];
+    }
+    else
+    {
+        f = [arrStaffPicks objectAtIndex: indexPath.row];
+    }
     
     [cell setDonateFeed: f isDetail: NO];
     
@@ -419,11 +535,6 @@
     VideoPlayer *videoPlayer = [[VideoPlayer alloc] init];
     videoPlayer.viewController = self;
     [videoPlayer playVideo: videoURL];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [FeedTableViewCell getHeight];
 }
 
 #define REFRESH_POINT 50.0f
@@ -478,8 +589,8 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     CGFloat pullDistance = MAX(0.0, -self.refreshControl.frame.origin.y);
-  //  CGFloat pullRatio = MIN( MAX(pullDistance, 0.0), REFRESH_POINT) / REFRESH_POINT;
-   // if (pullRatio >= 1.0) {
+    //  CGFloat pullRatio = MIN( MAX(pullDistance, 0.0), REFRESH_POINT) / REFRESH_POINT;
+    // if (pullRatio >= 1.0) {
     if(pullDistance>=50){
         if (!self.refreshControl.isRefreshing)
         {

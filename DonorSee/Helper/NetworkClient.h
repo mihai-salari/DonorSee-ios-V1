@@ -94,6 +94,11 @@
                   success: (void (^)(NSArray *arrFeed))success
                   failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) getStaffPicksFeeds: (int) limit
+                   offset: (int) offset
+                  success: (void (^)(NSArray *arrFeed))success
+                  failure: (void (^)(NSString *errorMessage))failure;
+
 - (void) getSingleFeed: (NSString*) feed_id
                success: (void (^)(NSDictionary *dicFeed))success
                failure: (void (^)(NSString *errorMessage))failure;
