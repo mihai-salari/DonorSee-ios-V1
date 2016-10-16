@@ -528,7 +528,6 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     DetailFeedViewController *nextView = [storyboard instantiateViewControllerWithIdentifier: @"DetailFeedViewController"];
     nextView.selectedFeed = f;
-    nextView.isFollowMessage = YES;
     [self.navigationController pushViewController: nextView animated: YES];
 }
 

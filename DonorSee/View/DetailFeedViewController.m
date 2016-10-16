@@ -52,12 +52,7 @@
 @property (nonatomic, weak) IBOutlet UILabel            *lbDonatedCount;
 @property (nonatomic, weak) IBOutlet UILabel            *lbRaisedAmount;
 
-@property (nonatomic, weak) IBOutlet UIView             *viFooter;
 @property (nonatomic, weak) IBOutlet UIButton           *btFollowUp;
-@property (nonatomic, weak) IBOutlet UIView             *viPost;
-@property (nonatomic, weak) IBOutlet UIView             *viMessage;
-@property (nonatomic, weak) IBOutlet UITextField        *tfMessage;
-@property (nonatomic, weak) IBOutlet UIScrollView       *scPostPhotos;
 
 @property (nonatomic, weak) IBOutlet UIToolbar          *toolBar;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem    *btDone;
@@ -103,15 +98,10 @@
 @synthesize progressView;
 @synthesize viInfo;
 
-@synthesize viFooter;
 @synthesize viDonateBar;
 @synthesize tfAmount;
 @synthesize btFollowUp;
 
-@synthesize viPost;
-@synthesize viMessage;
-@synthesize tfMessage;
-@synthesize scPostPhotos;
 @synthesize toolBar;
 @synthesize btDone;
 @synthesize viDonateContainer;
@@ -455,16 +445,7 @@
                                                        [arrActivities addObjectsFromArray: array1];
                                                    }
                                                    
-                                                   
                                                    [tbActivity reloadData];
-                                                   
-                                                   if(_isFollowMessage)
-                                                   {
-                                                       _isFollowMessage = NO;
-//                                                       [self actionFollowUp: nil];
-                                                       CGPoint newContentOffset = CGPointMake(0, [tbActivity contentSize].height -  tbActivity.bounds.size.height);
-                                                       [tbActivity setContentOffset:newContentOffset animated:YES];
-                                                   }
 
                                                } failure:^(NSString *errorMessage) {
                                                    [SVProgressHUD dismiss];
@@ -702,7 +683,6 @@
 - (IBAction) actionInputDone:(id)sender
 {
     [tfAmount resignFirstResponder];
-    [tfMessage resignFirstResponder];
 }
 
 - (void) textFieldDidBeginEditing:(UITextField *)textField
@@ -720,11 +700,6 @@
                              
                          }];
 
-    }
-    else
-    {
-        [tbActivity setContentOffset: CGPointMake(0, tbActivity.contentSize.height - tbActivity.frame.size.height + 216.0 + toolBar.frame.size.height - viPost.frame.size.height) animated:YES];
-        tbActivity.scrollEnabled = NO;
     }
 }
 
@@ -805,7 +780,6 @@
 - (void) hideKeyboard
 {
     [tfAmount resignFirstResponder];
-    [tfMessage resignFirstResponder];
 }
 
 #pragma mark - Action Donate.

@@ -22,7 +22,6 @@
 }
 @property (weak, nonatomic) IBOutlet UIView *vBackground;
 @property (weak, nonatomic) IBOutlet UIButton *btFollowUp;
-@property (weak, nonatomic) IBOutlet UIView *viPost;
 @property (weak, nonatomic) IBOutlet UIView *vFrame;
 @property (weak, nonatomic) IBOutlet UIView *viMessage;
 @property (weak, nonatomic) IBOutlet UITextField *tfMessage;
@@ -35,7 +34,6 @@
 @synthesize vBackground;
 @synthesize btFollowUp;
 @synthesize selectedFeed;
-@synthesize viPost;
 @synthesize vFrame;
 @synthesize viMessage;
 @synthesize tfMessage;
@@ -52,8 +50,16 @@
     gestureBackgroundTap.delegate = self;
     [vBackground addGestureRecognizer:gestureBackgroundTap];
     
+    self.tfMessage.delegate = self;
+    
+    self.scPostPhotos.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self initUI];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
 }
 
 - (void) onTapBackground :(UITapGestureRecognizer *)gr{
@@ -100,7 +106,7 @@
     viMessage.layer.borderWidth = 1.0;
     viMessage.layer.cornerRadius = 10.0;
     
-    [tfMessage becomeFirstResponder];
+  //  [tfMessage becomeFirstResponder];
     
     if([self isFollowUp]) {
         [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
@@ -154,6 +160,7 @@
 
 - (void) updateFollowPhotos
 {
+    
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
@@ -167,7 +174,7 @@
     float fw = 84;
     float fh = 84;
     float offset = 20;
-    
+    7
     int index = 0;
     for(UIImage* imgPhoto in arrFollowPhotos)
     {
@@ -186,6 +193,10 @@
     fx += fw + offset;
     
     [scPostPhotos setContentSize: CGSizeMake(fx, scPostPhotos.contentSize.height)];
+    
+    [self.view setNeedsLayout];
+    [self.view layoutIfNeeded];
+
 }
 
 - (void) addPhoto
