@@ -2488,10 +2488,10 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FollowersCell" rowHeight="73" id="7uH-a7-aAt">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="73"/>
+                                        <rect key="frame" x="0.0" y="28" width="1000" height="73"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7uH-a7-aAt" id="tdg-dt-1XI">
-                                            <frame key="frameInset" width="375" height="73"/>
+                                            <frame key="frameInset" width="1000" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="11" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default-profile-pic.png" translatesAutoresizingMaskIntoConstraints="NO" id="Oy5-ml-Gkq">
@@ -2534,10 +2534,10 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TransactionHistoryCell" rowHeight="48" id="e3v-m4-v2l">
-                                        <rect key="frame" x="0.0" y="101" width="375" height="48"/>
+                                        <rect key="frame" x="0.0" y="101" width="1000" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e3v-m4-v2l" id="ptn-jP-xKq">
-                                            <frame key="frameInset" width="375" height="48"/>
+                                            <frame key="frameInset" width="1000" height="48"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="12" contentMode="left" verticalHuggingPriority="251" misplaced="YES" text="$20" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLu-EC-G5N">
@@ -3679,7 +3679,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                     <connections>
                         <outlet property="btDonate" destination="gTF-qg-bx9" id="Qai-i7-a7A"/>
                         <outlet property="btDone" destination="8Fh-AG-LRg" id="jvI-w9-1OK"/>
-                        <outlet property="btFollowUp" destination="1ts-ca-MEw" id="SO1-sb-6bu"/>
+                        <outlet property="btFollowUp" destination="996-jh-rGn" id="M8x-Wv-H0f"/>
                         <outlet property="btGive" destination="5Aa-1T-ync" id="LR6-vK-iTy"/>
                         <outlet property="btTrash" destination="yHw-WJ-wNc" id="1zF-fF-JOQ"/>
                         <outlet property="btnCancelRecurringGift" destination="EPd-2m-fyv" id="kOU-JH-qxn"/>
@@ -3799,7 +3799,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" id="prV-kh-R9t">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="1200"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="1350"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iko-26-SaM">
@@ -3850,11 +3850,8 @@ In order to ensure DonorSee provides the best experience possible for everyone
                             <color key="textColor" red="0.91764705879999997" green="0.61568627450000002" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52G-up-2Lw">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52G-up-2Lw">
                             <frame key="frameInset" minX="29" minY="421" width="327" height="710"/>
-                            <constraints>
-                                <constraint firstAttribute="height" relation="lessThanOrEqual" constant="900" id="8iB-wk-UD9"/>
-                            </constraints>
                             <string key="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                             <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3930,28 +3927,32 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                 </mask>
                             </variation>
                         </view>
-                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gd8-kw-ofk" userLabel="View - Info">
+                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gd8-kw-ofk" userLabel="View - Info">
                             <frame key="frameInset" minY="1144" width="375" height="56"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uEk-gf-iMj" userLabel="View - Line">
+                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEk-gf-iMj" userLabel="View - Line">
+                                    <frame key="frameInset" width="375" height="1"/>
                                     <color key="backgroundColor" red="0.59215686274509804" green="0.59215686274509804" blue="0.59215686274509804" alpha="0.28000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="mFG-wx-ui5"/>
                                     </constraints>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eLY-q1-VIe" userLabel="View - Line">
+                                <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLY-q1-VIe" userLabel="View - Line">
+                                    <frame key="frameInset" minY="55" width="375" height="1"/>
                                     <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="0.28000000000000003" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="vl1-ZU-hjh"/>
                                     </constraints>
                                 </view>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="follow_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Uft-fh-8GR">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="follow_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Uft-fh-8GR">
+                                    <frame key="frameInset" minX="28" minY="15" width="34" height="27"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="27" id="5xv-yM-WyU"/>
                                         <constraint firstAttribute="width" constant="34" id="x7L-00-XYq"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$533 RAISED" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7vk-YO-chm">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="$533 RAISED" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7vk-YO-chm">
+                                    <frame key="frameInset" minX="214" minY="15" width="118" height="27"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="27" id="0hx-IR-gSi"/>
                                         <constraint firstAttribute="width" constant="118" id="qnB-wV-RMH"/>
@@ -3960,7 +3961,8 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                     <color key="textColor" red="0.91764705879999997" green="0.61568627450000002" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12 DONATED" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iM3-Og-gFu">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="12 DONATED" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iM3-Og-gFu">
+                                    <frame key="frameInset" minX="86" minY="15" width="104" height="27"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="27" id="IA5-Rp-h8z"/>
                                         <constraint firstAttribute="width" constant="104" id="Kf4-iM-5dV"/>
@@ -3997,24 +3999,51 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                 <action selector="onPlayVideoTap:" destination="8BM-9h-2N2" eventType="touchUpInside" id="zbP-TZ-4XQ"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="996-jh-rGn">
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="67" id="3of-PM-F74"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="23"/>
+                            <state key="normal" title="FOLLOW UP">
+                                <color key="titleColor" red="0.031372549020000001" green="0.45882352939999999" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="actionFollowUp:" destination="8BM-9h-2N2" eventType="touchUpInside" id="zZb-u7-MH0"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="ACTIVITY" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hBh-Zr-6VW">
+                            <frame key="frameInset" minX="140" minY="1222" width="94" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            <color key="textColor" red="0.031372549019607843" green="0.45882352941176469" blue="0.49019607843137253" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Gd8-kw-ofk" secondAttribute="trailing" id="1Hf-uq-yqM"/>
+                        <constraint firstItem="hBh-Zr-6VW" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="140" id="4f3-Qd-jLL"/>
                         <constraint firstAttribute="trailing" secondItem="bIi-KE-tC6" secondAttribute="trailing" id="54Q-LG-Lw9"/>
                         <constraint firstItem="bIi-KE-tC6" firstAttribute="top" secondItem="prV-kh-R9t" secondAttribute="top" id="6uj-8v-qXE"/>
                         <constraint firstAttribute="trailing" secondItem="4b5-HZ-KTP" secondAttribute="trailing" constant="12" id="7rq-eI-0D7"/>
                         <constraint firstItem="4b5-HZ-KTP" firstAttribute="top" secondItem="prV-kh-R9t" secondAttribute="top" constant="18" id="CNO-s2-Yhc"/>
                         <constraint firstItem="7sK-vm-gJ8" firstAttribute="top" secondItem="bIi-KE-tC6" secondAttribute="bottom" constant="229" id="MEv-jh-H0q"/>
                         <constraint firstItem="52G-up-2Lw" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="29" id="OGE-rZ-3e7"/>
+                        <constraint firstAttribute="trailing" secondItem="996-jh-rGn" secondAttribute="trailing" constant="60" id="QPR-sb-bjs"/>
                         <constraint firstItem="bIi-KE-tC6" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" id="T7u-XF-Liy"/>
                         <constraint firstItem="Gd8-kw-ofk" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" id="VHn-KQ-HKI"/>
                         <constraint firstItem="9DQ-Ef-Xbj" firstAttribute="centerX" secondItem="bIi-KE-tC6" secondAttribute="centerX" id="Zgq-DR-Ixa"/>
+                        <constraint firstItem="996-jh-rGn" firstAttribute="centerX" secondItem="prV-kh-R9t" secondAttribute="centerX" id="a85-8U-PH5"/>
+                        <constraint firstItem="hBh-Zr-6VW" firstAttribute="top" secondItem="Gd8-kw-ofk" secondAttribute="bottom" constant="22" id="blc-sS-2tM"/>
                         <constraint firstItem="9DQ-Ef-Xbj" firstAttribute="top" secondItem="bIi-KE-tC6" secondAttribute="bottom" constant="50" id="bv3-8o-fmm"/>
+                        <constraint firstAttribute="bottom" secondItem="996-jh-rGn" secondAttribute="bottom" constant="16" id="fGz-WV-mHf"/>
                         <constraint firstItem="52G-up-2Lw" firstAttribute="top" secondItem="7sK-vm-gJ8" secondAttribute="bottom" constant="20" id="feA-US-aYC"/>
                         <constraint firstAttribute="trailing" secondItem="7sK-vm-gJ8" secondAttribute="trailing" constant="11" id="gMD-cn-7aP"/>
                         <constraint firstItem="Gd8-kw-ofk" firstAttribute="top" secondItem="52G-up-2Lw" secondAttribute="bottom" constant="13" id="hqJ-Xf-qn1"/>
+                        <constraint firstAttribute="trailing" secondItem="hBh-Zr-6VW" secondAttribute="trailing" constant="141" id="n3F-qK-oGk"/>
                         <constraint firstAttribute="trailing" secondItem="52G-up-2Lw" secondAttribute="trailing" constant="19" id="pW5-fU-h2p"/>
+                        <constraint firstItem="996-jh-rGn" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="59" id="tLx-YX-olF"/>
+                        <constraint firstItem="996-jh-rGn" firstAttribute="top" secondItem="hBh-Zr-6VW" secondAttribute="bottom" constant="24" id="yL0-R9-pVB"/>
                     </constraints>
                 </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Jlp-HN-p5g">
@@ -4096,6 +4125,126 @@ In order to ensure DonorSee provides the best experience possible for everyone
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2BX-CX-Urv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3042.5" y="-1013.5"/>
+        </scene>
+        <!--Follow Up View Controller-->
+        <scene sceneID="ub9-SZ-TPC">
+            <objects>
+                <viewController storyboardIdentifier="FollowUp" id="NbK-Qd-B3l" customClass="FollowUpViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="M3c-LW-5yY"/>
+                        <viewControllerLayoutGuide type="bottom" id="LNM-Ap-MGX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="H3l-Ge-3VI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0e8-Va-nMc">
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vnl-XL-b79">
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RTa-Gf-M7d">
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="23"/>
+                                        <state key="normal" title="FOLLOW UP">
+                                            <color key="titleColor" red="0.031372549020000001" green="0.45882352939999999" blue="0.49019607840000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="actionFollowUp:" destination="NbK-Qd-B3l" eventType="touchUpInside" id="ASi-LI-VLE"/>
+                                            <action selector="actionFollowUp:" destination="8BM-9h-2N2" eventType="touchUpInside" id="g9T-SX-MvO"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8lO-bh-Ya4">
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QZQ-7i-NVd" userLabel="View - Line">
+                                                <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="Vux-tL-MhO"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cph-V9-cg2" userLabel="View - Line">
+                                                <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="v0H-QK-9c0"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i6F-Pw-CRa" userLabel="View - Message">
+                                                <subviews>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter message" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-Pe-Ddk">
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
+                                                        <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="8BM-9h-2N2" id="ZTn-so-LFO"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstItem="6R6-Pe-Ddk" firstAttribute="top" secondItem="i6F-Pw-CRa" secondAttribute="top" id="DGP-MQ-Y2M"/>
+                                                    <constraint firstAttribute="height" constant="42" id="GeM-FK-21Q"/>
+                                                    <constraint firstAttribute="trailing" secondItem="6R6-Pe-Ddk" secondAttribute="trailing" constant="8" id="NSm-ZC-lwy"/>
+                                                    <constraint firstAttribute="bottom" secondItem="6R6-Pe-Ddk" secondAttribute="bottom" id="hJe-Td-DqQ"/>
+                                                    <constraint firstItem="6R6-Pe-Ddk" firstAttribute="leading" secondItem="i6F-Pw-CRa" secondAttribute="leading" constant="8" id="rTD-tz-RV1"/>
+                                                </constraints>
+                                            </view>
+                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-au-bVM"/>
+                                        </subviews>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="cph-V9-cg2" firstAttribute="leading" secondItem="8lO-bh-Ya4" secondAttribute="leading" id="2np-kj-JyX"/>
+                                            <constraint firstAttribute="trailing" secondItem="QZQ-7i-NVd" secondAttribute="trailing" id="3G8-y5-kEx"/>
+                                            <constraint firstItem="i6F-Pw-CRa" firstAttribute="leading" secondItem="8lO-bh-Ya4" secondAttribute="leading" constant="31" id="3ed-Ok-3jo"/>
+                                            <constraint firstItem="Lc0-au-bVM" firstAttribute="top" secondItem="i6F-Pw-CRa" secondAttribute="bottom" constant="9" id="4kL-DG-FJN"/>
+                                            <constraint firstAttribute="height" constant="194" id="7EY-IJ-Edq"/>
+                                            <constraint firstAttribute="trailing" secondItem="Lc0-au-bVM" secondAttribute="trailing" id="B4g-S2-f2p"/>
+                                            <constraint firstItem="QZQ-7i-NVd" firstAttribute="leading" secondItem="8lO-bh-Ya4" secondAttribute="leading" id="ICP-FR-BlT"/>
+                                            <constraint firstItem="QZQ-7i-NVd" firstAttribute="top" secondItem="Lc0-au-bVM" secondAttribute="bottom" constant="1" id="IkN-7g-yFa"/>
+                                            <constraint firstAttribute="trailing" secondItem="cph-V9-cg2" secondAttribute="trailing" id="Lcy-Vz-BLF"/>
+                                            <constraint firstAttribute="bottom" secondItem="QZQ-7i-NVd" secondAttribute="bottom" id="MZ4-ig-yna"/>
+                                            <constraint firstAttribute="trailing" secondItem="i6F-Pw-CRa" secondAttribute="trailing" constant="32" id="fbN-Ue-crQ"/>
+                                            <constraint firstItem="cph-V9-cg2" firstAttribute="top" secondItem="8lO-bh-Ya4" secondAttribute="top" id="iXW-p0-wU8"/>
+                                            <constraint firstItem="i6F-Pw-CRa" firstAttribute="top" secondItem="cph-V9-cg2" secondAttribute="bottom" constant="12" id="mCT-Ec-UTC"/>
+                                            <constraint firstItem="Lc0-au-bVM" firstAttribute="leading" secondItem="8lO-bh-Ya4" secondAttribute="leading" id="x6v-aE-a81"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="8lO-bh-Ya4" firstAttribute="leading" secondItem="Vnl-XL-b79" secondAttribute="leading" id="2gd-uR-nWM"/>
+                                    <constraint firstItem="8lO-bh-Ya4" firstAttribute="top" secondItem="Vnl-XL-b79" secondAttribute="top" id="9h1-yv-c9a"/>
+                                    <constraint firstItem="RTa-Gf-M7d" firstAttribute="top" secondItem="8lO-bh-Ya4" secondAttribute="bottom" constant="21" id="JBb-8L-sOc"/>
+                                    <constraint firstItem="RTa-Gf-M7d" firstAttribute="centerX" secondItem="8lO-bh-Ya4" secondAttribute="centerX" id="aKd-c7-WcZ"/>
+                                    <constraint firstItem="RTa-Gf-M7d" firstAttribute="leading" secondItem="Vnl-XL-b79" secondAttribute="leading" constant="59" id="bqq-fF-0qf"/>
+                                    <constraint firstAttribute="bottom" secondItem="RTa-Gf-M7d" secondAttribute="bottom" constant="18" id="j6Q-lK-OlG"/>
+                                    <constraint firstAttribute="trailing" secondItem="8lO-bh-Ya4" secondAttribute="trailing" id="nqY-fP-j2g"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Vnl-XL-b79" firstAttribute="leading" secondItem="H3l-Ge-3VI" secondAttribute="leading" id="H5G-Sm-4s2"/>
+                            <constraint firstItem="0e8-Va-nMc" firstAttribute="leading" secondItem="H3l-Ge-3VI" secondAttribute="leading" id="K24-uk-x4s"/>
+                            <constraint firstItem="LNM-Ap-MGX" firstAttribute="top" secondItem="Vnl-XL-b79" secondAttribute="bottom" constant="227" id="QcF-qf-Mg6"/>
+                            <constraint firstAttribute="trailing" secondItem="Vnl-XL-b79" secondAttribute="trailing" id="cYl-wE-4Rl"/>
+                            <constraint firstItem="Vnl-XL-b79" firstAttribute="top" secondItem="M3c-LW-5yY" secondAttribute="bottom" constant="120" id="ew9-4M-JRK"/>
+                            <constraint firstItem="LNM-Ap-MGX" firstAttribute="top" secondItem="0e8-Va-nMc" secondAttribute="bottom" id="fi7-Rq-igm"/>
+                            <constraint firstItem="0e8-Va-nMc" firstAttribute="top" secondItem="M3c-LW-5yY" secondAttribute="bottom" id="ld3-kb-3pY"/>
+                            <constraint firstAttribute="trailing" secondItem="0e8-Va-nMc" secondAttribute="trailing" id="qXr-Pq-wIz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btFollowUp" destination="RTa-Gf-M7d" id="mIO-UA-Emt"/>
+                        <outlet property="scPostPhotos" destination="Lc0-au-bVM" id="XzZ-6o-R4j"/>
+                        <outlet property="tfMessage" destination="6R6-Pe-Ddk" id="t5s-it-sUv"/>
+                        <outlet property="vBackground" destination="0e8-Va-nMc" id="RU8-ai-iwP"/>
+                        <outlet property="vFrame" destination="Vnl-XL-b79" id="UAZ-UR-fVt"/>
+                        <outlet property="viMessage" destination="i6F-Pw-CRa" id="nbp-uN-omi"/>
+                        <outlet property="viPost" destination="8lO-bh-Ya4" id="IHA-Mb-5mI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Jn-rw-BA9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3042" y="-283"/>
         </scene>
         <!--Stripe Donate View Controller-->
         <scene sceneID="gcq-gU-Url">

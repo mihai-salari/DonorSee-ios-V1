@@ -15,6 +15,7 @@
 		43D7EB481DB27ABA009FB79B /* tab_explore_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 43D7EB441DB27ABA009FB79B /* tab_explore_normal@2x.png */; };
 		43D7EB491DB27ABA009FB79B /* tab_explore_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 43D7EB451DB27ABA009FB79B /* tab_explore_sel@2x.png */; };
 		43D7EB4A1DB27ABA009FB79B /* tab_pexplore_sel.png in Resources */ = {isa = PBXBuildFile; fileRef = 43D7EB461DB27ABA009FB79B /* tab_pexplore_sel.png */; };
+		43E113551DB2CFBF00613369 /* FollowUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E113541DB2CFBF00613369 /* FollowUpViewController.m */; };
 		43E425EC1DB22434007893ED /* menu_explore.png in Resources */ = {isa = PBXBuildFile; fileRef = 43E425EB1DB22434007893ED /* menu_explore.png */; };
 		43E425F01DB2261D007893ED /* StaffPicksGlobalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E425EF1DB2261D007893ED /* StaffPicksGlobalViewController.m */; };
 		43E425F31DB23C28007893ED /* StaffPicksGlobalStyleBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E425F21DB23C28007893ED /* StaffPicksGlobalStyleBar.m */; };
@@ -202,6 +203,8 @@
 		43D7EB441DB27ABA009FB79B /* tab_explore_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_explore_normal@2x.png"; sourceTree = "<group>"; };
 		43D7EB451DB27ABA009FB79B /* tab_explore_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_explore_sel@2x.png"; sourceTree = "<group>"; };
 		43D7EB461DB27ABA009FB79B /* tab_pexplore_sel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_pexplore_sel.png; sourceTree = "<group>"; };
+		43E113531DB2CFBF00613369 /* FollowUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowUpViewController.h; sourceTree = "<group>"; };
+		43E113541DB2CFBF00613369 /* FollowUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowUpViewController.m; sourceTree = "<group>"; };
 		43E425EB1DB22434007893ED /* menu_explore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_explore.png; sourceTree = "<group>"; };
 		43E425EE1DB2261D007893ED /* StaffPicksGlobalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaffPicksGlobalViewController.h; sourceTree = "<group>"; };
 		43E425EF1DB2261D007893ED /* StaffPicksGlobalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaffPicksGlobalViewController.m; sourceTree = "<group>"; };
@@ -494,6 +497,15 @@
 				5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		4331A59A1DB3AFD30004E966 /* FollowUp */ = {
+			isa = PBXGroup;
+			children = (
+				43E113531DB2CFBF00613369 /* FollowUpViewController.h */,
+				43E113541DB2CFBF00613369 /* FollowUpViewController.m */,
+			);
+			name = FollowUp;
 			sourceTree = "<group>";
 		};
 		43E425ED1DB225C1007893ED /* StaffPicksGlobal */ = {
@@ -883,6 +895,7 @@
 		F87AE4381C83D45900FE9417 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4331A59A1DB3AFD30004E966 /* FollowUp */,
 				43E425ED1DB225C1007893ED /* StaffPicksGlobal */,
 				457447411D8AEA50005A7E5C /* Web */,
 				F854F9B41C859EFA0080D03A /* MainTabBarViewController.h */,
@@ -1275,6 +1288,7 @@
 				F83394771C99A03300E8ADFF /* Activity.m in Sources */,
 				F83305041C932E4C004D11F1 /* FeedViewController.m in Sources */,
 				F87AE4251C83739C00FE9417 /* ViewController.m in Sources */,
+				43E113551DB2CFBF00613369 /* FollowUpViewController.m in Sources */,
 				F87AE43D1C83D4A600FE9417 /* BaseViewController.m in Sources */,
 				F84932D31C8CA87100F0DDC1 /* DonateViewController.m in Sources */,
 				F83B4FB01C8996460065EF39 /* UploadTableViewCell.m in Sources */,
@@ -1438,6 +1452,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Gret Glyer (X8HZDWLA44)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1484,6 +1499,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "DonorSee/View/DonorSee-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "";
 			};
@@ -1495,6 +1512,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = DonorSee/DonorSee.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1541,6 +1559,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.donorsee.gret;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "DonorSee/View/DonorSee-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "";
 			};

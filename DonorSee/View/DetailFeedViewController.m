@@ -19,22 +19,14 @@
 #import "StripeDonateViewController.h"
 #import "SignInViewController.h"
 #import "VideoPlayer.h"
+#import "FollowUpViewController.h"
 
 @import ALCameraViewController;
 @import CircleProgressView;
 
-@interface DetailFeedViewController () <UITableViewDataSource, UITableViewDelegate, FeedTableViewCellDelegate, UITextFieldDelegate, PhotoCellViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PayPalPaymentDelegate, StripePaymentViewControllerDelegate>
+@interface DetailFeedViewController () <UITableViewDataSource, UITableViewDelegate, FeedTableViewCellDelegate, UITextFieldDelegate, PhotoCellViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, PayPalPaymentDelegate, StripePaymentViewControllerDelegate, FollowUpViewControllerDelegate>
 {
     NSMutableArray              *arrActivities;
-    BOOL                        isFollowUp;
-    BOOL                        isPostComment;
-    
-    NSMutableArray              *arrFollowPhotos;
-    UIImagePickerController     *imagePicker;
-    int                         selectedPhotoIndex;
-    
-    NSMutableArray              *arrUploadedPhotos;
-    int                         uploadingPhotoIndex;
     
     AuthView                    *viSignInFB;
     NSString                    *postusername;
@@ -230,10 +222,6 @@
     lbMaxPrice.text = @"$";
     
     arrActivities = [[NSMutableArray alloc] init];
-    arrFollowPhotos = [[NSMutableArray alloc] init];
-    arrUploadedPhotos = [[NSMutableArray alloc] init];
-    
-    selectedPhotoIndex = -1;
     
     [self updateUserDonationStatus];
     [self initPaypal];
@@ -241,8 +229,6 @@
     [self initFooterUI];
     [self initAuthUI];
     
-    isFollowUp = NO;
-    isPostComment = NO;
     [tbActivity registerNib: [UINib nibWithNibName: @"ActivityTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([ActivityTableViewCell class])];
 
     if([AppEngine sharedInstance].currentUser == nil)
@@ -525,16 +511,6 @@
     return viInfo.frame.origin.y + viInfo.frame.size.height;
 }
 
-- (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    return viFooter;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 90;// viFooter.frame.size.height;
-}
-
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ActivityTableViewCell *cell = (ActivityTableViewCell*)[tableView dequeueReusableCellWithIdentifier: NSStringFromClass([ActivityTableViewCell class]) forIndexPath:indexPath];
@@ -564,11 +540,6 @@
     btFollowUp.layer.borderWidth = 1.0;
     btFollowUp.layer.cornerRadius = 20.0;
     
-    viMessage.layer.masksToBounds = YES;
-    viMessage.layer.borderColor = COLOR_FEED_TEXT.CGColor;
-    viMessage.layer.borderWidth = 1.0;
-    viMessage.layer.cornerRadius = 10.0;
-    
     UIFont *font = [UIFont systemFontOfSize:22];
     NSString *dollarSignText = @"$";
     CGSize size = [dollarSignText sizeWithAttributes:@{NSFontAttributeName: font}];
@@ -583,317 +554,34 @@
     if([AppEngine sharedInstance].currentUser != nil) {
         if([selectedFeed isCreatedByCurrentUser])
         {
-            viPost.hidden = YES;
             btFollowUp.hidden = NO;
-            viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, btFollowUp.frame.size.height + 70.0);
         } else {
-            viPost.hidden = YES;
             btFollowUp.hidden = NO;
             [btFollowUp setTitle:@"POST COMMENT" forState:UIControlStateNormal];
-            viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, btFollowUp.frame.size.height + 30.0);
         }
     } else {
-        viPost.hidden = YES;
         btFollowUp.hidden = YES;
-        viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viFooter.frame.size.width, 40.0);
     }
     
-}
-
-- (void) updateFollowPhotos
-{
-    for(UIView* view in scPostPhotos.subviews)
-    {
-        [view removeFromSuperview];
-    }
-    
-    float fx = 20;
-    float fy = 20;
-    float fw = 84;
-    float fh = 84;
-    float offset = 20;
-    
-    int index = 0;
-    for(UIImage* imgPhoto in arrFollowPhotos)
-    {
-        PhotoCellView* cell = [[PhotoCellView alloc] initWithImage: CGRectMake(fx, fy, fw, fh) image: imgPhoto];
-        cell.delegate = self;
-        cell.tag = index;
-        [scPostPhotos addSubview: cell];
-        
-        fx += offset + fw;
-        index ++;
-    }
-    
-    PhotoCellView* cell = [[PhotoCellView alloc] initWithAddCell: CGRectMake(fx, fy, fw, fh)];
-    cell.delegate = self;    
-    [scPostPhotos addSubview: cell];
-    fx += fw + offset;
-    
-    [scPostPhotos setContentSize: CGSizeMake(fx, scPostPhotos.contentSize.height)];
-}
-
-- (void) addPhoto
-{
-    [self hideKeyboard];
-    
-    if(TEST_FLAG)
-    {
-        imagePicker = [[UIImagePickerController alloc] init];
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        imagePicker.allowsEditing = YES;
-        imagePicker.delegate = self;
-        [self presentViewController:imagePicker animated:YES completion:nil];
-        return;
-    }
-    
-    CameraViewController* cameraController = [[CameraViewController alloc] initWithCroppingEnabled: YES
-                                                                               allowsLibraryAccess: YES
-                                                                                        completion:^(UIImage * image, PHAsset * asset) {
-                                                                                            
-                                                                                            if(image != nil)
-                                                                                            {
-                                                                                                [arrFollowPhotos addObject: image];
-                                                                                                [self updateFollowPhotos];
-                                                                                            }
-                                                                                            
-                                                                                            [self dismissViewControllerAnimated: YES completion: nil];
-                                                                                        }];
-    
-    [self presentViewController: cameraController animated: YES completion: nil];
-}
-
-- (void) updatePhoto:(int)index
-{
-    if(TEST_FLAG)
-    {
-        selectedPhotoIndex = index;
-        imagePicker = [[UIImagePickerController alloc] init];
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        imagePicker.allowsEditing = YES;
-        imagePicker.delegate = self;
-        [self presentViewController:imagePicker animated:YES completion:nil];
-        return;
-    }
-    
-    CameraViewController* cameraController = [[CameraViewController alloc] initWithCroppingEnabled: YES
-                                                                               allowsLibraryAccess: YES
-                                                                                        completion:^(UIImage * image, PHAsset * asset) {
-                                                                                                
-                                                                                                if(image != nil)
-                                                                                                {
-                                                                                                    [arrFollowPhotos replaceObjectAtIndex: index withObject: image];
-                                                                                                    [self updateFollowPhotos];
-                                                                                                }
-                                                                                                
-                                                                                                [self dismissViewControllerAnimated: YES completion: nil];
-                                                                                            }];
-    [self presentViewController: cameraController animated: YES completion: nil];
-}
-
-- (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    selectedPhotoIndex = -1;
-    [self dismissViewControllerAnimated: YES completion: nil];
-}
-
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
-    
-    if(selectedPhotoIndex >= 0)
-    {
-        [arrFollowPhotos replaceObjectAtIndex: selectedPhotoIndex withObject: image];
-        selectedPhotoIndex = -1;
-    }
-    else
-    {
-        [arrFollowPhotos addObject: image];
-    }
-
-    [self updateFollowPhotos];
-    [self dismissViewControllerAnimated: YES completion: nil];
 }
 
 - (IBAction) actionFollowUp:(id)sender
 {
     
-    if([selectedFeed isCreatedByCurrentUser])
-    {
-        isFollowUp = !isFollowUp;
-        if(isFollowUp)
-        {
-            [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
-            
-            viPost.hidden = NO;
-            viFooter.frame = CGRectMake(viFooter.frame.origin.x,
-                                        viFooter.frame.origin.y,
-                                        viDonateBar.frame.size.width,
-                                        viPost.frame.size.height + viDonateBar.frame.size.height + btFollowUp.frame.size.height + 70.0);
-            
-            [tbActivity reloadData];
-            CGPoint newContentOffset = CGPointMake(0, [tbActivity contentSize].height -  tbActivity.bounds.size.height);
-            [tbActivity setContentOffset:newContentOffset animated:YES];
-            [self updateFollowPhotos];
-            [tfMessage becomeFirstResponder];
-        }
-        else
-        {
-            [arrUploadedPhotos removeAllObjects];
-            
-            NSString* message = tfMessage.text;
-            if(message == nil || [message length] == 0)
-            {
-                [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_MESSAGE] animated: YES completion: nil];
-                return;
-            }
-            
-            if([arrFollowPhotos count] > 0)
-            {
-                [self uploadPhotos];
-            }
-            else
-            {
-                [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
-                [self postFollowMessage];
-            }
-        }
-        return;
-    }
-    
-    if ([selectedFeed is_gave]) {
-        isPostComment = !isPostComment;
-        if(isPostComment)
-        {
-            [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
-            
-            viPost.hidden = NO;
-            viFooter.frame = CGRectMake(viFooter.frame.origin.x,
-                                        viFooter.frame.origin.y,
-                                        viDonateBar.frame.size.width,
-                                        viPost.frame.size.height + viDonateBar.frame.size.height + btFollowUp.frame.size.height + 30.0);
-            
-            [tbActivity reloadData];
-            CGPoint newContentOffset = CGPointMake(0, [tbActivity contentSize].height -  tbActivity.bounds.size.height);
-            [tbActivity setContentOffset:newContentOffset animated:YES];
-            [tfMessage becomeFirstResponder];
-        } else {
-            NSString* message = tfMessage.text;
-            if(message == nil || [message length] == 0)
-            {
-                [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_MESSAGE] animated: YES completion: nil];
-                return;
-            }
-            
-            [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
-            [self postCommentMessage];
-        }
-    } else {
+    if (![selectedFeed isCreatedByCurrentUser] && ![selectedFeed is_gave]) {
         [self presentViewController: [AppEngine showAlertWithText: @"You need to give to this project before you can leave a comment!"] animated: YES completion: nil];
-    }
-    
-    
-}
-
-- (void) clearPostView
-{
-    tfMessage.text = @"";
-    [arrUploadedPhotos removeAllObjects];
-    [arrFollowPhotos removeAllObjects];
-    
-    [self updateFollowPhotos];
-}
-
-- (void) cancelPostFollowMessage
-{
-    [self clearPostView];
-    
-    [btFollowUp setTitle: @"FOLLOW UP" forState: UIControlStateNormal];
-    
-    if ([selectedFeed is_gave]) {
-        [btFollowUp setTitle: @"POST COMMENT" forState: UIControlStateNormal];
-    }
-    
-    viPost.hidden = YES;
-    viFooter.frame = CGRectMake(viFooter.frame.origin.x, viFooter.frame.origin.y, viDonateBar.frame.size.width, viDonateBar.frame.size.height + btFollowUp.frame.size.height + 70.0);
-    [tbActivity reloadData];
-}
-
-- (void) postCommentMessage {
-    [self hideKeyboard];
-    
-    NSString* message = tfMessage.text;
-    [[NetworkClient sharedClient] postProjectComment:message feed:selectedFeed success:^{
-        [SVProgressHUD dismiss];
-        [self cancelPostFollowMessage];
-        [self loadActivities];
-    } failure:^(NSString *errorMessage) {
-        [SVProgressHUD dismiss];
-        [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
-    }];
-    
-}
-
-- (void) postFollowMessage
-{
-    [self hideKeyboard];
-    
-    NSString* message = tfMessage.text;
-    [[NetworkClient sharedClient] postFollowMessage: message
-                                             photos: arrUploadedPhotos
-                                               feed: selectedFeed
-                                            success:^{
-                                               
-                                                [SVProgressHUD dismiss];
-                                                [self cancelPostFollowMessage];
-                                                [self loadActivities];
-                                                
-                                            } failure:^(NSString *errorMessage) {
-                                                
-                                                [SVProgressHUD dismiss];
-                                                [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
-                                            }];
-}
-
-- (void) uploadPhotos
-{
-    [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
-    uploadingPhotoIndex = 0;
-    [self uploadSinglePhoto];
-}
-
-- (void) uploadSinglePhoto
-{
-    UIImage* image = [arrFollowPhotos objectAtIndex: uploadingPhotoIndex];
-    NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
-    
-    
-    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+    }else{
+        FollowUpViewController *followUpController = [self.storyboard instantiateViewControllerWithIdentifier:@"FollowUp"];
+        followUpController.selectedFeed = selectedFeed;
+        followUpController.modalPresentationStyle = UIModalPresentationCustom;
+        followUpController.delegate = self;
         
-        if ([photoInfo objectForKey:@"secure_url"]) {
-            NSString *secure_url = [photoInfo objectForKey:@"secure_url"];
-            
-            [arrUploadedPhotos addObject: secure_url];
-            uploadingPhotoIndex ++;
-            
-            if(uploadingPhotoIndex >= [arrFollowPhotos count])
-            {
-                [self postFollowMessage];
-            }
-            else
-            {
-                [self uploadSinglePhoto];
-            }
-            
-        }else
-        {
-            [SVProgressHUD dismiss];
-            [self presentViewController: [AppEngine showErrorWithText: MSG_ERROR_UPLOADING_IMAGE] animated: YES completion: nil];
-        }
-        
-    } failure:^(NSString *errorMessage) {
-        [SVProgressHUD dismiss];
-    }];
+        [self presentViewController:followUpController animated:NO completion:NULL];
+    }
+}
+
+- (void) onFollowUpPostedSuccess{
+    [self loadActivities];
 }
 
 #pragma mark - Feed Delegate.
