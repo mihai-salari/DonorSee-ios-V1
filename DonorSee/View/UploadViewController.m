@@ -813,7 +813,6 @@
         imagePicker.delegate = self;
         [self presentViewController:imagePicker animated:YES completion:nil];
     }
-
 }
 
 - (void) chooseVideoFile{

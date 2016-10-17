@@ -194,6 +194,7 @@
 //Follow Messages.
 - (void) postFollowMessage: (NSString*) message
                     photos: (NSArray*) arrPhotos
+                    videos: (NSArray*) arrVideos
                       feed: (Feed*) f
                    success: (void (^)(void))success
                    failure: (void (^)(NSString *errorMessage))failure;

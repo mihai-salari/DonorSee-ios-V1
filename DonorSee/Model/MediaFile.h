@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) NSString      *mediaURL;
 
+@property (nonatomic, strong) UIImage *uiImage;
+
 @property (nonatomic)         enum MediaType mediaType;
 
 typedef enum MediaType

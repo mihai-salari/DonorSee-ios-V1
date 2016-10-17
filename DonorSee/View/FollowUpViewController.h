@@ -13,7 +13,7 @@
 - (void) onFollowUpPostedSuccess;
 @end
 
-@interface FollowUpViewController : UIViewController <UIAdaptivePresentationControllerDelegate, UIGestureRecognizerDelegate>
+@interface FollowUpViewController : UIViewController <UIAdaptivePresentationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) Feed *selectedFeed;
 @property (nonatomic, weak) id<FollowUpViewControllerDelegate> delegate;

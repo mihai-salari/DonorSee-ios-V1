@@ -1297,6 +1297,7 @@
 
 - (void) postFollowMessage: (NSString*) message
                     photos: (NSArray*) arrPhotos
+                    videos: (NSArray*) arrVideos
                       feed: (Feed*) f
                    success: (void (^)(void))success
                    failure: (void (^)(NSString *errorMessage))failure
@@ -1306,6 +1307,9 @@
     [parameters setValue:message forKey:@"message"];
     if (arrPhotos.count > 0) {
         [parameters setValue:arrPhotos forKey:@"photo_urls"];
+    }
+    if (arrVideos.count > 0) {
+        [parameters setValue:arrVideos forKey:@"video_urls"];
     }
     
     

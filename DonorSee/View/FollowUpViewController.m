@@ -8,6 +8,10 @@
 
 #import "FollowUpViewController.h"
 #import "PhotoCellView.h"
+#import "MediaFile.h"
+#import "AVFoundation/AVAsset.h"
+#import "AVFoundation/AVAssetImageGenerator.h"
+
 
 @import ALCameraViewController;
 
@@ -19,6 +23,8 @@
     
     NSMutableArray              *arrUploadedPhotos;
     int                         uploadingPhotoIndex;
+    
+    enum MediaType              mediaType;
 }
 @property (weak, nonatomic) IBOutlet UIView *vBackground;
 @property (weak, nonatomic) IBOutlet UIButton *btFollowUp;
@@ -63,7 +69,9 @@
 }
 
 - (void) onTapBackground :(UITapGestureRecognizer *)gr{
-    [self finish];
+    if(![SVProgressHUD isVisible]){
+        [self finish];
+    }
 }
 
 - (IBAction)actionFollowUp:(id)sender {
@@ -76,9 +84,8 @@
     }
     
     [SVProgressHUD showWithStatus: @"Posting..." maskType: SVProgressHUDMaskTypeClear];
-    
+
     if([self isFollowUp]){
-        
         if([arrFollowPhotos count] > 0) {
             [self uploadFollowUpWithMedia];
         } else {
@@ -106,8 +113,6 @@
     viMessage.layer.borderWidth = 1.0;
     viMessage.layer.cornerRadius = 10.0;
     
-  //  [tfMessage becomeFirstResponder];
-    
     if([self isFollowUp]) {
         [btFollowUp setTitle: @"POST" forState: UIControlStateNormal];
         scPostPhotos.hidden = NO;
@@ -121,41 +126,53 @@
 - (void) uploadFollowUpWithMedia
 {
     uploadingPhotoIndex = 0;
-    [self uploadSinglePhoto];
+    [self uploadNextMediaFile];
 }
 
-- (void) uploadSinglePhoto
+- (void) uploadNextMediaFile
 {
-    UIImage* image = [arrFollowPhotos objectAtIndex: uploadingPhotoIndex];
-    NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
-    
-    
-    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+    MediaFile* mediaFile = [arrFollowPhotos objectAtIndex: uploadingPhotoIndex];
+    if(mediaFile.mediaType == PICTURE){
+        UIImage* image = mediaFile.uiImage;
+        NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
         
-        if ([photoInfo objectForKey:@"secure_url"]) {
-            NSString *secure_url = [photoInfo objectForKey:@"secure_url"];
-            
-            [arrUploadedPhotos addObject: secure_url];
-            uploadingPhotoIndex ++;
-            
-            if(uploadingPhotoIndex >= [arrFollowPhotos count])
-            {
-                [self postFollowMessage];
-            }
-            else
-            {
-                [self uploadSinglePhoto];
-            }
-            
-        }else
-        {
+        [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *mediaInfo) {
+            [self mediaFileUploaded:mediaInfo mediaFile:mediaFile];
+        } failure:^(NSString *errorMessage) {
             [SVProgressHUD dismiss];
-            [self presentViewController: [AppEngine showErrorWithText: MSG_ERROR_UPLOADING_IMAGE] animated: YES completion: nil];
-        }
+        }];
+    } else {
+        NSURL * mediaURL = [NSURL URLWithString:[mediaFile.mediaURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSData *videoData = [NSData dataWithContentsOfFile:[mediaURL path]];
+        [[NetworkClient sharedClient] uploadVideo: videoData success:^(NSDictionary *mediaInfo) {
+            [self mediaFileUploaded:mediaInfo mediaFile:mediaFile];
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+        }];
+    }
+}
+
+- (void) mediaFileUploaded:(NSDictionary*) mediaInfo mediaFile:(MediaFile*) mediaFile{
+    if ([mediaInfo objectForKey:@"secure_url"]) {
+        NSString *secure_url = [mediaInfo objectForKey:@"secure_url"];
         
-    } failure:^(NSString *errorMessage) {
+        mediaFile.mediaURL = secure_url;
+        [arrUploadedPhotos addObject: mediaFile];
+        uploadingPhotoIndex ++;
+        
+        if(uploadingPhotoIndex >= [arrFollowPhotos count])
+        {
+            [self postFollowMessage];
+        }
+        else
+        {
+            [self uploadNextMediaFile];
+        }
+    }else
+    {
         [SVProgressHUD dismiss];
-    }];
+        [self presentViewController: [AppEngine showErrorWithText: MSG_ERROR_UPLOADING_IMAGE] animated: YES completion: nil];
+    }
 }
 
 - (void) updateFollowPhotos
@@ -176,8 +193,9 @@
     float offset = 20;
     
     int index = 0;
-    for(UIImage* imgPhoto in arrFollowPhotos)
+    for(MediaFile* mediaFile in arrFollowPhotos)
     {
+        UIImage* imgPhoto = mediaFile.uiImage;
         PhotoCellView* cell = [[PhotoCellView alloc] initWithImage: CGRectMake(fx, fy, fw, fh) image: imgPhoto];
         cell.delegate = self;
         cell.tag = index;
@@ -213,48 +231,124 @@
         return;
     }
     
+    
+     [self showMediaPickerDialog];
+}
+
+
+- (void) showMediaPickerDialog{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle: nil
+                                                                   message: nil
+                                                            preferredStyle: UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction* actionCamera = [UIAlertAction actionWithTitle: @"Camera"
+                                                           style: UIAlertActionStyleDefault
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             [self takePicture];
+                                                         }];
+    [alert addAction: actionCamera];
+    
+    UIAlertAction* actionUploadFromGallery = [UIAlertAction actionWithTitle: @"Upload photo from gallery"
+                                                                      style: UIAlertActionStyleDefault
+                                                                    handler:^(UIAlertAction * _Nonnull action) {
+                                                                        [self choosePhotoFileFromGallery];
+                                                                    }];
+    [alert addAction: actionUploadFromGallery];
+    
+    UIAlertAction* actionUploadVideoFromGallery = [UIAlertAction actionWithTitle:@"Upload video from gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self chooseVideoFile];
+    }];
+    
+    [alert addAction:actionUploadVideoFromGallery];
+    
+    UIAlertAction* actionCancel = [UIAlertAction actionWithTitle: @"Cancel"
+                                                           style: UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction * _Nonnull action) {
+                                                             
+                                                         }];
+    [alert addAction: actionCancel];
+    [self presentViewController: alert animated: YES completion: nil];
+}
+
+- (void) takePicture
+{
+    mediaType = PICTURE;
     CameraViewController* cameraController = [[CameraViewController alloc] initWithCroppingEnabled: YES
                                                                                allowsLibraryAccess: YES
                                                                                         completion:^(UIImage * image, PHAsset * asset) {
                                                                                             
                                                                                             if(image != nil)
                                                                                             {
-                                                                                                [arrFollowPhotos addObject: image];
-                                                                                                [self updateFollowPhotos];
+                                                                                                [self completeMediaPick:[self createImageMediaFile:image]];
                                                                                             }
                                                                                             
                                                                                             [self dismissViewControllerAnimated: YES completion: nil];
                                                                                         }];
     
     [self presentViewController: cameraController animated: YES completion: nil];
+   
 }
 
-- (void) updatePhoto:(int)index
-{
-    if(TEST_FLAG)
+- (void) choosePhotoFileFromGallery{
+    if([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
     {
-        selectedPhotoIndex = index;
+        mediaType = PICTURE;
         imagePicker = [[UIImagePickerController alloc] init];
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         imagePicker.allowsEditing = YES;
         imagePicker.delegate = self;
         [self presentViewController:imagePicker animated:YES completion:nil];
-        return;
     }
+}
+
+- (void) chooseVideoFile{
+    mediaType = VIDEO;
+    UIImagePickerController *videoPicker = [[UIImagePickerController alloc] init];
+    videoPicker.delegate = self;
+    videoPicker.modalPresentationStyle = UIModalPresentationCurrentContext;
+    videoPicker.mediaTypes =[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
+    videoPicker.videoQuality = UIImagePickerControllerQualityTypeMedium;
+    [self presentViewController:videoPicker animated:YES completion:nil];
+}
+
+
+- (void) completeMediaPick:(MediaFile*)mediaFile{
+    if(selectedPhotoIndex >= 0)
+    {
+        [arrFollowPhotos replaceObjectAtIndex: selectedPhotoIndex withObject: mediaFile];
+    }
+    else
+    {
+        [arrFollowPhotos addObject: mediaFile];
+    }
+
+    selectedPhotoIndex = -1;
     
-    CameraViewController* cameraController = [[CameraViewController alloc] initWithCroppingEnabled: YES
-                                                                               allowsLibraryAccess: YES
-                                                                                        completion:^(UIImage * image, PHAsset * asset) {
-                                                                                            
-                                                                                            if(image != nil)
-                                                                                            {
-                                                                                                [arrFollowPhotos replaceObjectAtIndex: index withObject: image];
-                                                                                                [self updateFollowPhotos];
-                                                                                            }
-                                                                                            
-                                                                                            [self dismissViewControllerAnimated: YES completion: nil];
-                                                                                        }];
-    [self presentViewController: cameraController animated: YES completion: nil];
+    [self updateFollowPhotos];
+}
+
+- (MediaFile*) createImageMediaFile:(UIImage*)image{
+    MediaFile *mediaFile = [[MediaFile alloc] init];
+    mediaFile.mediaType = PICTURE;
+    mediaFile.uiImage = image;
+    return mediaFile;
+}
+
+- (MediaFile*) createVideoMediaFile:(NSURL*) videoURL {
+    MediaFile *mediaFile = [[MediaFile alloc] init];
+    mediaFile.mediaType = VIDEO;
+    mediaFile.mediaURL = videoURL.absoluteString;
+    mediaFile.uiImage = [self getThumbnailFromVideo:videoURL];
+    return mediaFile;
+}
+
+- (void) updatePhoto:(int)index
+{
+    selectedPhotoIndex = index;
+    
+    [self showMediaPickerDialog];
+   
 }
 
 - (void) imagePickerControllerDidCancel:(UIImagePickerController *)picker
@@ -265,29 +359,59 @@
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
-    
-    if(selectedPhotoIndex >= 0)
-    {
-        [arrFollowPhotos replaceObjectAtIndex: selectedPhotoIndex withObject: image];
-        selectedPhotoIndex = -1;
-    }
-    else
-    {
-        [arrFollowPhotos addObject: image];
+    if(mediaType == VIDEO){
+        NSURL* mediaUrl = [info objectForKey:UIImagePickerControllerMediaURL];
+        
+        [self completeMediaPick:[self createVideoMediaFile:mediaUrl]];
+    }else{
+        UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
+        [self completeMediaPick:[self createImageMediaFile:image]];
     }
     
-    [self updateFollowPhotos];
     [self dismissViewControllerAnimated: YES completion: nil];
+}
+
+- (UIImage*) getThumbnailFromVideo: (NSURL *) mediaUrl{
+    AVAsset *asset = [AVAsset assetWithURL: mediaUrl];
+    
+    // Calculate a time for the snapshot - I'm using the half way mark.
+    CMTime duration = [asset duration];
+    CMTime snapshot = CMTimeMake(duration.value / 2, duration.timescale);
+    
+    // Create a generator and copy image at the time.
+    // I'm not capturing the actual time or an error.
+    AVAssetImageGenerator *generator =
+    [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    CGImageRef imageRef = [generator copyCGImageAtTime:snapshot
+                                            actualTime:nil
+                                                 error:nil];
+    
+    // CGImageRelease(imageRef);
+    
+    return [UIImage imageWithCGImage:imageRef];
+}
+
+- (NSArray*) getUploadedMediaByType:(enum MediaType)mediaType{
+    NSMutableArray* mediaFiles = [[NSMutableArray alloc] init];
+    for(MediaFile* mediaFile in arrFollowPhotos){
+        if(mediaFile.mediaType == mediaType){
+            [mediaFiles addObject:mediaFile.mediaURL];
+        }
+    }
+    return mediaFiles;
 }
 
 - (void) postFollowMessage
 {
     [self hideKeyboard];
     
+    NSArray* uploadedPhotos = [self getUploadedMediaByType:PICTURE];
+    NSArray* uploadedVideos = [self getUploadedMediaByType:VIDEO];
+    
     NSString* message = tfMessage.text;
     [[NetworkClient sharedClient] postFollowMessage: message
-                                             photos: arrUploadedPhotos
+                                             photos: uploadedPhotos
+                                             videos:uploadedVideos
                                                feed: selectedFeed
                                             success:^{
                                                 
@@ -312,7 +436,6 @@
         [SVProgressHUD dismiss];
         [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
     }];
-    
 }
 
 -(void) finish{
