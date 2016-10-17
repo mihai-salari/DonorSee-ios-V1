@@ -3214,13 +3214,14 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         <constraints>
                             <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="0dB-ON-h6d"/>
                             <constraint firstItem="h8h-04-7d7" firstAttribute="top" secondItem="mjv-vv-P3H" secondAttribute="top" id="1VY-3A-4gc"/>
+                            <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="2zp-Gt-IQu"/>
                             <constraint firstItem="rjc-Re-3sf" firstAttribute="centerX" secondItem="mjv-vv-P3H" secondAttribute="centerX" id="FN5-sI-FG9"/>
+                            <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="QmU-fr-Gbn"/>
                             <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="RZ5-XA-RS6"/>
                             <constraint firstItem="p8f-iE-NMN" firstAttribute="top" secondItem="h8h-04-7d7" secondAttribute="bottom" id="VUn-Ox-HGW"/>
                             <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="dPl-Kt-XEk"/>
                             <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="etu-zu-wnr"/>
                             <constraint firstItem="rjc-Re-3sf" firstAttribute="centerY" secondItem="mjv-vv-P3H" secondAttribute="centerY" id="lm0-km-ueo"/>
-                            <constraint firstItem="h8h-04-7d7" firstAttribute="top" secondItem="scJ-OV-sH9" secondAttribute="bottom" constant="-20" id="nnB-qh-PDp"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">

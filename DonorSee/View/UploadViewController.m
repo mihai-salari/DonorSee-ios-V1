@@ -19,7 +19,9 @@
 #import "FEMDeserializer.h"
 #import "SignInViewController.h"
 #import "WebViewController.h"
-
+#import "AVFoundation/AVAsset.h"
+#import "AVFoundation/AVAssetImageGenerator.h"
+#import "MediaFile.h"
 
 
 @import ALCameraViewController;
@@ -27,6 +29,7 @@
 @interface UploadViewController() <UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AuthViewDelegate>
 {
     UIImagePickerController         *imagePicker;
+    MediaFile                       *mediaFile;
 }
 
 @property (nonatomic, strong) AuthView                  *viSignInFB;
@@ -74,6 +77,8 @@
 - (void) initMember
 {
     [super initMember];
+    
+    mediaFile = [[MediaFile alloc] init];
     
     tvDescription.inputAccessoryView = toolBar;
     tfPrice.inputAccessoryView = toolBar;
@@ -154,7 +159,6 @@
 {
     [self hideKeyboard];
     
-    UIImage* imgPhoto = ivPhoto.image;
     NSString* feedDescription = tvDescription.text;
     int amount = [tfPrice.text intValue];
     
@@ -166,13 +170,7 @@
         [self presentViewController: [AppEngine showAlertWithText: MSG_MAX_POST_PROJECT] animated: YES completion: nil];
         return;
     }
-    
-    if(imgPhoto == nil)
-    {
-        [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_PHOTO] animated: YES completion: nil];
-        return;
-    }
-    
+
     if(feedDescription == nil || [feedDescription length] == 0)
     {
         [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_DESCRIPTION] animated: YES completion: nil];
@@ -196,7 +194,7 @@
         //[self postFeed: imgPhoto description: feedDescription amount: amount];
         
     }*/
-    [self UpdateMypostedFeed:imgPhoto description:feedDescription amount:amount];
+    [self UpdateMypostedFeed:feedDescription amount:amount];
 }
 
 - (IBAction)CancelButtonPress:(UIButton *)sender{
@@ -316,61 +314,97 @@
     }
     
     if ([self isUserConfiguredStripeAccount]) {
-        [self postFeed: imgPhoto description: feedDescription amount: amount];
+        [self postFeed: feedDescription amount: amount];
     }
-    
-    
     
 }
 
-- (void) postFeed: (UIImage*) image description: (NSString*) text amount: (int) amount
+- (void) postFeed: (NSString*) description amount: (int) amount
 {
     [SVProgressHUD showWithStatus: @"Uploading..." maskType: SVProgressHUDMaskTypeClear];
     
-    NSString *imageKey = [AppEngine getImageName];
-    
-    NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
-    
-    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
-        [SVProgressHUD dismiss];
-        if ([photoInfo objectForKey:@"secure_url"]) {
-            NSString *gift_type = [self getFeedType];
-            NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
-            [[NetworkClient sharedClient] postFeed: secureUrl
-                                       description: text
-                                            amount: amount
-                                           user_id: [AppEngine sharedInstance].currentUser.user_id
-                                         feed_type: gift_type
-                                           success:^(NSDictionary *dicFeed, NSDictionary* dicUser) {
-                                               
-                                               [SVProgressHUD dismiss];
-                                               
-                                               //Refresh Feeds.
-                                               HomeViewController* homeView = [self.tabBarController.viewControllers firstObject];
-                                               [homeView refreshFeeds];
-                                               self.tabBarController.selectedIndex = 0;
-                                               
-                                               //Refresh Profile's Upload.
-                                               ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 2];
-                                               [profileView loadMyFeeds];
-                                               
-                                               //Add Post history.
-                                               [[CoreHelper sharedInstance] addPostHistory: [AppEngine sharedInstance].currentUser.user_id
-                                                                                 post_date: [NSDate date]];
-                                               [self clearContent];
-                                               
-                                           } failure:^(NSString *errorMessage) {
-                                               
-                                               [SVProgressHUD dismiss];
-                                               [self presentViewController: [AppEngine showErrorWithText: errorMessage]
-                                                                  animated: YES
-                                                                completion: nil];
-                                           }];
-        }
+    if(mediaFile.mediaType == VIDEO){
+        NSURL * mediaURL = [NSURL URLWithString:[mediaFile.mediaURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSData *videoData = [NSData dataWithContentsOfFile:[mediaURL path]];
+        [[NetworkClient sharedClient] uploadVideo: videoData success:^(NSDictionary *photoInfo) {
+            [SVProgressHUD dismiss];
+            if ([photoInfo objectForKey:@"secure_url"]) {
+                NSString *gift_type = [self getFeedType];
+                NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
+                
+                [self makePostFeedRequest : description
+                                   amount : amount
+                                secureURL : secureUrl
+                                gift_type : gift_type];
+                
+            }
+            
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+        }];
+    }else{
         
-    } failure:^(NSString *errorMessage) {
-        [SVProgressHUD dismiss];
-    }];
+         NSData* imgData = UIImageJPEGRepresentation(ivPhoto.image, IMAGE_COMPRESSION);
+        
+        [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+            [SVProgressHUD dismiss];
+            if ([photoInfo objectForKey:@"secure_url"]) {
+                NSString *gift_type = [self getFeedType];
+                NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
+                
+                [self makePostFeedRequest : description
+                                   amount : amount
+                                secureURL : secureUrl
+                                gift_type : gift_type];
+                
+            }
+            
+        } failure:^(NSString *errorMessage) {
+            [SVProgressHUD dismiss];
+        }];
+
+    }
+}
+
+- (void) makePostFeedRequest:
+                 (NSString*) description
+                      amount: (int) amount
+                   secureURL: (NSString*) secureUrl
+                   gift_type: (NSString*) gift_type {
+    
+    mediaFile.mediaURL = secureUrl;
+    
+    [[NetworkClient sharedClient] postFeed: mediaFile
+                               description: description
+                                    amount: amount
+                                   user_id: [AppEngine sharedInstance].currentUser.user_id
+                                 feed_type: gift_type
+                                   success:^(NSDictionary *dicFeed, NSDictionary* dicUser) {
+                                       
+                                       [SVProgressHUD dismiss];
+                                       
+                                       //Refresh Feeds.
+                                       HomeViewController* homeView = [self.tabBarController.viewControllers firstObject];
+                                       [homeView refreshFeeds];
+                                       self.tabBarController.selectedIndex = 0;
+                                       
+                                       //Refresh Profile's Upload.
+                                       ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 3];
+                                       [profileView loadMyFeeds];
+                                       
+                                       //Add Post history.
+                                       [[CoreHelper sharedInstance] addPostHistory: [AppEngine sharedInstance].currentUser.user_id
+                                                                         post_date: [NSDate date]];
+                                       [self clearContent];
+                                       
+                                   } failure:^(NSString *errorMessage) {
+                                       
+                                       [SVProgressHUD dismiss];
+                                       [self presentViewController: [AppEngine showErrorWithText: errorMessage]
+                                                          animated: YES
+                                                        completion: nil];
+                                   }];
+
 }
 
 - (NSString*) getFeedType
@@ -382,58 +416,70 @@
     }
 }
 
-- (void) UpdateMypostedFeed: (UIImage*) image description: (NSString*) text amount: (int) amount
+- (void) UpdateMypostedFeed: (NSString*) text amount: (int) amount
 {
     [SVProgressHUD showWithStatus: @"Updating..." maskType: SVProgressHUDMaskTypeClear];
     
-    NSString *imageKey = [AppEngine getImageName];
-    NSData* imgData = UIImageJPEGRepresentation(image, IMAGE_COMPRESSION);
     NSString* newFeedType = [self getFeedType];
     NSString* oldFeedType = objFeed.getFeedType;
     
     if([newFeedType isEqualToString:oldFeedType]){
         newFeedType = nil;
     }
-    
-    [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
-        [SVProgressHUD dismiss];
-        if ([photoInfo objectForKey:@"secure_url"]) {
-            NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
-            [[NetworkClient sharedClient] UpdatepostFeed:secureUrl
-                                          description:text amount:amount
-                                          user_id:[AppEngine sharedInstance].currentUser.user_id
-                                        gift_type: newFeedType
-                                                 success:^(NSDictionary *dicFeed, NSDictionary *dicUser) {
+
+    if(mediaFile.mediaURL != nil){
+        if(mediaFile.mediaType == VIDEO){
+            NSURL * mediaURL = [NSURL URLWithString:[mediaFile.mediaURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            NSData *videoData = [NSData dataWithContentsOfFile:[mediaURL path]];
+            [[NetworkClient sharedClient] uploadVideo: videoData success:^(NSDictionary *photoInfo) {
                 [SVProgressHUD dismiss];
+                if ([photoInfo objectForKey:@"secure_url"]) {
+                    mediaFile.mediaURL = [photoInfo objectForKey:@"secure_url"];
+                    [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType];
+                }
                 
-                /*
-                //Refresh Feeds.
-                HomeViewController* homeView = [self.tabBarController.viewControllers firstObject];
-                [homeView refreshFeeds];
-                self.tabBarController.selectedIndex = 0;
-                
-                //Refresh Profile's Upload.
-                ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 2];
-                [profileView loadMyFeeds];
-                
-                //Add Post history.
-                [[CoreHelper sharedInstance] addPostHistory: [AppEngine sharedInstance].currentUser.user_id
-                                                  post_date: [NSDate date]];
-                [self clearContent];
-                 */
-                [self CancelButtonPress:nil];
             } failure:^(NSString *errorMessage) {
                 [SVProgressHUD dismiss];
-                [self presentViewController: [AppEngine showErrorWithText: errorMessage]
-                                   animated: YES
-                                 completion: nil];
+            }];
+
+        } else {
+            NSData* imgData = UIImageJPEGRepresentation(ivPhoto.image, IMAGE_COMPRESSION);
+            [[NetworkClient sharedClient] uploadImage:imgData success:^(NSDictionary *photoInfo) {
+                [SVProgressHUD dismiss];
+                if ([photoInfo objectForKey:@"secure_url"]) {
+                    mediaFile.mediaURL = [photoInfo objectForKey:@"secure_url"];
+                    [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType];
+                }
+                
+            } failure:^(NSString *errorMessage) {
+                [SVProgressHUD dismiss];
             }];
         }
-        
-    } failure:^(NSString *errorMessage) {
-        [SVProgressHUD dismiss];
-    }];
+    } else {
+        [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType];
+    }
+    
 }
+
+- (void) makeUpdateFeedRequest: (NSString*) description
+                        amount: (int) amount
+                   gift_type: (NSString*) gift_type {
+    [[NetworkClient sharedClient] UpdatepostFeed:mediaFile
+                                     description:description amount:amount
+                                         user_id:[AppEngine sharedInstance].currentUser.user_id
+                                       gift_type: gift_type
+                                         success:^(NSDictionary *dicFeed, NSDictionary *dicUser) {
+                                             [SVProgressHUD dismiss];
+                                             
+                                             [self CancelButtonPress:nil];
+                                         } failure:^(NSString *errorMessage) {
+                                             [SVProgressHUD dismiss];
+                                             [self presentViewController: [AppEngine showErrorWithText: errorMessage]
+                                                                animated: YES
+                                                              completion: nil];
+                                         }];
+}
+
 - (void) hideKeyboard
 {
     [tfPrice resignFirstResponder];
@@ -515,7 +561,7 @@
                                               NSString* feedDescription = tvDescription.text;
                                               int amount = [tfPrice.text intValue];
                                               
-                                              [self postFeed: imgPhoto description: feedDescription amount: amount];
+                                              [self postFeed: feedDescription amount: amount];
                                           } else {
                                               [self presentViewController: [AppEngine showAlertWithText: @"Stripe account is not connected. Try again."] animated: YES completion: nil];
                                           }
@@ -701,23 +747,11 @@
         [self presentViewController:imagePicker animated:YES completion:nil];
         return;
     }
-    
-    CameraViewController* cameraController = [[CameraViewController alloc] initWithCroppingEnabled: YES
-                                                                               allowsLibraryAccess: YES
-                                                                                        completion:^(UIImage * image, PHAsset * asset) {
-                                                                                                
-                                                                                                if(image != nil)
-                                                                                                {
-                                                                                                    ivAddPhoto.hidden = YES;
-                                                                                                    ivPhoto.image = image;
-                                                                                                    [self checkValid];
-                                                                                                }
-                                                                                                
-                                                                                                [self dismissViewControllerAnimated: YES completion: nil];
-                                                                                            }];
-    [self presentViewController: cameraController animated: YES completion: nil];
-    
-    /*
+   
+    [self showMediaPickerDialog];
+}
+
+- (void) showMediaPickerDialog{
     UIAlertController* alert = [UIAlertController alertControllerWithTitle: nil
                                                                    message: nil
                                                             preferredStyle: UIAlertControllerStyleActionSheet];
@@ -725,34 +759,25 @@
     UIAlertAction* actionCamera = [UIAlertAction actionWithTitle: @"Camera"
                                                            style: UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction * _Nonnull action) {
-                                                             
-                                                             if([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera])
-                                                             {
-                                                                 imagePicker = [[UIImagePickerController alloc] init];
-                                                                 imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                                                                 imagePicker.allowsEditing = YES;
-                                                                 imagePicker.delegate = self;
-                                                                 [self presentViewController:imagePicker animated:YES completion:nil];
-
-                                                             }
-
+                                                             mediaFile.mediaType = PICTURE;
+                                                             [self takePicture];
                                                          }];
     [alert addAction: actionCamera];
     
-    UIAlertAction* actionUploadFromGallery = [UIAlertAction actionWithTitle: @"Upload from gallery"
+    UIAlertAction* actionUploadFromGallery = [UIAlertAction actionWithTitle: @"Upload photo from gallery"
                                                                       style: UIAlertActionStyleDefault
                                                                     handler:^(UIAlertAction * _Nonnull action) {
-                                                                       
-                                                                        if([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
-                                                                        {
-                                                                            imagePicker = [[UIImagePickerController alloc] init];
-                                                                            imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                                                            imagePicker.allowsEditing = YES;
-                                                                            imagePicker.delegate = self;
-                                                                            [self presentViewController:imagePicker animated:YES completion:nil];
-                                                                        }
+                                                                        mediaFile.mediaType = PICTURE;
+                                                                        [self choosePhotoFileFromGallery];
                                                                     }];
     [alert addAction: actionUploadFromGallery];
+    
+    UIAlertAction* actionUploadVideoFromGallery = [UIAlertAction actionWithTitle:@"Upload video from gallery" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        mediaFile.mediaType = VIDEO;
+        [self chooseVideoFile];
+    }];
+    
+    [alert addAction:actionUploadVideoFromGallery];
     
     UIAlertAction* actionCancel = [UIAlertAction actionWithTitle: @"Cancel"
                                                            style: UIAlertActionStyleCancel
@@ -761,19 +786,90 @@
                                                          }];
     [alert addAction: actionCancel];
     [self presentViewController: alert animated: YES completion: nil];
-     */
-    
+}
+
+- (void) takePicture{
+    CameraViewController* cameraController = [[CameraViewController alloc] initWithCroppingEnabled: YES
+                                                                               allowsLibraryAccess: YES
+                                                                                        completion:^(UIImage * image, PHAsset * asset) {
+                                                                                            
+                                                                                            if(image != nil)
+                                                                                            {
+                                                                                                NSURL* url = [[NSURL alloc] initWithString:@""];
+                                                                                                    [self onMediaPicked : url uiImage:image];
+                                                                                            }
+                                                                                            
+                                                                                            [self dismissViewControllerAnimated: YES completion: nil];
+                                                                                        }];
+    [self presentViewController: cameraController animated: YES completion: nil];
+}
+
+- (void) choosePhotoFileFromGallery{
+    if([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypePhotoLibrary])
+    {
+        imagePicker = [[UIImagePickerController alloc] init];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePicker.allowsEditing = YES;
+        imagePicker.delegate = self;
+        [self presentViewController:imagePicker animated:YES completion:nil];
+    }
+
+}
+
+- (void) chooseVideoFile{
+    UIImagePickerController *videoPicker = [[UIImagePickerController alloc] init];
+    videoPicker.delegate = self;
+    videoPicker.modalPresentationStyle = UIModalPresentationCurrentContext;
+    videoPicker.mediaTypes =[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
+    videoPicker.videoQuality = UIImagePickerControllerQualityTypeMedium;
+    [self presentViewController:videoPicker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+     NSURL* mediaUrl = [info objectForKey:UIImagePickerControllerMediaURL];
+     [self onMediaPicked : mediaUrl uiImage:info[UIImagePickerControllerOriginalImage]];
+    
+     [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void) onMediaPicked: (NSURL *) mediaUrl uiImage:(UIImage*) image {
     ivAddPhoto.hidden = YES;
     
-    UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
-    ivPhoto.image = chosenImage;
-    [picker dismissViewControllerAnimated:YES completion:NULL];
+    if(mediaFile.mediaType == VIDEO){
+        mediaFile.mediaURL = mediaUrl.absoluteString;
+        UIImage *videoThumbnail = [self getThumbnailFromVideo: mediaUrl];
+        ivPhoto.image = videoThumbnail;
+    }else{
+        mediaFile.mediaURL = @"";
+        UIImage *chosenImage = image;
+        ivPhoto.image = chosenImage;
+    }
     
+
     [self checkValid];
+
+}
+
+- (UIImage*) getThumbnailFromVideo: (NSURL *) mediaUrl{
+    AVAsset *asset = [AVAsset assetWithURL: mediaUrl];
+    
+    // Calculate a time for the snapshot - I'm using the half way mark.
+    CMTime duration = [asset duration];
+    CMTime snapshot = CMTimeMake(duration.value / 2, duration.timescale);
+    
+    // Create a generator and copy image at the time.
+    // I'm not capturing the actual time or an error.
+    AVAssetImageGenerator *generator =
+    [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    CGImageRef imageRef = [generator copyCGImageAtTime:snapshot
+                                            actualTime:nil
+                                                 error:nil];
+    
+   // CGImageRelease(imageRef);
+    
+    return [UIImage imageWithCGImage:imageRef];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{

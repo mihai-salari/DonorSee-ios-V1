@@ -96,11 +96,16 @@
     [whiteBarView addSubview:leftVerticalDividerView];
     
     //Staff picks.
+    int staffIconWidth = 23;
+    int staffTitleWidth = 100;
+
     UIImageView* ivStaffPicks = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"staff_picks.png"]];
-    ivStaffPicks.frame = CGRectMake(40, 15, 23, 28);
+    int ivStaffX = initialWhiteBarLayoutAttributes.size.width/4.0 - (staffIconWidth + staffTitleWidth)/2.0;
+    
+    ivStaffPicks.frame = CGRectMake(ivStaffX, 15, staffIconWidth, 28);
     [whiteBarView addSubview: ivStaffPicks];
     
-    lbStaffPick = [[UILabel alloc] initWithFrame: CGRectMake(70, 15, 100, 28)];
+    lbStaffPick = [[UILabel alloc] initWithFrame: CGRectMake(staffIconWidth + 40, 15, staffTitleWidth, 28)];
     lbStaffPick.textAlignment = NSTextAlignmentLeft;
     lbStaffPick.text = @"STAFF PICKS";
     [whiteBarView addSubview: lbStaffPick];
@@ -112,11 +117,15 @@
 
     
     //Global.
+    int globalIconWidth = 29;
+    int globalTitleWidth = 150;
+
     UIImageView* ivGlobal = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"global_icon.png"]];
-    ivGlobal.frame = CGRectMake(40 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 25, 23);
+    
+    ivGlobal.frame = CGRectMake(30 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 24, 23);
     [whiteBarView addSubview: ivGlobal];
     
-    lbGlobal = [[UILabel alloc] initWithFrame: CGRectMake(80 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28)];
+    lbGlobal = [[UILabel alloc] initWithFrame: CGRectMake(30 + initialWhiteBarLayoutAttributes.size.width/2.0 + globalIconWidth, 15, 90, 28)];
     lbGlobal.textAlignment = NSTextAlignmentLeft;
     lbGlobal.text = @"GLOBAL";
     [whiteBarView addSubview: lbGlobal];
@@ -127,22 +136,22 @@
     [whiteBarView addSubview: btGlobal];
     
     
-    if(IS_IPHONE_5)
-    {
-        ivGlobal.frame = CGRectMake(27, 15, 23, 28);
-        lbGlobal.frame = CGRectMake(60, 15, 80, 28);
-        
-        ivStaffPicks.frame = CGRectMake(20 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
-        lbStaffPick.frame = CGRectMake(60 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
-    }
-    else if(IS_IPHONE_4_OR_LESS)
-    {
-        ivGlobal.frame = CGRectMake(22, 15, 23, 28);
-        lbGlobal.frame = CGRectMake(55, 15, 80, 28);
-        
-        ivStaffPicks.frame = CGRectMake(15 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
-        lbStaffPick.frame = CGRectMake(55 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
-    }
+//    if(IS_IPHONE_5)
+//    {
+//        ivGlobal.frame = CGRectMake(27, 15, 23, 28);
+//        lbGlobal.frame = CGRectMake(60, 15, 80, 28);
+//        
+//        ivStaffPicks.frame = CGRectMake(20 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
+//        lbStaffPick.frame = CGRectMake(60 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
+//    }
+//    else if(IS_IPHONE_4_OR_LESS)
+//    {
+//        ivGlobal.frame = CGRectMake(22, 15, 23, 28);
+//        lbGlobal.frame = CGRectMake(55, 15, 80, 28);
+//        
+//        ivStaffPicks.frame = CGRectMake(15 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
+//        lbStaffPick.frame = CGRectMake(55 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
+//    }
     
     
     selectedIndex = 0;

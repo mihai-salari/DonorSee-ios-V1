@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AFNetworking/AFHTTPSessionManager.h>
+#import "MediaFile.h"
 
 @interface NetworkClient : AFHTTPSessionManager
 {
@@ -67,7 +68,7 @@
            failure: (void (^)(NSString *errorMessage))failure;
 
 //Feed.
-- (void) postFeed: (NSString*) imageURL
+- (void) postFeed: (MediaFile*) mediaFile
       description: (NSString*) description
            amount: (int) amount
           user_id: (int) user_id
@@ -75,7 +76,7 @@
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure;
 
-- (void) UpdatepostFeed: (NSString*) imageURL
+- (void) UpdatepostFeed: (MediaFile*) mediaFile
             description: (NSString*) description
                  amount: (int) amount
                 user_id: (int) user_id
@@ -249,7 +250,11 @@
             success: (void (^)(NSDictionary* dicDonate))success
             failure: (void (^)(NSString *errorMessage))failure;
 
-- (void) uploadImage:(NSData *)data
+- (void) uploadImage: (NSData *) data
+             success: (void (^)(NSDictionary *photoInfo))success
+             failure: (void (^)(NSString *errorMessage))failure;
+
+- (void) uploadVideo: (NSData *) data
              success: (void (^)(NSDictionary *photoInfo))success
              failure: (void (^)(NSString *errorMessage))failure;
 

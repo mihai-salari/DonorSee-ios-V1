@@ -174,7 +174,7 @@
     float fw = 84;
     float fh = 84;
     float offset = 20;
-    7
+    
     int index = 0;
     for(UIImage* imgPhoto in arrFollowPhotos)
     {

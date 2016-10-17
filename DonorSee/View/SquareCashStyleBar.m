@@ -110,17 +110,17 @@
     btPersonal.tag = 1;
     [whiteBarView addSubview: btPersonal];
     
-    if(IS_IPHONE_5)
-    {
-        ivPersonal.frame = CGRectMake(20 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
-        lbPersonal.frame = CGRectMake(60 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
-    }
-    else if(IS_IPHONE_4_OR_LESS)
-    {
-    
-        ivPersonal.frame = CGRectMake(15 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
-        lbPersonal.frame = CGRectMake(55 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
-    }
+//    if(IS_IPHONE_5)
+//    {
+//        ivPersonal.frame = CGRectMake(20 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
+//        lbPersonal.frame = CGRectMake(60 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
+//    }
+//    else if(IS_IPHONE_4_OR_LESS)
+//    {
+//    
+//        ivPersonal.frame = CGRectMake(15 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 29, 23);
+//        lbPersonal.frame = CGRectMake(55 + initialWhiteBarLayoutAttributes.size.width/2.0, 15, 90, 28);
+//    }
 
     
     selectedIndex = 0;

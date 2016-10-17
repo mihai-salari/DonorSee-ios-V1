@@ -15,6 +15,7 @@
 #import "FEMDeserializer.h"
 #import "Cloudinary/Cloudinary.h"
 #import "AppDelegate.h"
+#import "MediaFile.h"
 
 @implementation NetworkClient
 
@@ -458,7 +459,7 @@
 }
 
 
-- (void) postFeed: (NSString*) imageURL
+- (void) postFeed: (MediaFile*) mediaFile
       description: (NSString*) description
            amount: (int) amount
           user_id: (int) user_id
@@ -466,12 +467,21 @@
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure
 {
+    
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       imageURL, @"photo_url",
-                                       description, @"description",
-                                       [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
-                                       feed_type, @"gift_type",
-                                       nil];
+                                
+                                      description, @"description",
+                                      [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
+                                      feed_type, @"gift_type",
+                                      nil];
+
+    
+    if(mediaFile.mediaType == VIDEO){
+        [parameters setObject:mediaFile.mediaURL forKey:@"video_url"];
+    }else{
+        [parameters setObject:mediaFile.mediaURL forKey:@"photo_url"];
+    }
+    
     
     [self PostRequest: @"projects"
            parameters: parameters
@@ -486,7 +496,7 @@
                   failure(MSG_DISCONNECT_INTERNET);
               }];
 }
-- (void) UpdatepostFeed: (NSString*) imageURL
+- (void) UpdatepostFeed: (MediaFile*) mediaFile
       description: (NSString*) description
            amount: (int) amount
           user_id: (int) user_id
@@ -498,10 +508,18 @@
     [self addTokenIfExist];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                       imageURL, @"photo_url",
                                        description, @"description",
                                        [NSNumber numberWithInt: amount*100], @"goal_amount_cents",
                                        nil];
+    
+    if(mediaFile.mediaURL!=nil){
+        if(mediaFile.mediaType == VIDEO){
+            [parameters setObject:mediaFile.mediaURL forKey:@"video_url"];
+        }else{
+            [parameters setObject:mediaFile.mediaURL forKey:@"photo_url"];
+        }
+    }
+    
     if(gift_type!=nil){
         [parameters setObject:gift_type  forKey:@"gift_type"];
     }
@@ -1442,7 +1460,7 @@
 
 #pragma mark -
 #pragma mark Image upload to Cloudinary
-- (void) uploadImage:(NSData *)data
+- (void) uploadImage:(NSData *) data
              success: (void (^)(NSDictionary *photoInfo))success
              failure: (void (^)(NSString *errorMessage))failure
 {
@@ -1477,6 +1495,72 @@
         failure(MSG_DISCONNECT_INTERNET);
     }];
     
+}
+
+- (void) uploadVideo: (NSData *) data
+             success: (void (^)(NSDictionary *photoInfo))success
+             failure: (void (^)(NSString *errorMessage))failure
+{
+    [self GETRequest:@"photos/presign" parameters:nil success:^(id responseObject) {
+        
+        NSLog(@"responseObject %@", responseObject);
+        if ([responseObject objectForKey:@"url"]) {
+            
+            
+            NSDictionary* config = [self getVideoConfig: responseObject];
+    
+            
+            NSString *url = [responseObject objectForKey:@"url"];
+            
+            CLCloudinary *mobileCloudinary = [[CLCloudinary alloc] initWithUrl:url];
+            [mobileCloudinary.config setValue:@"donorsee" forKey:@"cloud_name"];
+            
+            
+            
+            [mobileCloudinary.config setValue:@"ileub0hk_unsigned_video" forKey:@"upload_preset"];
+            [mobileCloudinary.config setValue:@"video" forKey:@"resource_type"];
+            
+            
+            
+            CLUploader* mobileUploader = [[CLUploader alloc] init:mobileCloudinary delegate:nil];
+            
+            
+            
+            [mobileUploader unsignedUpload:data uploadPreset:@"ileub0hk_unsigned_video" options:config withCompletion:^(NSDictionary *successResult, NSString *errorResult, NSInteger code, id context) {
+                if (successResult) {
+                    NSString* publicId = [successResult valueForKey:@"public_id"];
+                    NSLog(@"Block upload success. Public ID=%@, Full result=%@", publicId, successResult);
+                    success(successResult);
+                } else {
+                    NSLog(@"Block upload error: %@, %d", errorResult, code);
+                    failure(errorResult);
+                }
+                
+            }andProgress:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite, id context) {
+                NSLog(@"Block upload progress: %d/%d (+%d)", totalBytesWritten, totalBytesExpectedToWrite, bytesWritten);
+            }];
+
+        } else {
+            failure(MSG_DISCONNECT_INTERNET);
+        }
+    } failure:^(NSError *error) {
+        failure(MSG_DISCONNECT_INTERNET);
+    }];
+    
+}
+
+- (NSMutableDictionary*) getVideoConfig:(NSDictionary*) preset {
+    NSMutableDictionary* config = [[NSMutableDictionary alloc] init];
+    
+    [config setObject: [preset objectForKey:@"api_key"] forKey:@"api_key"];
+    [config setObject: [preset objectForKey:@"folder"] forKey:@"folder"];
+    [config setObject: [preset objectForKey:@"signature"] forKey:@"signature"];
+    [config setObject: @"donorsee"  forKey:@"cloud_name"];
+    [config setObject: @"ileub0hk_unsigned_video" forKey:@"upload_preset"];
+    [config setObject: @"video" forKey:@"resource_type"];
+    //[config setValue: @"true" forKey:@"unsigned"];
+    
+    return config;
 }
 
 - (void) cancelMonthlyDonation:(NSString*) project_id
