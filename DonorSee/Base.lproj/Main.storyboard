@@ -1080,12 +1080,12 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="qrg-4t-qAe" firstAttribute="leading" secondItem="sI5-yE-W6V" secondAttribute="leading" id="8XL-I2-Ely"/>
-                            <constraint firstItem="qrg-4t-qAe" firstAttribute="trailing" secondItem="sI5-yE-W6V" secondAttribute="trailing" id="9cs-xu-ZqA"/>
                             <constraint firstItem="qrg-4t-qAe" firstAttribute="top" secondItem="XXD-15-N9a" secondAttribute="top" id="V8s-22-bm1"/>
+                            <constraint firstAttribute="trailing" secondItem="qrg-4t-qAe" secondAttribute="trailing" id="VSN-Dd-J1T"/>
                             <constraint firstItem="sI5-yE-W6V" firstAttribute="centerX" secondItem="XXD-15-N9a" secondAttribute="centerX" id="bU2-NK-way"/>
                             <constraint firstItem="sI5-yE-W6V" firstAttribute="centerY" secondItem="XXD-15-N9a" secondAttribute="centerY" id="eGf-Tp-VYT"/>
                             <constraint firstItem="qrg-4t-qAe" firstAttribute="bottom" secondItem="iIe-PY-jlF" secondAttribute="top" id="fyb-b8-2pz"/>
+                            <constraint firstItem="qrg-4t-qAe" firstAttribute="leading" secondItem="XXD-15-N9a" secondAttribute="leading" id="hJ5-Mq-dmu"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" selectedImage="CancelBlack.png" id="9G9-kd-9aZ"/>
@@ -3212,15 +3212,13 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="0dB-ON-h6d"/>
                             <constraint firstItem="h8h-04-7d7" firstAttribute="top" secondItem="mjv-vv-P3H" secondAttribute="top" id="1VY-3A-4gc"/>
-                            <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="2zp-Gt-IQu"/>
                             <constraint firstItem="rjc-Re-3sf" firstAttribute="centerX" secondItem="mjv-vv-P3H" secondAttribute="centerX" id="FN5-sI-FG9"/>
-                            <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="QmU-fr-Gbn"/>
+                            <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="Fu7-iO-mlp"/>
                             <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="RZ5-XA-RS6"/>
                             <constraint firstItem="p8f-iE-NMN" firstAttribute="top" secondItem="h8h-04-7d7" secondAttribute="bottom" id="VUn-Ox-HGW"/>
-                            <constraint firstAttribute="trailing" secondItem="h8h-04-7d7" secondAttribute="trailing" id="dPl-Kt-XEk"/>
                             <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="etu-zu-wnr"/>
+                            <constraint firstItem="h8h-04-7d7" firstAttribute="leading" secondItem="mjv-vv-P3H" secondAttribute="leading" id="fh7-he-Vva"/>
                             <constraint firstItem="rjc-Re-3sf" firstAttribute="centerY" secondItem="mjv-vv-P3H" secondAttribute="centerY" id="lm0-km-ueo"/>
                         </constraints>
                         <variation key="default">

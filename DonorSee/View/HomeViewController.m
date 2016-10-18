@@ -410,7 +410,7 @@
     if ([_followedUserIds containsObject:[NSNumber numberWithInt:feedId]]) {
         [cell updateFollowStatus:YES];
     }
-    
+
     return cell;
 }
 
@@ -425,6 +425,7 @@
 {
     return [FeedTableViewCell getHeight];
 }
+
 
 #define REFRESH_POINT 50.0f
 #define REFRESH_ICON_Y 5.0f
