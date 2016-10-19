@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43588F3C1DB8126100F8961A /* country_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 43588F3B1DB8126100F8961A /* country_arrow.png */; };
 		4378C3651DA7FD22009FE0E3 /* icon_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4378C3641DA7FD22009FE0E3 /* icon_play.png */; };
 		439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FD1DA8F95D0041DB44 /* icon_reccuring.png */; };
 		439047001DA915550041DB44 /* reccuring_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FF1DA915550041DB44 /* reccuring_white.png */; };
@@ -194,6 +195,7 @@
 
 /* Begin PBXFileReference section */
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43588F3B1DB8126100F8961A /* country_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = country_arrow.png; sourceTree = "<group>"; };
 		4378C3641DA7FD22009FE0E3 /* icon_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_play.png; sourceTree = "<group>"; };
 		439046FD1DA8F95D0041DB44 /* icon_reccuring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_reccuring.png; sourceTree = "<group>"; };
 		439046FF1DA915550041DB44 /* reccuring_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reccuring_white.png; sourceTree = "<group>"; };
@@ -801,6 +803,7 @@
 		F87AE4371C83D45900FE9417 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				43588F3B1DB8126100F8961A /* country_arrow.png */,
 				43D7EB431DB27ABA009FB79B /* tab_explore_normal.png */,
 				43D7EB441DB27ABA009FB79B /* tab_explore_normal@2x.png */,
 				43D7EB451DB27ABA009FB79B /* tab_explore_sel@2x.png */,
@@ -1131,6 +1134,7 @@
 				F83E83791C9AC1AE00A40334 /* tab_upload_normal.png in Resources */,
 				F83E83891C9AC49200A40334 /* tab_profile_sel.png in Resources */,
 				BB8C5B271D7B50F2007403EE /* CancelBlack.png in Resources */,
+				43588F3C1DB8126100F8961A /* country_arrow.png in Resources */,
 				F8E29C5D1C83DDC0003CAFD2 /* upload.png in Resources */,
 				F8E29C591C83DDC0003CAFD2 /* donate.png in Resources */,
 				F842144A1CABE42C0021EABB /* gave_icon.png in Resources */,

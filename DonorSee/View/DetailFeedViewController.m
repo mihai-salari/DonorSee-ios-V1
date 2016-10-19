@@ -76,6 +76,7 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableBottom;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableTop;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomDescriptionLabel;
 
 @end
 
@@ -488,8 +489,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-   // return ivFeed.frame.size.height + viInfo.frame.size.height + lbDescription.frame.size.height + progressView.frame.size.height;
-    return viInfo.frame.origin.y + viInfo.frame.size.height;
+    return ivFeed.frame.size.height + lbDescription.frame.size.height + viInfo.frame.size.height +btFollowUp.frame.size.height + 200;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

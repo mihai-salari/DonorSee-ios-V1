@@ -51,6 +51,10 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintPhotoHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintContentTop;
 @property (weak, nonatomic) IBOutlet UISwitch *switchRecurring;
+
+@property (weak, nonatomic) IBOutlet UILabel *lbCountry;
+
+
 @end
 
 
@@ -878,6 +882,26 @@
             controller.urlString = @"https://donorsee.com/faq";
         }
     }
+}
+
+-(NSMutableArray *) getSortedCountryArray {
+    
+    NSLocale *locale = [NSLocale currentLocale];
+    NSArray *countryArray = [NSLocale ISOCountryCodes];
+    
+    NSMutableArray *sortedCountryArray = [[NSMutableArray alloc] init];
+    
+    for (NSString *countryCode in countryArray) {
+        
+        NSString *displayNameString = [locale displayNameForKey:NSLocaleCountryCode value:countryCode];
+        [sortedCountryArray addObject:displayNameString];
+        
+    }
+    
+    [sortedCountryArray sortUsingSelector:@selector(localizedCompare:)];
+    
+    return sortedCountryArray;
+    
 }
 
 @end
