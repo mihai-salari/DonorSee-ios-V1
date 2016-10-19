@@ -31,6 +31,7 @@
         self.stripe_user_id = [dicFeed valueForKey:@"stripe_user_id"];
         self.is_monthly_giver = [dicFeed[@"is_monthly_giver"] boolValue];
         self.amount_given_cents = [dicFeed[@"amount_given_cents"] intValue];
+        self.country_code = [dicFeed valueForKey:@"country_code"];
     }
     return self;
 }
@@ -50,6 +51,7 @@
         self.register_date = [objFeed valueForKey: @"created_at"];
         self.is_monthly_giver = [[objFeed valueForKey: @"is_monthly_giver"] boolValue];
         self.amount_given_cents = [[objFeed valueForKey:@"amount_given_cents"] intValue];
+         self.country_code = [objFeed valueForKey:@"country_code"];
         self.arrUsers = [NSMutableArray array];
     }
     return self;
@@ -76,6 +78,7 @@
         //self.donated_count = [dicFeed[@"donated_count"] intValue];
         //self.is_gave = [dicFeed[@"is_gave"] boolValue];
         //self.stripe_user_id = [dicFeed valueForKey:@"stripe_user_id"];
+         self.country_code = [dicFeed valueForKey:@"country_code"];
         
         NSString* email = [ownerUser valueForKey: @"email"];
         NSString* name = [NSString stringWithFormat:@"%@ %@", [ownerUser valueForKey: @"first_name"], [ownerUser valueForKey: @"last_name"]];
@@ -114,6 +117,7 @@
         self.is_gave = [dicFeed[@"is_gave"] boolValue];        
         self.arrUsers = [NSMutableArray array];
         self.stripe_user_id =[dicFeed valueForKey:@"stripe_user_id"];
+        self.country_code = [dicFeed valueForKey:@"country_code"];
         
         if([[dicFeed allKeys] containsObject: @"donated_user_count"])
         {

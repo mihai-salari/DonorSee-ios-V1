@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView        *ivGave;
 @property (weak, nonatomic) IBOutlet UIButton *playVideoButton;
 @property (weak, nonatomic) IBOutlet UIButton *ivPlayVideo;
+@property (weak, nonatomic) IBOutlet UIImageView *ivCountry;
+@property (weak, nonatomic) IBOutlet UILabel *lbCountry;
 
 @end
 
@@ -45,6 +47,8 @@
 @synthesize progressView;
 @synthesize btHeart;
 @synthesize ivGave;
+@synthesize ivCountry;
+@synthesize lbCountry;
 
 - (void)awakeFromNib {
     // Initialization code
@@ -89,6 +93,15 @@
     progressView.trackBorderColor = [UIColor whiteColor];
     progressView.trackFillColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
     
+    if(currentFeed.country_code!=nil){
+        ivCountry.hidden = NO;
+        lbCountry.hidden = NO;
+        lbCountry.text = currentFeed.country_code;
+        [ivCountry setImage: [UIImage imageNamed: [currentFeed.country_code lowercaseString]]];
+    }else{
+        ivCountry.hidden = YES;
+        lbCountry.hidden = YES;
+    }
     
 }
 

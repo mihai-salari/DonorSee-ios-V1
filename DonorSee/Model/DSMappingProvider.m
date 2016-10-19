@@ -95,6 +95,7 @@
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"photo" toKeyPath:@"photo_url"]];
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"videoURL" toKeyPath:@"video_url"]];
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"gift_type" toKeyPath:@"gift_type"]];
+    [mapping addAttribute:[FEMAttribute mappingOfProperty:@"country_code" toKeyPath:@"country_code"]];
 
     // Date
     [mapping addAttribute:[DSMappingProvider mappingOfNSStringToDateProperty:@"created_at" toKeyPath:@"created_at"]];

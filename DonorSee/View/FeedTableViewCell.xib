@@ -162,7 +162,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nf5-9t-85o">
-                                <frame key="frameInset" minX="87" minY="43" width="175" height="17"/>
+                                <frame key="frameInset" minX="87" minY="43" width="93" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="11"/>
                                 <color key="textColor" red="0.80784313725490198" green="0.80784313725490198" blue="0.80784313725490198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -170,7 +170,8 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b7R-HW-Lg1">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="71N-o5-fID"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="5Hi-z8-YJG"/>
+                                    <constraint firstAttribute="height" constant="39" id="9WV-Kc-jE5"/>
                                     <constraint firstAttribute="width" constant="40" id="ft0-Gf-uIg"/>
                                 </constraints>
                                 <state key="normal" image="heart.png"/>
@@ -185,18 +186,30 @@
                                     <constraint firstAttribute="height" constant="47" id="o8i-rO-Um0"/>
                                 </constraints>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ua" translatesAutoresizingMaskIntoConstraints="NO" id="Lhn-XS-m1X">
+                                <frame key="frameInset" minX="190" minY="46" width="12" height="12"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5m-3J-hcj">
+                                <frame key="frameInset" minX="206" minY="41" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="7vN-1G-0S3" firstAttribute="top" secondItem="V4I-gR-Rl2" secondAttribute="topMargin" constant="14" id="3yr-gw-qcs"/>
                             <constraint firstItem="7c0-Of-szm" firstAttribute="leading" secondItem="V4I-gR-Rl2" secondAttribute="leading" constant="20" id="8sz-k8-nUY"/>
                             <constraint firstItem="Qgx-eu-JUL" firstAttribute="top" secondItem="V4I-gR-Rl2" secondAttribute="top" id="9ya-sv-9Av"/>
+                            <constraint firstItem="PaJ-Uq-1If" firstAttribute="leading" secondItem="b7R-HW-Lg1" secondAttribute="trailing" constant="94" id="A2L-G8-6yY"/>
                             <constraint firstItem="7vN-1G-0S3" firstAttribute="leading" secondItem="7c0-Of-szm" secondAttribute="trailing" constant="11" id="P2y-ZM-nac"/>
                             <constraint firstItem="7c0-Of-szm" firstAttribute="centerY" secondItem="V4I-gR-Rl2" secondAttribute="centerY" id="VXL-Z7-ha2"/>
                             <constraint firstItem="b7R-HW-Lg1" firstAttribute="leading" secondItem="7vN-1G-0S3" secondAttribute="trailing" constant="10" id="amq-ds-g6U"/>
                             <constraint firstAttribute="trailing" secondItem="PaJ-Uq-1If" secondAttribute="trailing" constant="11" id="do0-Wh-P1i"/>
-                            <constraint firstItem="b7R-HW-Lg1" firstAttribute="top" secondItem="V4I-gR-Rl2" secondAttribute="top" constant="19" id="hlo-kk-tWw"/>
                             <constraint firstItem="PaJ-Uq-1If" firstAttribute="centerY" secondItem="V4I-gR-Rl2" secondAttribute="centerY" id="iOC-35-W5H"/>
+                            <constraint firstItem="b7R-HW-Lg1" firstAttribute="top" secondItem="V4I-gR-Rl2" secondAttribute="top" constant="8" id="lfJ-uw-VRT"/>
                             <constraint firstItem="Qgx-eu-JUL" firstAttribute="leading" secondItem="V4I-gR-Rl2" secondAttribute="leading" id="o8c-5N-PQp"/>
                         </constraints>
                     </view>
@@ -225,10 +238,12 @@
             <connections>
                 <outlet property="btGive" destination="BO9-c9-o7m" id="TNd-7G-N8x"/>
                 <outlet property="btHeart" destination="b7R-HW-Lg1" id="B1h-3g-5tp"/>
+                <outlet property="ivCountry" destination="Lhn-XS-m1X" id="agT-0Q-gYF"/>
                 <outlet property="ivFeed" destination="l3u-BW-jug" id="Wrw-sg-Ou4"/>
                 <outlet property="ivGave" destination="Qgx-eu-JUL" id="UmT-GS-IOo"/>
                 <outlet property="ivPlayVideo" destination="8eY-16-xr1" id="MO6-oJ-4NT"/>
                 <outlet property="ivUserAvatar" destination="7c0-Of-szm" id="tTl-IA-lfX"/>
+                <outlet property="lbCountry" destination="U5m-3J-hcj" id="4l8-dI-b7f"/>
                 <outlet property="lbDescription" destination="Dm7-Cn-iww" id="uvi-5K-WHY"/>
                 <outlet property="lbGiveTitle" destination="oZp-nE-GIX" id="ViO-de-IFe"/>
                 <outlet property="lbMaxPrice" destination="Ctq-Yd-6YS" id="1lw-rj-811"/>
@@ -249,5 +264,6 @@
         <image name="share_icon.png" width="35" height="35"/>
         <image name="test_user_image.jpg" width="237" height="213"/>
         <image name="timer_icon.png" width="24" height="24"/>
+        <image name="ua" width="48" height="48"/>
     </resources>
 </document>
