@@ -8,6 +8,8 @@
 
 #import "FeedTableViewCell.h"
 #import "PlayerViewController.h"
+#import "CountryUtils.h"
+
 //#import "JAmazonS3ClientManager.h"
 @import CircleProgressView;
 
@@ -94,15 +96,15 @@
     progressView.trackFillColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
     
     if(currentFeed.country_code!=nil){
+        CountryUtils* countryUtils = [[CountryUtils alloc] init];
         ivCountry.hidden = NO;
         lbCountry.hidden = NO;
-        lbCountry.text = currentFeed.country_code;
+        lbCountry.text = [countryUtils getCountryNameByCode:currentFeed.country_code];
         [ivCountry setImage: [UIImage imageNamed: [currentFeed.country_code lowercaseString]]];
     }else{
         ivCountry.hidden = YES;
         lbCountry.hidden = YES;
     }
-    
 }
 
 - (void) setDonateFeed: (Feed*) f isDetail: (BOOL) isDetail

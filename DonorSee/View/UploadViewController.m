@@ -22,7 +22,7 @@
 #import "AVFoundation/AVAsset.h"
 #import "AVFoundation/AVAssetImageGenerator.h"
 #import "MediaFile.h"
-
+#import "CountryUtils.h"
 
 @import ALCameraViewController;
 
@@ -30,8 +30,12 @@
 {
     UIImagePickerController         *imagePicker;
     MediaFile                       *mediaFile;
+    CountryUtils                    *countryUtils;
+    NSString                        *selectedCountry;
+    UIPickerView                    *countryPicker;
 }
 
+@property (strong,nonatomic) NSArray                    *countries;
 @property (nonatomic, strong) AuthView                  *viSignInFB;
 @property (weak, nonatomic) IBOutlet UIImageView        *ivCheck;
 @property (weak, nonatomic) IBOutlet UIImageView        *ivPhoto;
@@ -52,7 +56,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintContentTop;
 @property (weak, nonatomic) IBOutlet UISwitch *switchRecurring;
 
-@property (weak, nonatomic) IBOutlet UILabel *lbCountry;
+@property (weak, nonatomic) IBOutlet UITextField *editCountry;
 
 
 @end
@@ -65,7 +69,6 @@
 @synthesize ivAddPhoto;
 @synthesize lbDescriptionLength;
 @synthesize tvDescription;
-//@synthesize lbDescriptionPlaceHolder;
 @synthesize tfPrice;
 @synthesize viPrice;
 @synthesize scMain;
@@ -77,12 +80,14 @@
 @synthesize constraintPhotoHeight;
 @synthesize constraintContentTop;
 @synthesize isUpdateMode;
+@synthesize editCountry;
 
 - (void) initMember
 {
     [super initMember];
     
     mediaFile = [[MediaFile alloc] init];
+    countryUtils = [[CountryUtils alloc] init];
     
     tvDescription.inputAccessoryView = toolBar;
     tfPrice.inputAccessoryView = toolBar;
@@ -112,9 +117,11 @@
     
     ivCheck.hidden = YES;
     
-    
     _BtnUpdateProject.layer.masksToBounds = YES;
     _BtnUpdateProject.layer.cornerRadius = 20.0;
+    
+    [self initCountryPicker];
+    
     if (isUpdateMode==TRUE)
     {
         _BtnUpdateProject.hidden=false;
@@ -131,11 +138,63 @@
     }
 }
 
+- (void)initCountryPicker {
+    self.countries = [countryUtils getSortedCountryArray];
+    
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    
+    UIToolbar *toolBarPicker = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 44)];
+    [toolBarPicker setBarStyle:UIBarStyleDefault];
+    UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    
+    UIBarButtonItem *barButtonDone = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                      style:UIBarButtonItemStyleDone
+                                                                     target:self
+                                                                     action:@selector(doneClicked)];
+    toolBarPicker.items = @[flex, barButtonDone];
+    barButtonDone.tintColor = [UIColor blackColor];
+    
+    countryPicker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, toolBarPicker.frame.size.height, screenWidth, 200)];
+    countryPicker.delegate = self;
+    countryPicker.dataSource = self;
+    countryPicker.showsSelectionIndicator = YES;
+    
+    UIView *inputView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, toolBarPicker.frame.size.height + countryPicker.frame.size.height)];
+    inputView.backgroundColor = [UIColor clearColor];
+    [inputView addSubview:countryPicker];
+    [inputView addSubview:toolBarPicker];
+    
+    self.editCountry.inputView = inputView;
+}
+
+- (void)doneClicked {
+    [editCountry resignFirstResponder];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    self.scMain.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height+50);
+    self.scMain.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height+70);
 }
+
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return self.countries.count;
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return  1;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return self.countries[row];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.editCountry.text = self.countries[row];
+    self->selectedCountry = self.countries[row];
+}
+
 
 -(IBAction)BackButtonPress:(id)sender
 {
@@ -158,7 +217,30 @@
     }else{
         _switchRecurring.enabled = YES;
     }
+    
+    if(objFeed.country_code != nil){
+        [countryPicker reloadAllComponents];
+        
+        int countryIndex = [self getProjectCountryIndex];
+        self.editCountry.text = self.countries[countryIndex];
+        [countryPicker selectRow:[self getProjectCountryIndex] inComponent:0 animated:NO];
+    }
 }
+
+-(int) getProjectCountryIndex {
+    NSString* countryCode = objFeed.country_code;
+    
+    int index = 0;
+    for (NSString* countryName in _countries) {
+        NSString* currentCountryCode = [countryUtils getCountryCodeByName:countryName];
+        if([countryCode isEqualToString:currentCountryCode]){
+            return index;
+        }
+        index++;
+    }
+    return 0;
+}
+
 - (IBAction)UpdateButtonPress:(UIButton *)sender
 {
     [self hideKeyboard];
@@ -333,13 +415,20 @@
         [[NetworkClient sharedClient] uploadVideo: videoData success:^(NSDictionary *photoInfo) {
             [SVProgressHUD dismiss];
             if ([photoInfo objectForKey:@"secure_url"]) {
+                
                 NSString *gift_type = [self getFeedType];
                 NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
+                NSString *countryCode;
+                
+                if(selectedCountry!=nil){
+                    countryCode = [countryUtils getCountryCodeByName:selectedCountry];
+                }
                 
                 [self makePostFeedRequest : description
                                    amount : amount
                                 secureURL : secureUrl
-                                gift_type : gift_type];
+                                gift_type : gift_type
+                                  country : countryCode];
                 
             }
             
@@ -356,10 +445,18 @@
                 NSString *gift_type = [self getFeedType];
                 NSString *secureUrl = [photoInfo objectForKey:@"secure_url"];
                 
+                NSString *countryCode;
+                
+                if(selectedCountry!=nil){
+                    countryCode = [countryUtils getCountryCodeByName:selectedCountry];
+                }
+
+                
                 [self makePostFeedRequest : description
                                    amount : amount
                                 secureURL : secureUrl
-                                gift_type : gift_type];
+                                gift_type : gift_type
+                                  country : countryCode];
                 
             }
             
@@ -374,7 +471,8 @@
                  (NSString*) description
                       amount: (int) amount
                    secureURL: (NSString*) secureUrl
-                   gift_type: (NSString*) gift_type {
+                   gift_type: (NSString*) gift_type
+                     country: (NSString*) country{
     
     mediaFile.mediaURL = secureUrl;
     
@@ -383,6 +481,7 @@
                                     amount: amount
                                    user_id: [AppEngine sharedInstance].currentUser.user_id
                                  feed_type: gift_type
+                                   country: country
                                    success:^(NSDictionary *dicFeed, NSDictionary* dicUser) {
                                        
                                        [SVProgressHUD dismiss];
@@ -430,6 +529,11 @@
     if([newFeedType isEqualToString:oldFeedType]){
         newFeedType = nil;
     }
+    
+    NSString* countryCode = nil;
+    if(selectedCountry != nil){
+        countryCode = [countryUtils getCountryCodeByName:selectedCountry];
+    }
 
     if(mediaFile.mediaURL != nil){
         if(mediaFile.mediaType == VIDEO){
@@ -439,7 +543,8 @@
                 [SVProgressHUD dismiss];
                 if ([photoInfo objectForKey:@"secure_url"]) {
                     mediaFile.mediaURL = [photoInfo objectForKey:@"secure_url"];
-                    [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType];
+                    
+                    [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType country:countryCode];
                 }
                 
             } failure:^(NSString *errorMessage) {
@@ -452,7 +557,7 @@
                 [SVProgressHUD dismiss];
                 if ([photoInfo objectForKey:@"secure_url"]) {
                     mediaFile.mediaURL = [photoInfo objectForKey:@"secure_url"];
-                    [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType];
+                    [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType country:countryCode];
                 }
                 
             } failure:^(NSString *errorMessage) {
@@ -460,18 +565,20 @@
             }];
         }
     } else {
-        [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType];
+        [self makeUpdateFeedRequest:text amount:amount gift_type:newFeedType country:countryCode];
     }
     
 }
 
 - (void) makeUpdateFeedRequest: (NSString*) description
                         amount: (int) amount
-                   gift_type: (NSString*) gift_type {
+                   gift_type: (NSString*) gift_type
+                       country: (NSString*) country{
     [[NetworkClient sharedClient] UpdatepostFeed:mediaFile
                                      description:description amount:amount
                                          user_id:[AppEngine sharedInstance].currentUser.user_id
                                        gift_type: gift_type
+                                         country: country
                                          success:^(NSDictionary *dicFeed, NSDictionary *dicUser) {
                                              [SVProgressHUD dismiss];
                                              
@@ -883,26 +990,6 @@
             controller.urlString = @"https://donorsee.com/faq";
         }
     }
-}
-
--(NSMutableArray *) getSortedCountryArray {
-    
-    NSLocale *locale = [NSLocale currentLocale];
-    NSArray *countryArray = [NSLocale ISOCountryCodes];
-    
-    NSMutableArray *sortedCountryArray = [[NSMutableArray alloc] init];
-    
-    for (NSString *countryCode in countryArray) {
-        
-        NSString *displayNameString = [locale displayNameForKey:NSLocaleCountryCode value:countryCode];
-        [sortedCountryArray addObject:displayNameString];
-        
-    }
-    
-    [sortedCountryArray sortUsingSelector:@selector(localizedCompare:)];
-    
-    return sortedCountryArray;
-    
 }
 
 @end

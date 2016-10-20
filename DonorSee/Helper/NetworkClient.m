@@ -464,6 +464,7 @@
            amount: (int) amount
           user_id: (int) user_id
         feed_type: (NSString*) feed_type
+          country: (NSString*) country
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure
 {
@@ -480,6 +481,10 @@
         [parameters setObject:mediaFile.mediaURL forKey:@"video_url"];
     }else{
         [parameters setObject:mediaFile.mediaURL forKey:@"photo_url"];
+    }
+    
+    if(country!=nil){
+        [parameters setObject:country forKey:@"country_code"];
     }
     
     
@@ -501,6 +506,7 @@
            amount: (int) amount
           user_id: (int) user_id
         gift_type: (NSString*) gift_type
+          country:(NSString*) country
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure
 {
@@ -518,6 +524,10 @@
         }else{
             [parameters setObject:mediaFile.mediaURL forKey:@"photo_url"];
         }
+    }
+    
+    if(country != nil){
+        [parameters setObject:country forKey:@"country_code"];
     }
     
     if(gift_type!=nil){

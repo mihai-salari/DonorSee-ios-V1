@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		43588F3C1DB8126100F8961A /* country_arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 43588F3B1DB8126100F8961A /* country_arrow.png */; };
 		4378C3651DA7FD22009FE0E3 /* icon_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4378C3641DA7FD22009FE0E3 /* icon_play.png */; };
+		438C983D1DB8D7400005A963 /* CountryUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 438C983C1DB8D7400005A963 /* CountryUtils.m */; };
 		439046FE1DA8F95D0041DB44 /* icon_reccuring.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FD1DA8F95D0041DB44 /* icon_reccuring.png */; };
 		439047001DA915550041DB44 /* reccuring_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 439046FF1DA915550041DB44 /* reccuring_white.png */; };
 		439047041DA96DC60041DB44 /* VideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 439047031DA96DC60041DB44 /* VideoPlayer.m */; };
@@ -197,6 +198,8 @@
 		37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DonorSee.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43588F3B1DB8126100F8961A /* country_arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = country_arrow.png; sourceTree = "<group>"; };
 		4378C3641DA7FD22009FE0E3 /* icon_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_play.png; sourceTree = "<group>"; };
+		438C983B1DB8D7300005A963 /* CountryUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CountryUtils.h; sourceTree = "<group>"; };
+		438C983C1DB8D7400005A963 /* CountryUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryUtils.m; sourceTree = "<group>"; };
 		439046FD1DA8F95D0041DB44 /* icon_reccuring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_reccuring.png; sourceTree = "<group>"; };
 		439046FF1DA915550041DB44 /* reccuring_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reccuring_white.png; sourceTree = "<group>"; };
 		439047031DA96DC60041DB44 /* VideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayer.m; sourceTree = "<group>"; };
@@ -761,6 +764,8 @@
 				F83F44041C990EB300FF2264 /* CustomSTTweetLabel.m */,
 				9FCAE57C1D5F3FDB0004B1D3 /* NSObject+ObjectMap.h */,
 				9FCAE57D1D5F3FDB0004B1D3 /* NSObject+ObjectMap.m */,
+				438C983B1DB8D7300005A963 /* CountryUtils.h */,
+				438C983C1DB8D7400005A963 /* CountryUtils.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -1320,6 +1325,7 @@
 				F892616D1CA8D29E00F97DD5 /* WebDonateViewController.m in Sources */,
 				F8276B411C9084AE008D1B76 /* OtherUserViewController.m in Sources */,
 				F83A23B41C9FA191006F4D2B /* AuthView.m in Sources */,
+				438C983D1DB8D7400005A963 /* CountryUtils.m in Sources */,
 				F8B3B2FB1CBD438900506AB1 /* EditProfileViewController.m in Sources */,
 				9FCAE57E1D5F3FDB0004B1D3 /* NSObject+ObjectMap.m in Sources */,
 				F854F9B61C859EFA0080D03A /* MainTabBarViewController.m in Sources */,

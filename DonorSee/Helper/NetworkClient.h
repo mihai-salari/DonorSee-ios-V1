@@ -73,6 +73,7 @@
            amount: (int) amount
           user_id: (int) user_id
         feed_type: (NSString*) feed_type
+          country: (NSString*) country
           success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
           failure: (void (^)(NSString *errorMessage))failure;
 
@@ -81,6 +82,7 @@
                  amount: (int) amount
                 user_id: (int) user_id
               gift_type: (NSString*) gift_type
+                country:(NSString*) country
                 success: (void (^)(NSDictionary *dicFeed, NSDictionary* dicUser))success
                 failure: (void (^)(NSString *errorMessage))failure;
 
