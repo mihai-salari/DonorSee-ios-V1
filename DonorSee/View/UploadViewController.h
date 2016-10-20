@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 #import "Feed.h"
 
-@interface UploadViewController : BaseViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface UploadViewController : BaseViewController <UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate>
 {
     
 }

@@ -3085,11 +3085,15 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                         <textInputTraits key="textInputTraits"/>
                                                                                     </textField>
-                                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="country_arrow.png" translatesAutoresizingMaskIntoConstraints="NO" id="ubZ-MS-Kku"/>
+                                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nud-9C-fO1">
+                                                                                        <state key="normal" image="country_arrow.png"/>
+                                                                                        <connections>
+                                                                                            <action selector="onCountryChooserButtonTap:" destination="B8g-jO-UFU" eventType="touchUpInside" id="ej2-pz-S3X"/>
+                                                                                        </connections>
+                                                                                    </button>
                                                                                 </subviews>
                                                                                 <constraints>
                                                                                     <constraint firstItem="b8h-bZ-XJ1" firstAttribute="top" secondItem="mf3-hq-t0k" secondAttribute="top" constant="5" id="MfL-OA-OS1"/>
-                                                                                    <constraint firstItem="ubZ-MS-Kku" firstAttribute="top" secondItem="mf3-hq-t0k" secondAttribute="top" id="g6a-mf-WwC"/>
                                                                                 </constraints>
                                                                             </stackView>
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="96k-V1-BCA" userLabel="View - Line">
@@ -3722,13 +3726,15 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         <outlet property="btnCancelRecurringGift" destination="EPd-2m-fyv" id="kOU-JH-qxn"/>
                         <outlet property="btnPlayVideo" destination="9DQ-Ef-Xbj" id="v3m-rs-edp"/>
                         <outlet property="cancelRecurringView" destination="lq0-42-ew3" id="Klr-Hp-lHJ"/>
-                        <outlet property="constraintBottomDescriptionLabel" destination="Nrx-8H-uay" id="osr-CJ-se9"/>
                         <outlet property="constraintTableBottom" destination="nVJ-PG-1r3" id="PIi-se-1OQ"/>
                         <outlet property="constraintTableTop" destination="w5c-gN-gAY" id="TSu-Uf-TiP"/>
                         <outlet property="constraitDonateContainerBottom" destination="6aQ-6t-Sgh" id="kds-S4-WIf"/>
                         <outlet property="donateButtonView" destination="TG6-xr-LUG" id="LFX-ae-yv4"/>
                         <outlet property="ivFeed" destination="Iko-26-SaM" id="shL-7s-qcI"/>
+                        <outlet property="ivFlag" destination="ipA-sV-skA" id="Yum-zQ-T8j"/>
+                        <outlet property="ivMap" destination="hxf-gZ-Ot1" id="DjS-EQ-DOR"/>
                         <outlet property="ivUserAvatar" destination="ux5-cG-6XY" id="W8v-JO-qxd"/>
+                        <outlet property="lbCountryName" destination="Ydd-Wc-xOa" id="VmF-K8-a41"/>
                         <outlet property="lbDescription" destination="52G-up-2Lw" id="9ad-ty-LpC"/>
                         <outlet property="lbDonatedCount" destination="iM3-Og-gFu" id="mt8-8k-Wml"/>
                         <outlet property="lbGiveTitle" destination="8zP-aS-dF7" id="Xhn-yh-dyT"/>
@@ -3751,7 +3757,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="atH-gx-EvZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <view contentMode="scaleToFill" id="prV-kh-R9t">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="730"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="750"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iko-26-SaM"/>
@@ -3800,9 +3806,10 @@ In order to ensure DonorSee provides the best experience possible for everyone
                             <color key="textColor" red="0.91764705879999997" green="0.61568627450000002" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="327" translatesAutoresizingMaskIntoConstraints="NO" id="52G-up-2Lw">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52G-up-2Lw">
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="4XC-Lz-ev1"/>
+                                <constraint firstAttribute="width" constant="327" id="7AO-15-Mkl"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                             <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3965,17 +3972,39 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                 <action selector="actionFollowUp:" destination="8BM-9h-2N2" eventType="touchUpInside" id="zZb-u7-MH0"/>
                             </connections>
                         </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ua" translatesAutoresizingMaskIntoConstraints="NO" id="ipA-sV-skA">
+                            <constraints>
+                                <constraint firstAttribute="width" constant="34" id="4oo-d4-JCQ"/>
+                                <constraint firstAttribute="height" constant="27" id="XDq-XF-djH"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ydd-Wc-xOa">
+                            <constraints>
+                                <constraint firstAttribute="height" constant="21" id="abJ-Ll-Yy4"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="location.png" translatesAutoresizingMaskIntoConstraints="NO" id="hxf-gZ-Ot1">
+                            <constraints>
+                                <constraint firstAttribute="height" constant="27" id="Dcn-fp-yNg"/>
+                                <constraint firstAttribute="width" constant="34" id="W5e-QJ-2Of"/>
+                            </constraints>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="Gd8-kw-ofk" secondAttribute="trailing" id="1Hf-uq-yqM"/>
                         <constraint firstAttribute="trailing" secondItem="bIi-KE-tC6" secondAttribute="trailing" id="54Q-LG-Lw9"/>
+                        <constraint firstItem="Gd8-kw-ofk" firstAttribute="top" secondItem="ipA-sV-skA" secondAttribute="bottom" constant="8" id="5r8-rK-ZyQ"/>
                         <constraint firstItem="bIi-KE-tC6" firstAttribute="top" secondItem="prV-kh-R9t" secondAttribute="top" id="6uj-8v-qXE"/>
                         <constraint firstAttribute="trailing" secondItem="4b5-HZ-KTP" secondAttribute="trailing" constant="12" id="7rq-eI-0D7"/>
+                        <constraint firstItem="hxf-gZ-Ot1" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="29" id="8Pc-Kk-iJz"/>
                         <constraint firstItem="4b5-HZ-KTP" firstAttribute="top" secondItem="prV-kh-R9t" secondAttribute="top" constant="18" id="CNO-s2-Yhc"/>
+                        <constraint firstItem="ipA-sV-skA" firstAttribute="leading" secondItem="hxf-gZ-Ot1" secondAttribute="trailing" constant="23" id="I2d-fm-ZuK"/>
                         <constraint firstItem="6zx-mt-jdk" firstAttribute="top" secondItem="9DQ-Ef-Xbj" secondAttribute="bottom" constant="180" id="KAE-Fy-VV2"/>
                         <constraint firstItem="7sK-vm-gJ8" firstAttribute="top" secondItem="bIi-KE-tC6" secondAttribute="bottom" constant="229" id="MEv-jh-H0q"/>
-                        <constraint firstItem="Gd8-kw-ofk" firstAttribute="top" relation="greaterThanOrEqual" secondItem="52G-up-2Lw" secondAttribute="bottom" constant="8" id="Nrx-8H-uay"/>
                         <constraint firstItem="52G-up-2Lw" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="29" id="OGE-rZ-3e7"/>
                         <constraint firstAttribute="trailing" secondItem="9DQ-Ef-Xbj" secondAttribute="trailing" constant="162.5" id="OKS-qb-ZWM"/>
                         <constraint firstAttribute="trailing" secondItem="996-jh-rGn" secondAttribute="trailing" constant="60" id="QPR-sb-bjs"/>
@@ -3985,7 +4014,9 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         <constraint firstItem="bIi-KE-tC6" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" id="T7u-XF-Liy"/>
                         <constraint firstItem="Gd8-kw-ofk" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" id="VHn-KQ-HKI"/>
                         <constraint firstItem="9DQ-Ef-Xbj" firstAttribute="top" secondItem="prV-kh-R9t" secondAttribute="top" constant="162" id="WWY-qM-Yti"/>
+                        <constraint firstItem="Gd8-kw-ofk" firstAttribute="top" secondItem="Ydd-Wc-xOa" secondAttribute="bottom" constant="11" id="YUx-Qt-BOu"/>
                         <constraint firstItem="996-jh-rGn" firstAttribute="centerX" secondItem="prV-kh-R9t" secondAttribute="centerX" id="a85-8U-PH5"/>
+                        <constraint firstItem="Ydd-Wc-xOa" firstAttribute="leading" secondItem="ipA-sV-skA" secondAttribute="trailing" constant="20" id="bEe-x4-ba7"/>
                         <constraint firstItem="Iko-26-SaM" firstAttribute="centerY" secondItem="9DQ-Ef-Xbj" secondAttribute="centerY" id="cYR-1A-scC"/>
                         <constraint firstItem="6zx-mt-jdk" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="29" id="eF4-gc-zXj"/>
                         <constraint firstItem="Gd8-kw-ofk" firstAttribute="leading" secondItem="Iko-26-SaM" secondAttribute="leading" id="eHZ-Sg-kqP"/>
@@ -3996,8 +4027,10 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         <constraint firstItem="52G-up-2Lw" firstAttribute="top" secondItem="Iko-26-SaM" secondAttribute="bottom" constant="46" id="mg6-bJ-b9B"/>
                         <constraint firstAttribute="trailing" secondItem="52G-up-2Lw" secondAttribute="trailing" constant="19" id="pW5-fU-h2p"/>
                         <constraint firstItem="9DQ-Ef-Xbj" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="162.5" id="rf0-CZ-vFB"/>
+                        <constraint firstItem="ipA-sV-skA" firstAttribute="top" relation="greaterThanOrEqual" secondItem="52G-up-2Lw" secondAttribute="bottom" constant="24" id="ric-Rf-J78"/>
                         <constraint firstItem="996-jh-rGn" firstAttribute="leading" secondItem="prV-kh-R9t" secondAttribute="leading" constant="59" id="tLx-YX-olF"/>
                         <constraint firstItem="52G-up-2Lw" firstAttribute="top" secondItem="6zx-mt-jdk" secondAttribute="bottom" constant="8" id="xKp-cG-WsZ"/>
+                        <constraint firstItem="Gd8-kw-ofk" firstAttribute="top" secondItem="hxf-gZ-Ot1" secondAttribute="bottom" constant="8" id="ydv-4Z-1Dy"/>
                     </constraints>
                 </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="Jlp-HN-p5g">
@@ -4305,6 +4338,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
         <image name="icon_play.png" width="84" height="96"/>
         <image name="icon_reccuring.png" width="44" height="44"/>
         <image name="info.png" width="28" height="28"/>
+        <image name="location.png" width="52" height="50"/>
         <image name="login_bg.png" width="735" height="1307"/>
         <image name="logo_image.png" width="717" height="458"/>
         <image name="password_icon.png" width="52" height="61"/>
@@ -4315,6 +4349,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
         <image name="small_logo.png" width="274" height="74"/>
         <image name="timer_icon.png" width="24" height="24"/>
         <image name="top_feed_overlay.png" width="735" height="225"/>
+        <image name="ua" width="48" height="48"/>
         <image name="user_pic.png" width="53" height="60"/>
         <image name="white_share_icon.png" width="80" height="80"/>
     </resources>

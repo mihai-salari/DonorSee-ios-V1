@@ -517,7 +517,8 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return ivFeed.frame.size.height + lbDescription.frame.size.height + viInfo.frame.size.height +btFollowUp.frame.size.height;
+//    return ivFeed.frame.size.height + lbDescription.frame.size.height + viInfo.frame.size.height +btFollowUp.frame.size.height;
+    return viHeader.frame.size.height;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

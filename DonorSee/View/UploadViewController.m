@@ -58,7 +58,6 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *editCountry;
 
-
 @end
 
 
@@ -166,6 +165,10 @@
     
     self.editCountry.inputView = inputView;
 }
+- (IBAction)onCountryChooserButtonTap:(id)sender {
+    [self.editCountry becomeFirstResponder];
+}
+
 
 - (void)doneClicked {
     [editCountry resignFirstResponder];
