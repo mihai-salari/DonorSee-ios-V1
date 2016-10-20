@@ -117,15 +117,15 @@
 
     
     //Global.
-    int globalIconWidth = 24;
+    int globalIconWidth = 23;
     int globalTitleWidth = 150;
 
     UIImageView* ivGlobal = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"global_icon.png"]];
     
-    ivGlobal.frame = CGRectMake(30 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, 24, 23);
+    ivGlobal.frame = CGRectMake(30 + initialWhiteBarLayoutAttributes.size.width/2.0, 17, globalIconWidth, 23);
     [whiteBarView addSubview: ivGlobal];
     
-    lbGlobal = [[UILabel alloc] initWithFrame: CGRectMake(30 + initialWhiteBarLayoutAttributes.size.width/2.0 + globalIconWidth, 15, 90, 28)];
+    lbGlobal = [[UILabel alloc] initWithFrame: CGRectMake(40 + initialWhiteBarLayoutAttributes.size.width/2.0 + globalIconWidth, 15, 90, 28)];
     lbGlobal.textAlignment = NSTextAlignmentLeft;
     lbGlobal.text = @"GLOBAL";
     [whiteBarView addSubview: lbGlobal];
