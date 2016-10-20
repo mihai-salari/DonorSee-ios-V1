@@ -382,6 +382,7 @@
     // I'm not capturing the actual time or an error.
     AVAssetImageGenerator *generator =
     [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    generator.appliesPreferredTrackTransform = YES;
     CGImageRef imageRef = [generator copyCGImageAtTime:snapshot
                                             actualTime:nil
                                                  error:nil];

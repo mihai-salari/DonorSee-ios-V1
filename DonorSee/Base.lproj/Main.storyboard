@@ -2863,7 +2863,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bBd-go-QJa">
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rlW-xZ-lw1">
-                                                <frame key="frameInset" width="375" height="626"/>
+                                                <frame key="frameInset" width="375" height="595"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i2G-Pq-KgA">
                                                         <subviews>
@@ -3117,8 +3117,8 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="trailing" secondItem="LOs-fZ-yYM" secondAttribute="trailing" id="SVs-fa-kSV"/>
-                                                            <constraint firstItem="LOs-fZ-yYM" firstAttribute="leading" secondItem="czL-SS-biE" secondAttribute="leading" id="Tzz-jB-dwn"/>
+                                                            <constraint firstAttribute="trailing" secondItem="LOs-fZ-yYM" secondAttribute="trailing" constant="10" id="SVs-fa-kSV"/>
+                                                            <constraint firstItem="LOs-fZ-yYM" firstAttribute="leading" secondItem="czL-SS-biE" secondAttribute="leading" constant="10" id="Tzz-jB-dwn"/>
                                                             <constraint firstItem="LOs-fZ-yYM" firstAttribute="top" secondItem="czL-SS-biE" secondAttribute="top" id="nAg-gf-2ky"/>
                                                             <constraint firstAttribute="bottom" secondItem="LOs-fZ-yYM" secondAttribute="bottom" id="tu7-gh-Z47"/>
                                                         </constraints>
