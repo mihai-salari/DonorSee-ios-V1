@@ -20,6 +20,7 @@
 #import "SignInViewController.h"
 #import "VideoPlayer.h"
 #import "FollowUpViewController.h"
+#import "CountryUtils.h"
 
 @import ALCameraViewController;
 @import CircleProgressView;
@@ -76,7 +77,12 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableBottom;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTableTop;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintBottomDescriptionLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *ivMap;
+
+@property (weak, nonatomic) IBOutlet UIImageView *ivFlag;
+
+@property (weak, nonatomic) IBOutlet UILabel *lbCountryName;
 
 @end
 
@@ -109,6 +115,10 @@
 @synthesize constraitDonateContainerBottom;
 
 @synthesize selectedFeed;
+
+@synthesize ivMap;
+@synthesize ivFlag;
+@synthesize lbCountryName;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -219,6 +229,7 @@
     [self initHeaderUI];
     [self initFooterUI];
     [self initAuthUI];
+    [self initCountyInfo];
     
     [tbActivity registerNib: [UINib nibWithNibName: @"ActivityTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([ActivityTableViewCell class])];
 
@@ -269,6 +280,23 @@
     }else{
         _vDonateButtonMonthly.hidden = YES;
 
+    }
+}
+
+-(void) initCountyInfo{
+    if(selectedFeed.country_code!=nil){
+        ivMap.hidden = NO;
+        lbCountryName.hidden = NO;
+        ivFlag.hidden = NO;
+        
+        CountryUtils *countryUtils = [[CountryUtils alloc] init];
+        lbCountryName.text = [countryUtils getCountryNameByCode:selectedFeed.country_code];
+        [ivFlag setImage: [UIImage imageNamed: [selectedFeed.country_code lowercaseString]]];
+        
+    }else{
+        ivMap.hidden = YES;
+        lbCountryName.hidden = YES;
+        ivFlag.hidden = YES;
     }
 }
 
@@ -489,7 +517,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return ivFeed.frame.size.height + lbDescription.frame.size.height + viInfo.frame.size.height +btFollowUp.frame.size.height + 200;
+    return ivFeed.frame.size.height + lbDescription.frame.size.height + viInfo.frame.size.height +btFollowUp.frame.size.height;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
