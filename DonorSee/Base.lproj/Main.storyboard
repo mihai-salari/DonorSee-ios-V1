@@ -2960,7 +2960,6 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                             <constraint firstItem="CVY-Nr-8tb" firstAttribute="top" secondItem="m0d-Vy-2At" secondAttribute="bottom" constant="8" id="Vw6-9Q-6fm"/>
                                                                             <constraint firstItem="m0d-Vy-2At" firstAttribute="leading" secondItem="4Ur-uF-GhO" secondAttribute="leading" constant="28" id="a6V-EO-nDm"/>
                                                                             <constraint firstAttribute="trailing" secondItem="9jS-oX-uyH" secondAttribute="trailing" constant="40" id="dOm-Qj-Uck"/>
-                                                                            <constraint firstItem="bX6-vb-LLo" firstAttribute="top" secondItem="4Ur-uF-GhO" secondAttribute="top" constant="113" id="dqQ-zS-0tj"/>
                                                                             <constraint firstItem="9jS-oX-uyH" firstAttribute="leading" secondItem="4Ur-uF-GhO" secondAttribute="leading" constant="260" id="pNL-xh-ie0"/>
                                                                             <constraint firstItem="vrz-IV-G2i" firstAttribute="leading" secondItem="4Ur-uF-GhO" secondAttribute="leading" constant="83" id="tFo-So-osc"/>
                                                                         </constraints>
@@ -3059,11 +3058,10 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="323" id="5l3-Ob-jhG"/>
                                                                     <constraint firstItem="4Ur-uF-GhO" firstAttribute="top" secondItem="P7P-Hm-byf" secondAttribute="top" constant="21" id="7Mz-Qc-Un3"/>
                                                                     <constraint firstAttribute="trailing" secondItem="4Ur-uF-GhO" secondAttribute="trailing" constant="4" id="C4y-2e-4fL"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="1Eb-D9-NXC" secondAttribute="trailing" constant="25" id="FXa-mE-jsK"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="1Eb-D9-NXC" secondAttribute="trailing" constant="10" id="JVg-F2-A3A"/>
                                                                     <constraint firstItem="1Eb-D9-NXC" firstAttribute="top" secondItem="4Ur-uF-GhO" secondAttribute="bottom" constant="15" id="MaX-P6-Pnu"/>
                                                                     <constraint firstItem="4Ur-uF-GhO" firstAttribute="leading" secondItem="P7P-Hm-byf" secondAttribute="leading" constant="4" id="WgE-4A-19V"/>
                                                                     <constraint firstItem="1Eb-D9-NXC" firstAttribute="top" secondItem="P7P-Hm-byf" secondAttribute="top" constant="159" id="cGb-k8-LPJ"/>
-                                                                    <constraint firstItem="1Eb-D9-NXC" firstAttribute="leading" secondItem="P7P-Hm-byf" secondAttribute="leading" constant="48" id="jmt-gH-Ixv"/>
                                                                     <constraint firstAttribute="bottom" secondItem="A5M-xh-VOx" secondAttribute="bottom" constant="29" id="mSh-VP-8Zu"/>
                                                                     <constraint firstItem="4Ur-uF-GhO" firstAttribute="centerX" secondItem="U0A-iD-4OB" secondAttribute="centerX" id="oms-HM-r86"/>
                                                                     <constraint firstItem="4Ur-uF-GhO" firstAttribute="centerX" secondItem="A5M-xh-VOx" secondAttribute="centerX" id="wDR-gD-vdw"/>
@@ -4131,9 +4129,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i6F-Pw-CRa" userLabel="View - Message">
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter message" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-Pe-Ddk">
-                                                <frame key="frameInset" minX="8" width="110" height="42"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter message" textAlignment="justified" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6R6-Pe-Ddk">
                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                                 <connections>
@@ -4143,7 +4139,11 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="6R6-Pe-Ddk" secondAttribute="bottom" id="4ee-3Y-7uh"/>
+                                            <constraint firstAttribute="trailing" secondItem="6R6-Pe-Ddk" secondAttribute="trailing" id="8k0-ev-qOB"/>
                                             <constraint firstAttribute="height" constant="42" id="GeM-FK-21Q"/>
+                                            <constraint firstItem="6R6-Pe-Ddk" firstAttribute="leading" secondItem="i6F-Pw-CRa" secondAttribute="leading" constant="8" id="fjZ-gU-9ws"/>
+                                            <constraint firstItem="6R6-Pe-Ddk" firstAttribute="top" secondItem="i6F-Pw-CRa" secondAttribute="top" id="spt-WH-by5"/>
                                         </constraints>
                                     </view>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-au-bVM">

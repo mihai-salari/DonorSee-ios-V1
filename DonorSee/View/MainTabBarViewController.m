@@ -68,7 +68,7 @@
 }
 
 - (UITabBarItem *)getNotificationTabItem {
-    return [self.tabBar.items objectAtIndex:3];
+    return [self.tabBar.items objectAtIndex:4];
 }
 
 //====================================================================================================

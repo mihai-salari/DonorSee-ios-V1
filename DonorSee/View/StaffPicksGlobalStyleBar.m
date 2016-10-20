@@ -117,7 +117,7 @@
 
     
     //Global.
-    int globalIconWidth = 29;
+    int globalIconWidth = 24;
     int globalTitleWidth = 150;
 
     UIImageView* ivGlobal = [[UIImageView alloc] initWithImage: [UIImage imageNamed: @"global_icon.png"]];
