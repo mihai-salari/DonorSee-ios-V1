@@ -362,13 +362,34 @@
     if(mediaType == VIDEO){
         NSURL* mediaUrl = [info objectForKey:UIImagePickerControllerMediaURL];
         
-        [self completeMediaPick:[self createVideoMediaFile:mediaUrl]];
+        if([self videoIsValid:mediaUrl]){
+            [self completeMediaPick:[self createVideoMediaFile:mediaUrl]];
+        } else {
+            selectedPhotoIndex = -1;
+            [self showVideoInvalid];
+        }
     }else{
         UIImage* image = [info objectForKey:UIImagePickerControllerEditedImage];
         [self completeMediaPick:[self createImageMediaFile:image]];
     }
     
     [self dismissViewControllerAnimated: YES completion: nil];
+}
+
+-(void) showVideoInvalid{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video"
+                                                    message:@"This video is too big. Maximum supported size is 30 seconds"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+-(BOOL) videoIsValid: (NSURL *) mediaUrl {
+    AVURLAsset *avUrl = [AVURLAsset assetWithURL:mediaUrl];
+    CMTime time = [avUrl duration];
+    int seconds = ceil(time.value/time.timescale);
+    return seconds <= 30;
 }
 
 - (UIImage*) getThumbnailFromVideo: (NSURL *) mediaUrl{

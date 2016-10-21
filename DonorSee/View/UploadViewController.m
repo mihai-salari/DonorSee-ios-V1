@@ -57,6 +57,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchRecurring;
 
 @property (weak, nonatomic) IBOutlet UITextField *editCountry;
+@property (weak, nonatomic) IBOutlet UILabel *amountToRaiseLabel;
 
 @end
 
@@ -137,6 +138,8 @@
         
         [self loadMostRecentCountry];
     }
+    
+    [_switchRecurring addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
 }
 
 -(void) loadMostRecentCountry{
@@ -230,9 +233,9 @@
     tvDescription.text=objFeed.feed_description;
     tfPrice.text=[NSString stringWithFormat:@"%d",objFeed.pre_amount/100];
     if(objFeed.gift_type != nil && [objFeed.gift_type isEqualToString:FEED_TYPE_MONTHLY] ){
-        _switchRecurring.on = YES;
+        [self checkMonthlySwitch];
     }else{
-        _switchRecurring.on = NO;
+        [self uncheckMonthlySwitch];
     }
     
     if(objFeed.donated_user_count>0){
@@ -247,6 +250,26 @@
         int countryIndex = [self getProjectCountryIndex:objFeed.country_code];
         self.editCountry.text = self.countries[countryIndex];
         [countryPicker selectRow:countryIndex inComponent:0 animated:NO];
+    }
+}
+
+-(void) checkMonthlySwitch {
+    _switchRecurring.on = YES;
+    _amountToRaiseLabel.text = @"AMOUNT TO RAISE MONTHLY";
+}
+
+-(void) uncheckMonthlySwitch{
+    _switchRecurring.on = NO;
+    _amountToRaiseLabel.text = @"AMOUNT TO RAISE";
+}
+
+- (void)setState:(id)sender
+{
+    BOOL state = [sender isOn];
+    if(state == YES){
+        _amountToRaiseLabel.text = @"AMOUNT TO RAISE MONTHLY";
+    } else {
+        _amountToRaiseLabel.text = @"AMOUNT TO RAISE";
     }
 }
 
@@ -966,21 +989,39 @@
 }
 
 - (void) onMediaPicked: (NSURL *) mediaUrl uiImage:(UIImage*) image {
-    ivAddPhoto.hidden = YES;
-    
     if(mediaFile.mediaType == VIDEO){
-        mediaFile.mediaURL = mediaUrl.absoluteString;
-        UIImage *videoThumbnail = [self getThumbnailFromVideo: mediaUrl];
-        ivPhoto.image = videoThumbnail;
+        if([self videoIsValid:mediaUrl]){
+            mediaFile.mediaURL = mediaUrl.absoluteString;
+            UIImage *videoThumbnail = [self getThumbnailFromVideo: mediaUrl];
+            ivPhoto.image = videoThumbnail;
+        } else {
+            [self showVideoInvalid];
+            return;
+        }
     }else{
         mediaFile.mediaURL = @"";
         UIImage *chosenImage = image;
         ivPhoto.image = chosenImage;
     }
     
-
+    ivAddPhoto.hidden = YES;
     [self checkValid];
+}
 
+-(void) showVideoInvalid{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video"
+                                                    message:@"This video is too big. Maximum supported size is 2 minutes"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+-(BOOL) videoIsValid: (NSURL *) mediaUrl {
+    AVURLAsset *avUrl = [AVURLAsset assetWithURL:mediaUrl];
+    CMTime time = [avUrl duration];
+    int seconds = ceil(time.value/time.timescale);
+    return seconds <= 120;
 }
 
 - (UIImage*) getThumbnailFromVideo: (NSURL *) mediaUrl{

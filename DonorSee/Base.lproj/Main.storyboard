@@ -2882,8 +2882,8 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add_photo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jxr-Cx-9XX">
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="91" id="3EY-rf-bRs"/>
-                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="76" id="6lH-PG-lai"/>
-                                                                            <constraint firstAttribute="width" constant="76" id="Frz-Ee-8cK"/>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="6lH-PG-lai"/>
+                                                                            <constraint firstAttribute="width" constant="140" id="Frz-Ee-8cK"/>
                                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="91" id="dbS-qF-yN9"/>
                                                                         </constraints>
                                                                     </imageView>
@@ -2993,9 +2993,9 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                     </button>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1Eb-D9-NXC">
                                                                         <subviews>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AMOUNT TO RAISE" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuc-3l-cxp">
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AMOUNT TO RAISE" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nuc-3l-cxp">
                                                                                 <constraints>
-                                                                                    <constraint firstAttribute="height" constant="21" id="E9p-pF-MbH"/>
+                                                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="E9p-pF-MbH"/>
                                                                                     <constraint firstAttribute="width" constant="142" id="iIo-NE-z4F"/>
                                                                                 </constraints>
                                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
@@ -3004,7 +3004,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                             </label>
                                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rEJ-0Z-ZGp">
                                                                                 <subviews>
-                                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lw5-DK-LRv">
+                                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="USD" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lw5-DK-LRv">
                                                                                         <color key="textColor" red="0.27843137254901962" green="0.27843137254901962" blue="0.28627450980392155" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="24"/>
                                                                                         <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -3020,7 +3020,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                                                                     <constraint firstAttribute="bottom" secondItem="lw5-DK-LRv" secondAttribute="bottom" id="VtD-2T-2er"/>
                                                                                     <constraint firstAttribute="trailing" secondItem="lw5-DK-LRv" secondAttribute="trailing" id="rcz-rT-aT6"/>
                                                                                     <constraint firstItem="lw5-DK-LRv" firstAttribute="top" secondItem="rEJ-0Z-ZGp" secondAttribute="top" id="rge-C9-oYr"/>
-                                                                                    <constraint firstAttribute="height" constant="40" id="sjj-WX-sui"/>
+                                                                                    <constraint firstAttribute="height" constant="50" id="sjj-WX-sui"/>
                                                                                     <constraint firstItem="lw5-DK-LRv" firstAttribute="leading" secondItem="rEJ-0Z-ZGp" secondAttribute="leading" id="zu5-6x-MXy"/>
                                                                                 </constraints>
                                                                             </view>
@@ -3188,6 +3188,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                     <size key="freeformSize" width="375" height="800"/>
                     <connections>
                         <outlet property="BtnUpdateProject" destination="A5M-xh-VOx" id="EFM-Yn-rc1"/>
+                        <outlet property="amountToRaiseLabel" destination="nuc-3l-cxp" id="rxB-Od-nzK"/>
                         <outlet property="btDone" destination="ANi-eA-uvv" id="8OX-SY-jzJ"/>
                         <outlet property="btPost" destination="U0A-iD-4OB" id="3F5-fp-JzU"/>
                         <outlet property="btnCancel" destination="Eh5-zb-5e2" id="duS-EH-js2"/>
@@ -4317,7 +4318,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
     </scenes>
     <resources>
         <image name="CancelBlack.png" width="35" height="35"/>
-        <image name="add_photo.png" width="180" height="215"/>
+        <image name="add_photo.png" width="320" height="215"/>
         <image name="btn_back.png" width="200" height="200"/>
         <image name="btn_check.png" width="100" height="100"/>
         <image name="btn_gray_back.png" width="200" height="200"/>

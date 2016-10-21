@@ -82,37 +82,37 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void) updateNotificationBadge
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateNotificationBadge) object:nil];
     [self performSelector:@selector(updateNotificationBadge) withObject:nil afterDelay:10];
-    //NSLog(@"Notification Called...");
     
-    if([AppEngine sharedInstance].currentUser == nil) return;
-    
-    
+    if([AppEngine sharedInstance].currentUser == nil) {
+        [self setNotificationsCount:0];
+        return;
+    }
     
     [[NetworkClient sharedClient] getUnReadCountInfo:[AppEngine sharedInstance].currentUser.user_id success:^(NSDictionary *dicUser) {
         if ([dicUser objectForKey:@"count"]) {
-            
             int totalCount = [[dicUser objectForKey:@"count"] intValue];
-            
-            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-            if (totalCount > 0) {
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalCount];
-                [[self getNotificationTabItem] setMyAppCustomBadgeValue:@"0"];
-            } else {
-                [[self getNotificationTabItem] setMyAppCustomBadgeValue:nil];
-            }
+            [self setNotificationsCount:totalCount];
         }
 
     } failure:^(NSString *errorMessage) {
         
     }];
-    
+}
+
+- (void) setNotificationsCount:(int)totalCount{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    if (totalCount > 0) {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalCount];
+        [[self getNotificationTabItem] setMyAppCustomBadgeValue:@"0"];
+    } else {
+        [[self getNotificationTabItem] setMyAppCustomBadgeValue:nil];
+    }
 }
 
 - (void) cancelUpdateNotification {
