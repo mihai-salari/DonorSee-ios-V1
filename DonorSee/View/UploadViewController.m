@@ -134,7 +134,26 @@
         _BtnUpdateProject.hidden=TRUE;
         _btnCancel.hidden=TRUE;
         btPost.hidden=FALSE;
+        
+        [self loadMostRecentCountry];
     }
+}
+
+-(void) loadMostRecentCountry{
+    [[NetworkClient sharedClient] getMostRecentCountry: [AppEngine sharedInstance].currentUser.user_id
+                                      success:^(NSDictionary *response) {
+                                          NSString* countryCode = [response objectForKey:@"country_code"];
+                                          if(countryCode != nil){
+                                              [countryPicker reloadAllComponents];
+                                              int countryIndex = [self getProjectCountryIndex:countryCode];
+                                              NSString* countryName = self.countries[countryIndex];
+                                              self.editCountry.text = countryName;
+                                              selectedCountry = countryName;
+                                              [countryPicker selectRow:countryIndex inComponent:0 animated:NO];
+                                          }
+                                      } failure:^(NSString *errorMessage) {
+                                          
+                                      }];
 }
 
 - (void)initCountryPicker {
@@ -164,11 +183,12 @@
     [inputView addSubview:toolBarPicker];
     
     self.editCountry.inputView = inputView;
+    editCountry.borderStyle = UITextBorderStyleNone;
+    [editCountry setBackgroundColor:[UIColor clearColor]];
 }
 - (IBAction)onCountryChooserButtonTap:(id)sender {
     [self.editCountry becomeFirstResponder];
 }
-
 
 - (void)doneClicked {
     [editCountry resignFirstResponder];
@@ -224,15 +244,13 @@
     if(objFeed.country_code != nil){
         [countryPicker reloadAllComponents];
         
-        int countryIndex = [self getProjectCountryIndex];
+        int countryIndex = [self getProjectCountryIndex:objFeed.country_code];
         self.editCountry.text = self.countries[countryIndex];
-        [countryPicker selectRow:[self getProjectCountryIndex] inComponent:0 animated:NO];
+        [countryPicker selectRow:countryIndex inComponent:0 animated:NO];
     }
 }
 
--(int) getProjectCountryIndex {
-    NSString* countryCode = objFeed.country_code;
-    
+-(int) getProjectCountryIndex:(NSString*)countryCode {
     int index = 0;
     for (NSString* countryName in _countries) {
         NSString* currentCountryCode = [countryUtils getCountryCodeByName:countryName];

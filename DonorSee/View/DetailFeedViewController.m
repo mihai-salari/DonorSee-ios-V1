@@ -232,22 +232,10 @@
     [self initCountyInfo];
     
     [tbActivity registerNib: [UINib nibWithNibName: @"ActivityTableViewCell" bundle:nil] forCellReuseIdentifier:NSStringFromClass([ActivityTableViewCell class])];
-
-    if([AppEngine sharedInstance].currentUser == nil)
-    {
-        btTrash.hidden = YES;
-    }
-    else
-    {
-        btTrash.hidden = NO;
-        [btTrash setImage: [UIImage imageNamed: @"flag_icon.png"] forState: UIControlStateNormal];
-        if([selectedFeed isCreatedByCurrentUser])
-        {
-            [btTrash setImage: [UIImage imageNamed: @"delete.png"] forState: UIControlStateNormal];
-        }
-    }
     
     tfAmount.inputAccessoryView = toolBar;
+    
+    [self updateFeedInfo];
     [self loadFeed];
     [self loadActivities];
 }
@@ -324,20 +312,38 @@
     progressView.trackBackgroundColor = [UIColor whiteColor];
     progressView.trackBorderColor = [UIColor whiteColor];
     progressView.trackFillColor = [UIColor colorWithRed: 234.0/255.0 green: 157.0/255.0 blue: 13.0/255.0 alpha: 1.0];
-    
-    /*
-    //Fill out Info.
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateFeedInfo];
-        
-        if (_isVisibleFromNotification) {
-            [self loadFeed];
-        }
-    });*/
 }
 
 - (void) updateFeedInfo
 {
+    if(self.selectedFeed == nil){
+        return;
+    }
+    if([AppEngine sharedInstance].currentUser == nil)
+    {
+        btTrash.hidden = YES;
+    }
+    else
+    {
+        btTrash.hidden = NO;
+        [btTrash setImage: [UIImage imageNamed: @"flag_icon.png"] forState: UIControlStateNormal];
+        if([selectedFeed isCreatedByCurrentUser])
+        {
+            [btTrash setImage: [UIImage imageNamed: @"delete.png"] forState: UIControlStateNormal];
+        }
+    }
+    if([AppEngine sharedInstance].currentUser != nil) {
+        if([selectedFeed isCreatedByCurrentUser])
+        {
+            btFollowUp.hidden = NO;
+        } else {
+            btFollowUp.hidden = NO;
+            [btFollowUp setTitle:@"POST COMMENT" forState:UIControlStateNormal];
+        }
+    } else {
+        btFollowUp.hidden = YES;
+    }
+    
     NSString* giftTitle = @"GIFT";
     if(selectedFeed.donated_count != 1)
     {
@@ -560,18 +566,6 @@
     dollarSignLabel.textColor = tfAmount.textColor;
     tfAmount.leftView = dollarSignLabel;
     tfAmount.leftViewMode = UITextFieldViewModeAlways;
-    
-    if([AppEngine sharedInstance].currentUser != nil) {
-        if([selectedFeed isCreatedByCurrentUser])
-        {
-            btFollowUp.hidden = NO;
-        } else {
-            btFollowUp.hidden = NO;
-            [btFollowUp setTitle:@"POST COMMENT" forState:UIControlStateNormal];
-        }
-    } else {
-        btFollowUp.hidden = YES;
-    }
     
 }
 

@@ -135,7 +135,6 @@
         success: (void (^)(NSDictionary *dicUser))success
         failure: (void (^)(NSString *errorMessage))failure
 {
-    //NSString* name = [NSString stringWithFormat: @"%@ %@", first_name, last_name];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        first_name, @"first_name",
                                        last_name, @"last_name",
@@ -146,9 +145,6 @@
     if (![avatar isEqualToString:@""]) {
         [parameters setValue:avatar forKey:@"photo_url"];
     }
-    
-
-
 
         [self POST:@"users" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             
@@ -195,9 +191,6 @@
             failure(MSG_DISCONNECT_INTERNET);
             
         }];
-    
-    
-
 }
 
 
@@ -423,6 +416,22 @@
                   
                   failure(MSG_DISCONNECT_INTERNET);
               }];
+}
+
+- (void) getMostRecentCountry: (int) user_id
+             success: (void (^)(NSDictionary *dicUser))success
+             failure: (void (^)(NSString *errorMessage))failure
+{
+    [self GETRequest: [NSString stringWithFormat:@"/projects/countries/most-recent?owner_id=%i", user_id]
+          parameters: nil
+             success:^(id responseObject) {
+                 
+                 success(responseObject);
+                 
+             } failure:^(NSError *error) {
+                 
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
 }
 
 - (void) getTransactionHistory: (int) user_id

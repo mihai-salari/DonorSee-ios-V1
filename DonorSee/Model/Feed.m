@@ -211,15 +211,15 @@
     }
 }
 
-
 - (BOOL) isCreatedByCurrentUser
 {
-    if(self.postUser.user_id == [AppEngine sharedInstance].currentUser.user_id)
+    int currentUserId = [AppEngine sharedInstance].currentUser.user_id;
+    if(self.postUser != nil)
     {
-        return YES;
+        return self.postUser.user_id == currentUserId;
     }
     
-    return NO;
+    return _post_user_id == currentUserId;
 }
 
 - (NSString*) getProjectImage

@@ -63,6 +63,10 @@
              success: (void (^)(NSDictionary *dicUser))success
              failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) getMostRecentCountry: (int) user_id
+                      success: (void (^)(NSDictionary *dicUser))success
+                      failure: (void (^)(NSString *errorMessage))failure;
+
 - (void) addPaypal: (NSString*) paypalEmail
            success: (void (^)(void))success
            failure: (void (^)(NSString *errorMessage))failure;
