@@ -341,7 +341,7 @@
     [self GET:[NSString stringWithFormat:@"users/password-reset?email=%@", email] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         success(@{@"message":@"Password has been successfully changed"});
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        failure(MSG_DISCONNECT_INTERNET);
+        failure([self getResponseMessage:error]);
     }];
     
 }
@@ -376,8 +376,7 @@
                   }
                   
               } failure:^(NSError *error) {
-                  
-                  failure(MSG_DISCONNECT_INTERNET);
+                  failure([self getResponseMessage:error]);
               }];
 }
 
@@ -1598,6 +1597,13 @@
         failure(MSG_DISCONNECT_INTERNET);
     }];
     
+}
+
+-(NSString*) getResponseMessage : (NSError *) error
+{
+    NSData *errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+    NSDictionary *serializedData = [NSJSONSerialization JSONObjectWithData: errorData options:kNilOptions error:nil];
+    return serializedData[@"message"];
 }
 
 @end

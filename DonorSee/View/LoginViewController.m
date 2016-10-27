@@ -242,6 +242,12 @@
                                                                                         } failure:^(NSString *errorMessage) {
                                                                                             NSLog(@"error = %@", errorMessage);
                                                                                             [SVProgressHUD dismiss];
+                                                                                            
+                                                                                            [self presentViewController: [AppEngine showErrorWithText: errorMessage]
+                                                                                                               animated: YES
+                                                                                                             completion: nil];
+
+                                                                                            
                                                                                         }];
                                                    
                                                }];
