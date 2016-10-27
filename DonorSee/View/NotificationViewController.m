@@ -82,7 +82,6 @@
         [SVProgressHUD show];
     }
     [[NetworkClient sharedClient] getMyActivities:^(NSArray *array1) {
-                                                   
                                                    [SVProgressHUD dismiss];
                                                    [arrNotifications removeAllObjects];
                                                    if(array1 != nil && [array1 count] > 0)
@@ -96,10 +95,7 @@
                                                     }
         
                                                    [tbMain reloadData];
-        //[self loadNotifications];
         [self checkUnReadItems];
-        
-        
                                                } failure:^(NSString *errorMessage) {
                                                    [SVProgressHUD dismiss];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
@@ -107,7 +103,6 @@
 }
 
 - (void) showNoDataHeader {
-    
     UILabel *lbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 150)];
     lbl.backgroundColor = [UIColor whiteColor];
     lbl.textColor = [UIColor colorWithRed:0.5548 green:0.5385 blue:0.5171 alpha:1.0];
@@ -116,19 +111,26 @@
     lbl.font = [UIFont systemFontOfSize:13];
     
     self.tbMain.tableHeaderView = lbl;
-    
 }
 
 - (void) checkUnReadItems {
-    
     if (arrNotifications.count > 0) {
-        NSPredicate *unRead = [NSPredicate predicateWithFormat:@"is_read==0"];
-        NSArray *unreadMessages = [arrNotifications filteredArrayUsingPredicate:unRead];
-        NSLog(@"unreadMessages %@", unreadMessages);
-        NSArray *unreadIds = [unreadMessages valueForKey:@"event_id"];
-        if (unreadIds.count > 0) {
-            [[AppDelegate getDelegate].mainTabBar markNotificationsUnreadForIds:unreadIds];
+        [self markNotificationsRead];
+    }
+}
+
+- (void) markNotificationsRead {
+    for (Event *notification in arrNotifications) {
+        if(notification.is_read){
+            continue;
         }
+        [[NetworkClient sharedClient] readActivity:notification.event_id success:^(NSDictionary *dicDonate) {
+            [[AppDelegate getDelegate].mainTabBar updateNotificationBadge];
+            notification.is_read = true;
+            [tbMain reloadData];
+        } failure:^(NSString *errorMessage) {
+            int x = 0;
+        }];
     }
 }
 
@@ -155,7 +157,6 @@
         }
         
         [tbMain reloadData];
-        
         
         
     } failure:^(NSString *errorMessage) {
@@ -245,7 +246,6 @@
     //Read Activity.
     a.is_read = YES;
     [cell setEventNotification: a];
-    [[NetworkClient sharedClient] readActivity: a.event_id.intValue];
 }
 
 //- (void)selectedNotificationNew:(Notification *)a cell:(id)cell

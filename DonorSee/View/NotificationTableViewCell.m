@@ -65,10 +65,15 @@
         [ivAvatar sd_setImageWithURL: [NSURL URLWithString: event.recipient.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
     }
     
-    viReadState.hidden = YES;
+    if(event.is_read){
+        viReadState.hidden = YES;
+    } else {
+        viReadState.hidden = NO;
+    }
     
     lbMessage.text = [NotificationTableViewCell getNotificationMessage:event];
     
+    [self initUI];
 }
 
 - (void) setNotificationNew: (Notification *) n

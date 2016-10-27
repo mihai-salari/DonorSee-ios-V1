@@ -17,5 +17,4 @@
 - (void) shareFeedInTwitter: (Feed*) f image: (UIImage*) imgShare;
 - (void) shareFeed:(Feed *)f image: (UIImage*) imgShare;
 
-
 @end

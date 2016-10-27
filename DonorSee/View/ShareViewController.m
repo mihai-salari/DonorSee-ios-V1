@@ -64,6 +64,21 @@
                                                              handler:^(UIAlertAction * _Nonnull action) {
                                                                  
                                                                  [self getProjectLink: f];
+                                                                 
+                                                                 
+                                                                 NSString *message = @"Project Link was copied";
+                                                                 UIAlertView *toast = [[UIAlertView alloc] initWithTitle:nil
+                                                                                                                 message:message
+                                                                                                                delegate:nil
+                                                                                                       cancelButtonTitle:nil
+                                                                                                       otherButtonTitles:nil, nil];
+                                                                 [toast show];
+                                                                 int duration = 1; // in seconds
+                                                                 
+                                                                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, duration * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                                                                     [toast dismissWithClickedButtonIndex:0 animated:YES];
+                                                                 });
+                                                                 
                                                              }];
     [alert addAction: getProfileAction];
 

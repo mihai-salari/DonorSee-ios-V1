@@ -61,7 +61,6 @@
 
 @end
 
-
 @implementation UploadViewController
 @synthesize viSignInFB;
 @synthesize ivCheck;
@@ -136,7 +135,9 @@
         _btnCancel.hidden=TRUE;
         btPost.hidden=FALSE;
         
-        [self loadMostRecentCountry];
+        if([AppEngine sharedInstance].currentUser != nil){
+            [self loadMostRecentCountry];
+        }
     }
     
     [_switchRecurring addTarget:self action:@selector(setState:) forControlEvents:UIControlEventValueChanged];
@@ -146,7 +147,7 @@
     [[NetworkClient sharedClient] getMostRecentCountry: [AppEngine sharedInstance].currentUser.user_id
                                       success:^(NSDictionary *response) {
                                           NSString* countryCode = [response objectForKey:@"country_code"];
-                                          if(countryCode != nil){
+                                          if([self strigNotNull:countryCode]){
                                               [countryPicker reloadAllComponents];
                                               int countryIndex = [self getProjectCountryIndex:countryCode];
                                               NSString* countryName = self.countries[countryIndex];
@@ -244,7 +245,7 @@
         _switchRecurring.enabled = YES;
     }
     
-    if(objFeed.country_code != nil){
+    if([self strigNotNull:objFeed.country_code]){
         [countryPicker reloadAllComponents];
         
         int countryIndex = [self getProjectCountryIndex:objFeed.country_code];
@@ -283,6 +284,10 @@
         index++;
     }
     return 0;
+}
+
+- (BOOL) strigNotNull:(NSString*) string{
+    return ![string isEqual: [NSNull null]] && string!=nil;
 }
 
 - (IBAction)UpdateButtonPress:(UIButton *)sender

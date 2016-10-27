@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <frame key="frameInset" width="320" height="215.5"/>
+                <frame key="frameInset" width="320" height="215"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default-profile-pic.png" translatesAutoresizingMaskIntoConstraints="NO" id="g4L-vy-Xgj">
@@ -45,38 +45,41 @@
                             <constraint firstAttribute="height" constant="14" id="iAd-AF-K6s"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Here are more pictures of this familiy! " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tvt-LU-pu8">
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GuS-Ue-kcN">
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="This is some followup message" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="9Yu-U0-na1">
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                    </textView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Tvt-LU-pu8" firstAttribute="top" secondItem="lCI-JX-gse" secondAttribute="bottom" constant="4" id="2N4-Ke-EJc"/>
+                    <constraint firstItem="9Yu-U0-na1" firstAttribute="top" secondItem="a92-HR-pga" secondAttribute="bottom" constant="4" id="0xz-qX-P4l"/>
                     <constraint firstItem="lCI-JX-gse" firstAttribute="centerY" secondItem="a92-HR-pga" secondAttribute="centerY" id="4CP-ZJ-udk"/>
                     <constraint firstItem="g4L-vy-Xgj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="13" id="Cj6-tM-Ol8"/>
                     <constraint firstItem="GuS-Ue-kcN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="53" id="DBk-00-MTr"/>
                     <constraint firstItem="g4L-vy-Xgj" firstAttribute="top" secondItem="dcy-6X-mLg" secondAttribute="top" id="GPf-DM-zzA"/>
-                    <constraint firstItem="Tvt-LU-pu8" firstAttribute="leading" secondItem="GuS-Ue-kcN" secondAttribute="leading" id="IYt-d8-Vpf"/>
                     <constraint firstAttribute="bottomMargin" secondItem="GuS-Ue-kcN" secondAttribute="bottom" constant="-1" id="JIN-yr-FNn"/>
                     <constraint firstItem="lCI-JX-gse" firstAttribute="trailing" secondItem="dcy-6X-mLg" secondAttribute="trailing" id="PHi-iQ-LKC"/>
-                    <constraint firstItem="Tvt-LU-pu8" firstAttribute="trailing" secondItem="GuS-Ue-kcN" secondAttribute="trailing" id="QY6-b0-vAG"/>
                     <constraint firstAttribute="trailingMargin" secondItem="lCI-JX-gse" secondAttribute="trailing" constant="1" id="SKT-LU-HPq"/>
                     <constraint firstItem="lCI-JX-gse" firstAttribute="leading" secondItem="a92-HR-pga" secondAttribute="trailing" constant="4" id="SyZ-5w-2vU"/>
+                    <constraint firstItem="9Yu-U0-na1" firstAttribute="top" secondItem="lCI-JX-gse" secondAttribute="bottom" id="Ttq-B9-qvb"/>
+                    <constraint firstItem="9Yu-U0-na1" firstAttribute="leading" secondItem="GuS-Ue-kcN" secondAttribute="leading" id="arp-Hb-sHs"/>
+                    <constraint firstItem="9Yu-U0-na1" firstAttribute="trailing" secondItem="GuS-Ue-kcN" secondAttribute="trailing" id="b1B-gE-irF"/>
                     <constraint firstAttribute="trailingMargin" secondItem="GuS-Ue-kcN" secondAttribute="trailing" constant="26" id="mR2-ni-I1D"/>
                     <constraint firstItem="dcy-6X-mLg" firstAttribute="leading" secondItem="a92-HR-pga" secondAttribute="leading" id="rEA-YE-eol"/>
                     <constraint firstItem="dcy-6X-mLg" firstAttribute="leading" secondItem="g4L-vy-Xgj" secondAttribute="trailing" constant="8" symbolic="YES" id="rzy-rX-SPx"/>
-                    <constraint firstItem="GuS-Ue-kcN" firstAttribute="top" secondItem="Tvt-LU-pu8" secondAttribute="bottom" constant="7" id="t12-cF-bUW"/>
                     <constraint firstItem="dcy-6X-mLg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="1" id="t4e-o9-6oS"/>
                     <constraint firstItem="a92-HR-pga" firstAttribute="top" secondItem="dcy-6X-mLg" secondAttribute="bottom" id="tcg-Yv-53L"/>
+                    <constraint firstItem="GuS-Ue-kcN" firstAttribute="top" secondItem="9Yu-U0-na1" secondAttribute="bottom" constant="7" id="wE1-np-XEx"/>
                     <constraint firstItem="lCI-JX-gse" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="18" id="wgm-bR-yaI"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="ivAvatar" destination="g4L-vy-Xgj" id="s9K-7t-l13"/>
-                <outlet property="lbFollowMessage" destination="Tvt-LU-pu8" id="1Qz-Nj-fKO"/>
+                <outlet property="lbFollowMessage" destination="9Yu-U0-na1" id="5uE-ZZ-00Q"/>
                 <outlet property="lbMessage" destination="dcy-6X-mLg" id="qLU-ib-5Fd"/>
                 <outlet property="lbTime" destination="lCI-JX-gse" id="gsV-EN-iIO"/>
                 <outlet property="viPhotoContainer" destination="GuS-Ue-kcN" id="9JE-f0-uWZ"/>

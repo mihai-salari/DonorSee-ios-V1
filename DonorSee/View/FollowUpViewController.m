@@ -30,7 +30,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *btFollowUp;
 @property (weak, nonatomic) IBOutlet UIView *vFrame;
 @property (weak, nonatomic) IBOutlet UIView *viMessage;
-@property (weak, nonatomic) IBOutlet UITextField *tfMessage;
+@property (weak, nonatomic) IBOutlet UITextView *tfMessage;
+
 @property (weak, nonatomic) IBOutlet UIScrollView *scPostPhotos;
 
 @end
@@ -60,7 +61,24 @@
     
     self.scPostPhotos.translatesAutoresizingMaskIntoConstraints = NO;
     
+    UIToolbar* keyboardToolbar = [[UIToolbar alloc] init];
+    [keyboardToolbar sizeToFit];
+    UIBarButtonItem *flexBarButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                      target:nil action:nil];
+    UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                      target:self action:@selector(messageDoneButtonPress)];
+    keyboardToolbar.items = @[flexBarButton, doneBarButton];
+    self.tfMessage.inputAccessoryView = keyboardToolbar;
+
+    
     [self initUI];
+}
+
+-(void)messageDoneButtonPress
+{
+    [self.tfMessage resignFirstResponder];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

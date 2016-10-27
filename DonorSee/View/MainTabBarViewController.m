@@ -122,19 +122,6 @@
 
 -(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController: (UIViewController *)viewController
 {
-//    if(TEST_FLAG) return;
-//    if(tabBarController.selectedIndex == 1)
-//    {
-//        ALCameraViewController* cameraController = [[ALCameraViewController alloc] initWithCroppingEnabled: YES
-//                                                                                       allowsLibraryAccess: YES
-//                                                                                                completion:^(UIImage * image) {
-//                                                                                                    
-//                                                                                                    UploadViewController *uploadController = (UploadViewController *)[[self viewControllers] objectAtIndex: 1];
-//                                                                                                    [uploadController captureImage: image];
-//                                                                                                    [self dismissViewControllerAnimated: YES completion: nil];
-//                                                                                                }];
-//        [self presentViewController: cameraController animated: YES completion: nil];
-//    }
     
         if ([viewController isKindOfClass:[ProfileViewController class]]) {
             ProfileViewController *profileController = (ProfileViewController *)viewController;
@@ -145,27 +132,6 @@
             NotificationViewController *profileController = (NotificationViewController *)viewController;
             [profileController showSignupPage];
         }
-    
-}
-
-- (void) markNotificationRead {
-    if (_notificationIds.count > 0) {
-        
-        int eventId = [[_notificationIds lastObject] intValue];
-        [[NetworkClient sharedClient] readActivity: eventId];
-        [_notificationIds removeLastObject];
-        
-        [self performSelector:@selector(markNotificationRead) withObject:nil afterDelay:0.3];
-        return;
-    } else {
-        [self updateNotificationBadge];
-    }
-}
-
-- (void) markNotificationsUnreadForIds:(NSArray *)notifications
-{
-    _notificationIds = [NSMutableArray arrayWithArray:notifications];
-    [self markNotificationRead];
 }
 
 @end

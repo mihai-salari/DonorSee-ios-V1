@@ -184,7 +184,10 @@
 
 - (void) getMyActivities: (void (^)(NSArray* arrActivities))success
                  failure: (void (^)(NSString *errorMessage))failure;
-- (void) readActivity: (int) activity_id;
+- (void) readActivity: (NSNumber*) activity_id
+              success: (void (^)(NSDictionary* dicWithdraw))success
+              failure: (void (^)(NSString *errorMessage))failure;
+
 
 //Follow.
 - (void) followUser: (int) follower_id

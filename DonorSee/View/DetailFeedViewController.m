@@ -43,7 +43,8 @@
 @property (weak, nonatomic) IBOutlet UIButton           *btGive;
 @property (weak, nonatomic) IBOutlet UILabel            *lbGiveTitle;
 @property (weak, nonatomic) IBOutlet UILabel            *lbMaxPrice;
-@property (weak, nonatomic) IBOutlet UILabel            *lbDescription;
+@property (weak, nonatomic) IBOutlet UITextView *lbDescription;
+
 @property (weak, nonatomic) IBOutlet UIImageView        *ivFeed;
 @property (weak, nonatomic) IBOutlet CircleProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UIView             *viInfo;
@@ -128,6 +129,8 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self.btDonate addGestureRecognizer:singleFingerTap];
+    
+    [self.lbDescription setScrollEnabled:NO];
     
    // self.tbActivity.tableHeaderView = viHeader;
 }
@@ -333,11 +336,11 @@
         }
     }
     if([AppEngine sharedInstance].currentUser != nil) {
+        btFollowUp.hidden = NO;
         if([selectedFeed isCreatedByCurrentUser])
         {
-            btFollowUp.hidden = NO;
+            [btFollowUp setTitle:@"FOLLOW UP" forState:UIControlStateNormal];
         } else {
-            btFollowUp.hidden = NO;
             [btFollowUp setTitle:@"POST COMMENT" forState:UIControlStateNormal];
         }
     } else {
@@ -523,7 +526,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return ivFeed.frame.size.height + lbDescription.frame.size.height + viInfo.frame.size.height +btFollowUp.frame.size.height + ivMap.frame.size.height + btFollowUp.frame.size.height + 150;
+    return ivFeed.frame.size.height + [lbDescription sizeThatFits:CGSizeMake(lbDescription.frame.size.width, CGFLOAT_MAX)].height + viInfo.frame.size.height +btFollowUp.frame.size.height + ivMap.frame.size.height + btFollowUp.frame.size.height + 110;
     //return viHeader.frame.size.height;
 }
 
@@ -869,44 +872,7 @@
 
 
 -(void)showPaymentOption{
-    
     [self payWithStripe];
-    /*
-    
-    NSString *message = @"For the moment you need Paypal account to make donation";
-    NSString *btnTitle = @"Ok";
-    
-    id stripe_user_id = [selectedFeed stripe_user_id];
-    
-    //if( stripe_user_id && ![stripe_user_id isKindOfClass:[NSNull class]] && !([stripe_user_id length]<=0)) {
-        message = @"Please select an option to pay";
-        btnTitle = @"PayPal";
-   // }
-    
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Payment Details" message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:btnTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-        [self processDonate];
-        
-    }];
-    
-    
-    
-    //if( stripe_user_id && ![stripe_user_id isKindOfClass:[NSNull class]] && !([stripe_user_id length]<=0)) {
-         UIAlertAction *stripeAction = [UIAlertAction actionWithTitle:@"Credit/Debit Card" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-             [self payWithStripe];
-         }];
-         [alert addAction:stripeAction];
-        
-    //}
-    
-    [alert addAction:okAction];
-    [self presentViewController:alert animated:YES completion:^{
-        printf("test");
-    }];
-    */
 }
 
 - (void) payWithStripe
@@ -1128,47 +1094,15 @@
             [self loadActivities];
             
             tfAmount.text = @"";
+                                             
+                                             [self shareFeed: selectedFeed image: ivFeed.image];
+                                             
         } failure:^(NSString *errorMessage) {
             [SVProgressHUD dismiss];
             [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
         }];
         
-        /*
-        
-        // Testing
-        NSString *sourceId = selectedFeed.stripe_user_id;
-        
-        [[NetworkClient sharedClient] postStripeDonate:[AppEngine sharedInstance].currentUser.user_id
-                                               feed_id:selectedFeed.feed_id
-                                      source_stripe_id:sourceId
-                                          stripe_token:token
-                                                amount:amount
-                                               success:^(NSDictionary *dicDonate) {
-                                                   [SVProgressHUD dismiss];
-                                                   NSLog(@"donate result = %@", dicDonate);
-                                                   
-                                                   if(dicDonate != nil)
-                                                   {
-                                                       int donatedAmount = [dicDonate[@"amount"] intValue];
-                                                       selectedFeed.donated_amount += donatedAmount;
-                                                       selectedFeed.is_gave = YES;
-                                                       [AppEngine sharedInstance].currentUser.pay_amount += donatedAmount;
-                                                       [[CoreHelper sharedInstance] updateUserInfo: [AppEngine sharedInstance].currentUser];
-                                                   }
-                                                   
-                                                   [[NSNotificationCenter defaultCenter] postNotificationName: NOTI_UPDATE_FUNDED_FEED object: selectedFeed];
-                                                   
-                                                   [self updateFeedInfo];
-                                                   [self loadActivities];
-                                                   
-                                                   tfAmount.text = @"";
-                                               } failure:^(NSString *errorMessage) {
-                                                   [SVProgressHUD dismiss];
-                                                   [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
-                                               }];*/
     }];
-         
-    
 }
 
 

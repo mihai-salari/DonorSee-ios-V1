@@ -234,10 +234,16 @@
 
 - (IBAction) actionShare:(id)sender
 {
+    [self openShareProjectPopUp];
+}
+
+- (void) openShareProjectPopUp
+{
     if ([self.delegate respondsToSelector:@selector(shareFeed:image:)])
     {
         [self.delegate shareFeed: currentFeed image: ivFeed.image];
     }
+
 }
 
 - (IBAction) actionDonate:(id)sender

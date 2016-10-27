@@ -27,7 +27,6 @@
             }
         }
     }
-
     
     if(_photo_urls!=nil){
         NSArray *photos = [_photo_urls componentsSeparatedByString:@","];

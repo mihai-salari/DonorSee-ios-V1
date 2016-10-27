@@ -25,7 +25,8 @@
 @property (nonatomic, weak) IBOutlet UIImageView            *ivAvatar;
 @property (nonatomic, weak) IBOutlet CustomSTTweetLabel     *lbMessage;
 @property (nonatomic, weak) IBOutlet UILabel                *lbTime;
-@property (nonatomic, weak) IBOutlet UILabel                *lbFollowMessage;
+@property (weak, nonatomic) IBOutlet UITextView *lbFollowMessage;
+
 @property (nonatomic, weak) IBOutlet UIView                 *viPhotoContainer;
 @property (weak, nonatomic) IBOutlet UIButton *btnPlayVideo;
 

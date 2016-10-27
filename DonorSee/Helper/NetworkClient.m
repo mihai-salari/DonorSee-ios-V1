@@ -1107,16 +1107,18 @@
 
 #pragma mark - Activities.
 
-- (void) readActivity: (int) activity_id
+- (void) readActivity: (NSNumber*) activity_id
+              success: (void (^)(NSDictionary* dicWithdraw))success
+              failure: (void (^)(NSString *errorMessage))failure
 {
     [self addTokenIfExist];
     
-    NSString *path = [NSString stringWithFormat:@"users/%i/notifications/%i", [AppEngine sharedInstance].currentUser.user_id, activity_id];
+    NSString *path = [NSString stringWithFormat:@"users/%i/notifications/%@", [AppEngine sharedInstance].currentUser.user_id, activity_id];
     [self PATCH:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //NSLog(@"responseObject %@", responseObject);
-        [[AppDelegate getDelegate].mainTabBar updateNotificationBadge];
+        success(responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
          //NSLog(@"error %@", error);
+        failure(MSG_DISCONNECT_INTERNET);
     }];
 }
 
@@ -1183,7 +1185,6 @@
     [self GETRequest: path
            parameters: nil
               success:^(id responseObject) {
-                  
                   FEMMapping *mapping = [DSMappingProvider eventMappingForNotification];
                   NSMutableArray* arrActivityResults = [[NSMutableArray alloc] init];
                   NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
