@@ -259,6 +259,7 @@
 
 - (void) updateProfile: (NSString*) firstName
               lastName: (NSString*) lastName
+               bioInfo: (NSString*) bioInfo
            oldPassword: (NSString*) oldPassword
            newPassword: (NSString*) newPassword
                 avatar: (NSString*) avatar
@@ -272,6 +273,7 @@
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                        firstName, @"first_name",
                                        lastName, @"last_name",
+                                       bioInfo, @"bio",
                                        nil];
     
     //[NSNumber numberWithInt: [AppEngine sharedInstance].currentUser.user_id], @"user_id",

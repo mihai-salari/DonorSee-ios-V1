@@ -30,6 +30,7 @@
 		457D1E691D91A7EA00127F3C /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 457D1E681D91A7EA00127F3C /* Entitlements.plist */; };
 		4919CA691DA7E8E800E48ED7 /* PlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4919CA681DA7E8E800E48ED7 /* PlayerViewController.m */; };
 		4919CA6B1DA7E9AE00E48ED7 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4919CA6A1DA7E9AE00E48ED7 /* AVKit.framework */; };
+		494D5DDA1DC77A20002743A8 /* change_bio.png in Resources */ = {isa = PBXBuildFile; fileRef = 494D5DD91DC77A20002743A8 /* change_bio.png */; };
 		49ED71A3D06D46BB608AA3A7 /* Pods_DonorSee.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E59EE8C1EC154E2DC08FFB /* Pods_DonorSee.framework */; };
 		9F2936A91D0BA0AD000A485D /* StripeDonateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2936A81D0BA0AD000A485D /* StripeDonateViewController.m */; };
 		9F42C6A61D65EFB30011C0D8 /* StripeSignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F42C6A51D65EFB30011C0D8 /* StripeSignupViewController.m */; };
@@ -232,6 +233,7 @@
 		4919CA671DA7E8E800E48ED7 /* PlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayerViewController.h; path = View/PlayerViewController.h; sourceTree = "<group>"; };
 		4919CA681DA7E8E800E48ED7 /* PlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayerViewController.m; path = View/PlayerViewController.m; sourceTree = "<group>"; };
 		4919CA6A1DA7E9AE00E48ED7 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		494D5DD91DC77A20002743A8 /* change_bio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = change_bio.png; sourceTree = "<group>"; };
 		5FF4E878BF253BA3E89F45ED /* Pods-DonorSee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DonorSee.release.xcconfig"; path = "Pods/Target Support Files/Pods-DonorSee/Pods-DonorSee.release.xcconfig"; sourceTree = "<group>"; };
 		610AE77298E1481F47BB26D0 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DE070191DA64A2D0089CC47 /* DonorSee.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DonorSee.entitlements; sourceTree = "<group>"; };
@@ -830,6 +832,7 @@
 				BB09F2661D7BE3C5004F5AEE /* share_icon@3x.png */,
 				F855D8361CD7B3E100473E93 /* btn_gray_back.png */,
 				F855D8371CD7B3E100473E93 /* logo_image.png */,
+				494D5DD91DC77A20002743A8 /* change_bio.png */,
 				F8B3B2F51CBD431E00506AB1 /* change_profile_image.png */,
 				F8B3B2F61CBD431E00506AB1 /* edit_profile.png */,
 				F89DDB331CBCA754001EFB65 /* gray_password_icon.png */,
@@ -1132,6 +1135,7 @@
 				F83A23B11C9F9C10006F4D2B /* quiz_profile.png in Resources */,
 				F83E837D1C9AC24400A40334 /* tab_profile_normal.png in Resources */,
 				F87AE4281C83739C00FE9417 /* Main.storyboard in Resources */,
+				494D5DDA1DC77A20002743A8 /* change_bio.png in Resources */,
 				F84F3E311CAC2F4D007E26E0 /* setting_icon.png in Resources */,
 				F83E837A1C9AC1AE00A40334 /* tab_upload_normal@2x.png in Resources */,
 				F85C818D1CA0093400D0DBE5 /* Owhite_share_icon.png in Resources */,

@@ -28,6 +28,7 @@
 @property (strong, nonatomic) SSARefreshControl               *refreshControl;
 @property (weak, nonatomic) IBOutlet UIView                 *viHeader;
 @property (weak, nonatomic) IBOutlet UILabel                *lbUsername;
+@property (weak, nonatomic) IBOutlet UILabel                *lbBioInfo;
 @property (weak, nonatomic) IBOutlet UIImageView            *ivProfile;
 @property (weak, nonatomic) IBOutlet UIView                 *viFooter;
 @property (weak, nonatomic) IBOutlet UILabel                *lbFollowers;
@@ -44,6 +45,7 @@
 @synthesize refreshControl;
 @synthesize viHeader;
 @synthesize lbUsername;
+@synthesize lbBioInfo;
 @synthesize ivProfile;
 @synthesize viFooter;
 @synthesize lbFollowers;
@@ -115,6 +117,7 @@
                                               if ([receivedAmount isKindOfClass: [NSNumber class]]){
                                                   centsReceived = [receivedAmount intValue];
                                               }
+                                              lbBioInfo.text = [userInfo valueForKey:@"bio"];
                                               
                                               self.receivedAmountLabel.text = [NSString stringWithFormat: @"$%@", [NSString StringWithAmountCents:centsReceived]];
                                               

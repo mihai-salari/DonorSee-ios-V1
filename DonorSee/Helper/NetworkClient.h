@@ -52,6 +52,7 @@
 
 - (void) updateProfile: (NSString*) firstName
               lastName: (NSString*) lastName
+               bioInfo: (NSString*) bioInfo
            oldPassword: (NSString*) oldPassword
            newPassword: (NSString*) newPassword
                 avatar: (NSString*) avatar

@@ -42,6 +42,7 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView  *ivUserAvatar;
 @property (nonatomic, strong) IBOutlet UILabel      *lbUsername;
+@property (nonatomic, strong) IBOutlet UILabel      *lbBioInfo;
 @property (nonatomic, weak) IBOutlet UILabel        *lbDonatedAmount;
 
 @property (nonatomic, strong) IBOutlet UIView       *viCategory;
@@ -93,6 +94,7 @@
 
 @synthesize ivUserAvatar;
 @synthesize lbUsername;
+@synthesize lbBioInfo;
 @synthesize lbDonatedAmount;
 
 @synthesize viCategory;
@@ -344,6 +346,7 @@
     [AppEngine sharedInstance].isShowDonatedAmount = [[CoreHelper sharedInstance] getIsShowDonatedAmount];
     
     lbUsername.text = [AppEngine sharedInstance].currentUser.name;
+    lbBioInfo.text = [AppEngine sharedInstance].currentUser.bio;
     [ivUserAvatar sd_setImageWithURL: [NSURL URLWithString: [AppEngine sharedInstance].currentUser.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
     lbDonatedAmount.hidden = ![AppEngine sharedInstance].isShowDonatedAmount;
     

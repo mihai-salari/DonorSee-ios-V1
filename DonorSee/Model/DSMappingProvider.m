@@ -56,7 +56,7 @@
     
     [mapping addAttribute:[FEMAttribute mappingOfProperty:@"avatar" toKeyPath:@"photo_url"]];
     
-    [mapping addAttributesFromArray:@[@"first_name", @"last_name", @"email", @"stripe_connected", @"stripe_customer", @"fb_id", @"can_receive_gifts"]];
+    [mapping addAttributesFromArray:@[@"first_name", @"last_name", @"email", @"stripe_connected", @"stripe_customer", @"fb_id", @"can_receive_gifts", @"bio"]];
     
     FEMAttribute *nameAttribute = [[FEMAttribute alloc] initWithProperty:@"name" keyPath:nil map:^id _Nullable(id  _Nonnull value) {
         if ([value isKindOfClass:[NSDictionary class]]) {

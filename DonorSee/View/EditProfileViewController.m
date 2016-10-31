@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet UIScrollView               *scMain;
 @property (nonatomic, weak) IBOutlet UIImageView                *ivAvatar;
 @property (nonatomic, weak) IBOutlet UITextField                *tfFirstName;
+@property (nonatomic, weak) IBOutlet UITextField                *tfBioInfo;
 @property (nonatomic, weak) IBOutlet UITextField                *tfLastName;
 @property (nonatomic, weak) IBOutlet UIView                     *viOldPassword;
 @property (nonatomic, weak) IBOutlet UITextField                *tfOldPassword;
@@ -31,6 +32,7 @@
 @synthesize scMain;
 @synthesize ivAvatar;
 @synthesize tfFirstName;
+@synthesize tfBioInfo;
 @synthesize tfLastName;
 @synthesize viOldPassword;
 @synthesize tfNewPassword;
@@ -57,11 +59,13 @@
     [ivAvatar sd_setImageWithURL: [NSURL URLWithString: [AppEngine sharedInstance].currentUser.avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
     
     NSString* name = [AppEngine sharedInstance].currentUser.name;
+    NSString* bio = [AppEngine sharedInstance].currentUser.bio;
     NSString* firstName = [AppEngine getFirstName: name];
     NSString* lastName = [AppEngine getLastName: name];
     
     tfFirstName.text = firstName;
     tfLastName.text = lastName;
+    tfBioInfo.text = bio;
     
     NSString* fb_id = [AppEngine sharedInstance].currentUser.fb_id;
     if(fb_id != nil && [fb_id length] > 0)
@@ -144,6 +148,7 @@
     [tfLastName resignFirstResponder];
     [tfNewPassword resignFirstResponder];
     [tfOldPassword resignFirstResponder];
+    [tfBioInfo resignFirstResponder];
 }
 
 - (IBAction) actionSaveChanges:(id)sender
@@ -152,6 +157,7 @@
     
     NSString* firstName = tfFirstName.text;
     NSString* lastName = tfLastName.text;
+    NSString* bioInfo = tfBioInfo.text;
     NSString* oldPassword = tfOldPassword.text;
     NSString* newPassword = tfNewPassword.text;
     
@@ -164,6 +170,11 @@
     if(lastName == nil || [lastName length] == 0)
     {
         [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_LAST_NAME] animated: YES completion: nil];
+        return;
+    }
+    
+    if (bioInfo == nil) {
+        [self presentViewController: [AppEngine showAlertWithText: MSG_INVALID_BIO_INFO] animated: YES completion: nil];
         return;
     }
     
@@ -211,6 +222,7 @@
 {
     NSString* firstName = tfFirstName.text;
     NSString* lastName = tfLastName.text;
+    NSString* bioInfo = tfBioInfo.text;
     NSString* oldPassword = tfOldPassword.text;
     NSString* newPassword = tfNewPassword.text;
     
@@ -221,6 +233,7 @@
 
     [[NetworkClient sharedClient] updateProfile: firstName
                                        lastName: lastName
+                                        bioInfo: bioInfo
                                     oldPassword: oldPassword
                                     newPassword: newPassword
                                          avatar: avatar

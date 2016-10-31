@@ -268,6 +268,7 @@
     [object setValue: u.name forKey:@"name"];
     [object setValue: u.email forKey:@"email"];
     [object setValue: u.avatar forKey:@"avatar"];
+    [object setValue: u.bio forKey:@"bio"];
     [object setValue: [NSNumber numberWithFloat: u.received_amount] forKey:@"received_amount"];
     [object setValue: [NSNumber numberWithFloat: u.pay_amount] forKey:@"pay_amount"];
     [object setValue: [NSNumber numberWithInt: u.follower] forKey:@"follower"];
@@ -305,6 +306,7 @@
         [object setValue: u.name forKey:@"name"];
         [object setValue: u.email forKey:@"email"];
         [object setValue: u.avatar forKey:@"avatar"];
+        [object setValue: u.bio forKey:@"bio"];
         [object setValue: [NSNumber numberWithFloat: u.received_amount] forKey:@"received_amount"];
         [object setValue: [NSNumber numberWithFloat: u.pay_amount] forKey:@"pay_amount"];
         [object setValue: [NSNumber numberWithInt: u.follower] forKey:@"follower"];

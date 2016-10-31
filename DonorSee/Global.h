@@ -130,6 +130,7 @@ typedef void(^J_DID_COMPLETE_CALL_BACK_BLOCK)(NSString *obj);//NSObject *obj
 /////////////////////////////////////// Message. /////////////////////////////////////////////
 #define     MSG_INVALID_FIRST_NAME              @"Please input a valid first name."
 #define     MSG_INVALID_LAST_NAME               @"Please input a valid last name."
+#define     MSG_INVALID_BIO_INFO                @"Please input a bio information."
 #define     MSG_INVALID_EMAIL                   @"Please input a valid email address."
 #define     MSG_INVALID_PASSWORD                @"Password must be 6 characters long."
 #define     MSG_INVALID_PHOTO                   @"Please add a photo to continue."
