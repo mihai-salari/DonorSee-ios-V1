@@ -11,6 +11,7 @@
 #import "MediaFile.h"
 #import "AVFoundation/AVAsset.h"
 #import "AVFoundation/AVAssetImageGenerator.h"
+#import "VideoValidation.h"
 
 
 @import ALCameraViewController;
@@ -380,7 +381,8 @@
     if(mediaType == VIDEO){
         NSURL* mediaUrl = [info objectForKey:UIImagePickerControllerMediaURL];
         
-        if([self videoIsValid:mediaUrl]){
+        VideoValidation *videoValidation = [[VideoValidation alloc] init];
+        if([videoValidation videoIsValid:mediaUrl]){
             [self completeMediaPick:[self createVideoMediaFile:mediaUrl]];
         } else {
             selectedPhotoIndex = -1;
@@ -401,13 +403,6 @@
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-}
-
--(BOOL) videoIsValid: (NSURL *) mediaUrl {
-    AVURLAsset *avUrl = [AVURLAsset assetWithURL:mediaUrl];
-    CMTime time = [avUrl duration];
-    int seconds = ceil(time.value/time.timescale);
-    return seconds <= 30;
 }
 
 - (UIImage*) getThumbnailFromVideo: (NSURL *) mediaUrl{

@@ -20,11 +20,11 @@
         self.name = [dicUser valueForKey: @"name"];
         self.email = [dicUser valueForKey: @"email"];
         self.avatar = [dicUser valueForKey: @"avatar"];
+        self.bio = [dicUser valueForKey: @"bio"];
         self.received_amount = [dicUser[@"received_amount"] floatValue];
         self.pay_amount = [dicUser[@"pay_amount"] floatValue];
         self.follower = [[dicUser valueForKey: @"follower"] intValue];
         self.following = [[dicUser valueForKey: @"following"] intValue];
-        //self.followed = self.following;
         self.paypal = [dicUser valueForKey: @"paypal"];
     }
     return self;
@@ -40,11 +40,11 @@
         self.name = [objUser valueForKey: @"name"];
         self.email = [objUser valueForKey: @"email"];
         self.avatar = [objUser valueForKey: @"avatar"];
+        self.bio = [objUser valueForKey: @"bio"];
         self.received_amount = [[objUser valueForKey: @"received_amount"] floatValue];
         self.pay_amount = [[objUser valueForKey: @"pay_amount"] floatValue];
         self.follower = [[objUser valueForKey: @"follower"] intValue];
         self.following = [[objUser valueForKey: @"following"] intValue];
-        //self.followed = self.following;
         self.paypal = [objUser valueForKey: @"paypal"];
     }
     return self;

@@ -433,23 +433,24 @@
 
 - (void) getProfileLink
 {
-    [SVProgressHUD show];
-//    
-//    NSDictionary* params = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i", _selectedUser.user_id ], @"user_id", nil];
-//    [[Branch getInstance] getShortURLWithParams:params andCallback:^(NSString *url, NSError *error)
-//     {
-//         [SVProgressHUD dismiss];
-//         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-//         pasteboard.string = url;
-//     }];
-    
     NSString *user = [NSString stringWithFormat:@"%i",_selectedUser.user_id];
-    // NSData *plainData = [[NSString stringWithFormat:@"%i", userid] dataUsingEncoding:NSUTF8StringEncoding];
-    //  NSString *base64String = [plainData base64EncodedStringWithOptions:0];
-    //  NSString *url = [NSString stringWithFormat:@"https://donorsee.com/public-profile/%@", base64String];
     NSString *url = [NSString stringWithFormat:@"https://donorsee.com/profile/%@", user];
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = url;
+    
+    NSString *message = @"Project Link was copied";
+    UIAlertView *toast = [[UIAlertView alloc] initWithTitle:nil
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:nil, nil];
+    [toast show];
+    int duration = 1; // in seconds
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, duration * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [toast dismissWithClickedButtonIndex:0 animated:YES];
+    });
+
 
 }
 

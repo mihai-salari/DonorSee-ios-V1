@@ -23,6 +23,7 @@
 #import "AVFoundation/AVAssetImageGenerator.h"
 #import "MediaFile.h"
 #import "CountryUtils.h"
+#import "VideoValidation.h"
 
 @import ALCameraViewController;
 
@@ -981,7 +982,7 @@
     videoPicker.modalPresentationStyle = UIModalPresentationCurrentContext;
     videoPicker.mediaTypes =[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie, (NSString*)kUTTypeAVIMovie, (NSString*)kUTTypeVideo, (NSString*)kUTTypeMPEG4];
-    videoPicker.videoQuality = UIImagePickerControllerQualityTypeMedium;
+    videoPicker.videoQuality = UIImagePickerControllerQualityTypeHigh;
     [self presentViewController:videoPicker animated:YES completion:nil];
 }
 
@@ -995,7 +996,8 @@
 
 - (void) onMediaPicked: (NSURL *) mediaUrl uiImage:(UIImage*) image {
     if(mediaFile.mediaType == VIDEO){
-        if([self videoIsValid:mediaUrl]){
+        VideoValidation *videoValidation = [[VideoValidation alloc] init];
+        if([videoValidation videoIsValid:mediaUrl]){
             mediaFile.mediaURL = mediaUrl.absoluteString;
             UIImage *videoThumbnail = [self getThumbnailFromVideo: mediaUrl];
             ivPhoto.image = videoThumbnail;
@@ -1015,18 +1017,11 @@
 
 -(void) showVideoInvalid{
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video"
-                                                    message:@"This video is too big. Maximum supported size is 2 minutes"
+                                                    message:@"Video must be less than 100MB"
                                                    delegate:nil
                                           cancelButtonTitle:@"OK"
                                           otherButtonTitles:nil];
     [alert show];
-}
-
--(BOOL) videoIsValid: (NSURL *) mediaUrl {
-    AVURLAsset *avUrl = [AVURLAsset assetWithURL:mediaUrl];
-    CMTime time = [avUrl duration];
-    int seconds = ceil(time.value/time.timescale);
-    return seconds <= 120;
 }
 
 - (UIImage*) getThumbnailFromVideo: (NSURL *) mediaUrl{

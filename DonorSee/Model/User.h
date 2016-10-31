@@ -19,14 +19,13 @@
 @property (nonatomic, strong) NSString      *name;
 @property (nonatomic, strong) NSString      *email;
 @property (nonatomic, strong) NSString      *avatar;
+@property (nonatomic, strong) NSString      *bio;
 @property (nonatomic, assign) float         received_amount;
 @property (nonatomic, assign) float         pay_amount;
 @property (nonatomic, assign) int           following;
 @property (nonatomic, assign) int           follower;
 @property (nonatomic, assign) BOOL          followed;
 @property (nonatomic, strong) NSString      *paypal;
-
-// NEW PRO
 @property (nonatomic, strong) NSString * created_at;
 @property (nonatomic, strong) NSString * first_name;
 @property (nonatomic, strong) NSString * last_name;
