@@ -98,6 +98,24 @@
     return (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
+    NSDictionary *parameters = @{@"feed_id" : @"127"};
+    
+    Branch *branch = [Branch getInstance];
+    [branch initSessionWithLaunchOptions:options andRegisterDeepLinkHandler:^(NSDictionary *params, NSError *error) {
+        // params are the deep linked params associated with the link that the user clicked before showing up.
+        NSLog(@"deep link data: %@", [parameters description]);
+        
+        if(parameters != nil && [parameters valueForKey: @"feed_id"] != nil)
+        {
+            [self gotoDetailPage: parameters];
+        }
+    }];
+    
+    return YES;
+}
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if ([url.absoluteString containsString:@"donorseestripe"]) {
