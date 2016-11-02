@@ -64,7 +64,7 @@
 
 - (void) checkAuthView{
     if([AppEngine sharedInstance].currentUser){
-        [self loadActivities];
+        [self loadActivities:YES];
         viSignInFB.hidden = YES;
     }
     else{
@@ -73,7 +73,7 @@
     
 }
 
-- (void) loadActivities
+- (void) loadActivities : (BOOL) isFirstLoading
 {
     self.tbMain.tableHeaderView = nil;
     
@@ -83,7 +83,7 @@
     }
     [[NetworkClient sharedClient] getMyActivities:FETCH_LIMIT
                                            offset:offsetGlobal
-                                          success:^(NSArray *array1) {
+                                          success:^(NSArray *respArray) {
                                                    [SVProgressHUD dismiss];
                                               
                                               
@@ -92,10 +92,10 @@
                                                   [arrNotifications removeAllObjects];
                                               }
                                               
-                                              if(array1 != nil && [array1 count] > 0)
+                                              if(respArray != nil && [respArray count] > 0)
                                               {
-                                                  [arrNotifications addObjectsFromArray: array1];
-                                                  offsetGlobal += (int)[array1 count];
+                                                  [arrNotifications addObjectsFromArray: respArray];
+                                                  offsetGlobal += (int)[respArray count];
                                               }
                                               
                                               [tbMain reloadData];
@@ -191,7 +191,7 @@
     NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
     NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
     if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
-        [self loadActivities];
+        [self loadActivities:NO];
     }
     
     // Remove seperator inset

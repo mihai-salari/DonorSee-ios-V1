@@ -43,7 +43,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1565790217067778</string>
+				<string>fb247669765634077</string>
 				<string>fbapi20150629</string>
 			</array>
 		</dict>
@@ -59,7 +59,7 @@
 	<key>CFBundleVersion</key>
 	<string>2</string>
 	<key>FacebookAppID</key>
-	<string>1565790217067778</string>
+	<string>247669765634077</string>
 	<key>FacebookDisplayName</key>
 	<string>DonorSee</string>
 	<key>LSApplicationQueriesSchemes</key>

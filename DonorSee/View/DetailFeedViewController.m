@@ -480,7 +480,7 @@
     [[NetworkClient sharedClient] getActivitiesForFeed:selectedFeed
                                                  limit:FETCH_LIMIT
                                                 offset:offsetGlobal
-                                               success:^(NSArray *array1, Feed *feed) {
+                                               success:^(NSArray *respArray, Feed *feed) {
                                                    
                                                    [SVProgressHUD dismiss];
                                                    
@@ -489,10 +489,10 @@
                                                        [arrActivities removeAllObjects];
                                                    }
                                                    
-                                                   if(array1 != nil && [array1 count] > 0)
+                                                   if(respArray != nil && [respArray count] > 0)
                                                    {
-                                                       [arrActivities addObjectsFromArray: array1];
-                                                       offsetGlobal += (int)[array1 count];
+                                                       [arrActivities addObjectsFromArray: respArray];
+                                                       offsetGlobal += (int)[respArray count];
                                                    }
                                                    
                                                    [tbActivity reloadData];

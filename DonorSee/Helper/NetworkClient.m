@@ -1185,8 +1185,13 @@
     
     NSString *path = [NSString stringWithFormat:@"users/%i/notifications", [AppEngine sharedInstance].currentUser.user_id];
     
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       [NSNumber numberWithInt: offset], @"offset",
+                                       [NSNumber numberWithInt: limit], @"limit",
+                                       nil];
+    
     [self GETRequest: path
-           parameters: nil
+           parameters: parameters
               success:^(id responseObject) {
                   FEMMapping *mapping = [DSMappingProvider eventMappingForNotification];
                   NSMutableArray* arrActivityResults = [[NSMutableArray alloc] init];
