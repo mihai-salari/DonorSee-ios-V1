@@ -541,6 +541,31 @@
                                        [homeView refreshFeeds];
                                        self.tabBarController.selectedIndex = 0;
                                        
+                                       UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"Thanks for giving! Would you like to tell others?" message: @"" preferredStyle: UIAlertControllerStyleActionSheet];
+                                       
+                                       UIAlertAction* fbAction = [UIAlertAction actionWithTitle: @"Share" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                           
+                                           FEMMapping *mapping = [DSMappingProvider projectsMapping];
+                                           Feed *uploadedFeed = [FEMDeserializer objectFromRepresentation:dicFeed mapping:mapping];
+
+                                           [self shareFeed: uploadedFeed image: ivPhoto.image];
+
+                                           
+                                           
+                                       }];
+                                       [alert addAction: fbAction];
+                                       
+                                       
+                                       
+                                       //Cancel.
+                                       UIAlertAction* cancelAction = [UIAlertAction actionWithTitle: @"No, thanks" style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                                           
+                                       }];
+                                       [alert addAction: cancelAction];
+                                       [self presentViewController: alert animated: YES completion: nil];
+                                       
+                                       
+                                    
                                        //Refresh Profile's Upload.
                                        ProfileViewController* profileView = [self.tabBarController.viewControllers objectAtIndex: 3];
                                        [profileView loadMyFeeds];

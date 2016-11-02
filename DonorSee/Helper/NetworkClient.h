@@ -189,8 +189,11 @@
 - (void) getNotifications: (void (^)(NSArray* notifications))success
                   failure: (void (^)(NSString *errorMessage))failure;
 
-- (void) getMyActivities: (void (^)(NSArray* arrActivities))success
+- (void) getMyActivities: (int) limit
+                  offset: (int) offset
+                 success:(void (^)(NSArray* arrActivities))success
                  failure: (void (^)(NSString *errorMessage))failure;
+
 - (void) readActivity: (NSNumber*) activity_id
               success: (void (^)(NSDictionary* dicWithdraw))success
               failure: (void (^)(NSString *errorMessage))failure;

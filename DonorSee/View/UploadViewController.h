@@ -6,10 +6,10 @@
 //  Copyright © 2016 DonorSee LLC. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "ShareViewController.h"
 #import "Feed.h"
 
-@interface UploadViewController : BaseViewController <UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate>
+@interface UploadViewController : ShareViewController <UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate>
 {
     
 }

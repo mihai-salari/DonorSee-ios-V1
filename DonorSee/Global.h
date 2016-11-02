@@ -46,6 +46,7 @@
 #define     MIN_PRICE                           1
 #define     IMAGE_COMPRESSION                   0.5
 #define     FETCH_LIMIT                         10
+#define     NOTIFICATIONS_FETCH_LIMIT           20
 #define     TAB_BAR_HEIGHT                      68.0f
 #define     TOP_BAR_HEIGHT                      77.0f
 #define     REQUEST_TIME_OUT                    20

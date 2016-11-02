@@ -17,6 +17,7 @@
 @interface NotificationViewController () <UITableViewDataSource, UITableViewDelegate, NotificationTableViewCellDelegate>
 {
     NSMutableArray          *arrNotifications;
+    int                         offsetGlobal;
 }
 
 
@@ -72,7 +73,6 @@
     
 }
 
-
 - (void) loadActivities
 {
     self.tbMain.tableHeaderView = nil;
@@ -81,21 +81,30 @@
     {
         [SVProgressHUD show];
     }
-    [[NetworkClient sharedClient] getMyActivities:^(NSArray *array1) {
+    [[NetworkClient sharedClient] getMyActivities:FETCH_LIMIT
+                                           offset:offsetGlobal
+                                          success:^(NSArray *array1) {
                                                    [SVProgressHUD dismiss];
-                                                   [arrNotifications removeAllObjects];
-                                                   if(array1 != nil && [array1 count] > 0)
-                                                   {
-                                                       [arrNotifications addObjectsFromArray: array1];
-                                                   }
-        
+                                              
+                                              
+                                              if(offsetGlobal == 0)
+                                              {
+                                                  [arrNotifications removeAllObjects];
+                                              }
+                                              
+                                              if(array1 != nil && [array1 count] > 0)
+                                              {
+                                                  [arrNotifications addObjectsFromArray: array1];
+                                                  offsetGlobal += (int)[array1 count];
+                                              }
+                                              
+                                              [tbMain reloadData];
+                                    
                                                     if([arrNotifications count] == 0)
                                                     {
                                                         [self showNoDataHeader];
                                                     }
-        
-                                                   [tbMain reloadData];
-        [self checkUnReadItems];
+                [self checkUnReadItems];
                                                } failure:^(NSString *errorMessage) {
                                                    [SVProgressHUD dismiss];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
@@ -129,7 +138,6 @@
             notification.is_read = true;
             [tbMain reloadData];
         } failure:^(NSString *errorMessage) {
-            int x = 0;
         }];
     }
 }
@@ -180,6 +188,12 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+    NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
+    if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+        [self loadActivities];
+    }
+    
     // Remove seperator inset
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
         [cell setSeparatorInset:UIEdgeInsetsZero];
@@ -196,6 +210,7 @@
     }
 }
 
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NotificationTableViewCell *cell = (NotificationTableViewCell*)[tableView dequeueReusableCellWithIdentifier: NSStringFromClass([NotificationTableViewCell class]) forIndexPath:indexPath];
@@ -204,16 +219,7 @@
     id object = [arrNotifications objectAtIndex:indexPath.row];
     [cell setEventNotification:object];
     cell.delegate = self;
-    /*
-    NSString *className = NSStringFromClass([object class]);
-    if ([className isEqualToString:@"Activity"]) {
-        [cell setNotification: [arrNotifications objectAtIndex: indexPath.row]];
-        cell.delegate = self;
-    } else {
-        [cell setNotificationNew:[arrNotifications objectAtIndex: indexPath.row]];
-        cell.delegate = self;
-    }*/
-
+    
     return cell;
 }
 /*

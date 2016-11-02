@@ -1177,7 +1177,9 @@
               }];
     
 }
-- (void) getMyActivities: (void (^)(NSArray* arrActivities))success
+- (void) getMyActivities: (int) limit
+                  offset: (int) offset
+                    success:(void (^)(NSArray* arrActivities))success
                  failure: (void (^)(NSString *errorMessage))failure
 {
     
