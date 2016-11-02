@@ -1143,7 +1143,24 @@
             
             tfAmount.text = @"";
                                              
-                                             [self shareFeed: selectedFeed image: ivFeed.image];
+                                             UIAlertController* alert = [UIAlertController alertControllerWithTitle: @"Thanks for giving! Would you like to tell others?" message: @"" preferredStyle: UIAlertControllerStyleActionSheet];
+                                             
+                                             UIAlertAction* fbAction = [UIAlertAction actionWithTitle: @"Share" style: UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                                                 
+                                                 [self shareFeed: selectedFeed image: ivFeed.image];
+                                                 
+                                                 
+                                             }];
+                                             [alert addAction: fbAction];
+                                             
+                                             
+                                             
+                                             //Cancel.
+                                             UIAlertAction* cancelAction = [UIAlertAction actionWithTitle: @"No, thanks" style: UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                                                 
+                                             }];
+                                             [alert addAction: cancelAction];
+                                             [self presentViewController: alert animated: YES completion: nil];
                                              
         } failure:^(NSString *errorMessage) {
             [SVProgressHUD dismiss];
