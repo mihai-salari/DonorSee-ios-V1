@@ -180,6 +180,12 @@
                       success: (void (^)(NSArray* arrActivities, Feed* f))success
                       failure: (void (^)(NSString *errorMessage))failure;
 
+- (void) getActivitiesForFeed: (Feed*) f
+                        limit: (int) limit
+                       offset: (int) offset
+                      success: (void (^)(NSArray* arrActivities, Feed* feed))success
+                      failure: (void (^)(NSString *errorMessage))failure;
+
 - (void) getNotifications: (void (^)(NSArray* notifications))success
                   failure: (void (^)(NSString *errorMessage))failure;
 

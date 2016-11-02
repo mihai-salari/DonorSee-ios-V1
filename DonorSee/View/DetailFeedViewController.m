@@ -32,6 +32,7 @@
     AuthView                    *viSignInFB;
     NSString                    *postusername;
     UIImage                    *postuserAvatar;
+    int                         offsetGlobal;
 }
 @property (weak, nonatomic) IBOutlet UIButton *btnPlayVideo;
 
@@ -131,6 +132,8 @@
     [self.btDonate addGestureRecognizer:singleFingerTap];
     
     [self.lbDescription setScrollEnabled:NO];
+    
+    offsetGlobal = 0;
     
    // self.tbActivity.tableHeaderView = viHeader;
 }
@@ -240,7 +243,7 @@
     
     [self updateFeedInfo];
     [self loadFeed];
-    [self loadActivities];
+    [self loadActivitiesFromServer:YES];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -469,6 +472,45 @@
     
 }
 
+- (void) loadActivitiesFromServer: (BOOL) isFirstLoading {
+    if(offsetGlobal == 0 && isFirstLoading)
+    {
+        [SVProgressHUD show];
+    }
+    [[NetworkClient sharedClient] getActivitiesForFeed:selectedFeed
+                                                 limit:FETCH_LIMIT
+                                                offset:offsetGlobal
+                                               success:^(NSArray *array1, Feed *feed) {
+                                                   
+                                                   [SVProgressHUD dismiss];
+                                                   
+                                                   if(offsetGlobal == 0)
+                                                   {
+                                                       [arrActivities removeAllObjects];
+                                                   }
+                                                   
+                                                   if(array1 != nil && [array1 count] > 0)
+                                                   {
+                                                       [arrActivities addObjectsFromArray: array1];
+                                                       offsetGlobal += (int)[array1 count];
+                                                   }
+                                                   
+                                                   [tbActivity reloadData];
+                                                   
+                                                   
+                                               } failure:^(NSString *errorMessage) {
+                                                   [SVProgressHUD dismiss];
+                                                   if ([errorMessage isEqualToString:MSG_FEED_DELETED]) {
+                                                       [self showProjectDeletedAlert];
+                                                       return;
+                                                   }
+                                                   [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
+                                               }];
+    
+    
+}
+
+
 - (void) loadActivities
 {
     [SVProgressHUD show];
@@ -503,6 +545,12 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
+    NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
+    if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
+        [self loadActivitiesFromServer:NO];
+    }
+    
     // Remove seperator inset
     if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
         [cell setSeparatorInset:UIEdgeInsetsZero];

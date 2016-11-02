@@ -1200,6 +1200,35 @@
 }
 
 - (void) getActivitiesForFeed: (Feed*) f
+                        limit: (int) limit
+                       offset: (int) offset
+                      success: (void (^)(NSArray* arrActivities, Feed* feed))success
+                      failure: (void (^)(NSString *errorMessage))failure {
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+                                       [NSNumber numberWithInt: offset], @"offset",
+                                       [NSNumber numberWithInt: limit], @"limit",
+                                       nil];
+    
+    NSString *path = [NSString stringWithFormat:@"projects/%@/timeline", f.feed_id];
+    
+    [self GETRequest: path
+          parameters: parameters
+             success:^(id responseObject) {
+                 
+                 
+                 FEMMapping *mapping = [DSMappingProvider eventMapping];
+                 NSMutableArray* arrActivityResults = [[NSMutableArray alloc] init];
+                 NSArray* arrFeeds = [FEMDeserializer collectionFromRepresentation:responseObject mapping:mapping];
+                 [arrActivityResults addObjectsFromArray:arrFeeds];
+                 success(arrActivityResults, f);
+             } failure:^(NSError *error) {
+                 
+                 failure(MSG_DISCONNECT_INTERNET);
+             }];
+}
+
+- (void) getActivitiesForFeed: (Feed*) f
                       success: (void (^)(NSArray* arrActivities, Feed* feed))success
                       failure: (void (^)(NSString *errorMessage))failure
 {
