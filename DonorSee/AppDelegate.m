@@ -115,38 +115,38 @@
 //    
 //    return YES;
 //}
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-    if ([url.absoluteString containsString:@"donorseestripe"]) {
-        
-        NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
-        NSArray *queryItems = [components queryItems];
-        
-        NSMutableDictionary *dict = [NSMutableDictionary new];
-        
-        for (NSURLQueryItem *item in queryItems)
-        {
-            [dict setObject:[item value] forKey:[item name]];
-            if ([item.name isEqualToString:@"stripe_userid"]) {
-                
-                [[NSUserDefaults standardUserDefaults] setValue:item.value forKey:@"stripe_userid"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"STRIPE_ACCOUNT_SIGNUP" object:self];
-                
-            }
-        }
-    }
-    
-    
-    [[Branch getInstance] handleDeepLink:url];
-    
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation
-            ];
-}
+//
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+//{
+//    if ([url.absoluteString containsString:@"donorseestripe"]) {
+//        
+//        NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+//        NSArray *queryItems = [components queryItems];
+//        
+//        NSMutableDictionary *dict = [NSMutableDictionary new];
+//        
+//        for (NSURLQueryItem *item in queryItems)
+//        {
+//            [dict setObject:[item value] forKey:[item name]];
+//            if ([item.name isEqualToString:@"stripe_userid"]) {
+//                
+//                [[NSUserDefaults standardUserDefaults] setValue:item.value forKey:@"stripe_userid"];
+//                [[NSUserDefaults standardUserDefaults] synchronize];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:@"STRIPE_ACCOUNT_SIGNUP" object:self];
+//                
+//            }
+//        }
+//    }
+//    
+//    
+//    [[Branch getInstance] handleDeepLink:url];
+//    
+//    return [[FBSDKApplicationDelegate sharedInstance] application:application
+//                                                          openURL:url
+//                                                sourceApplication:sourceApplication
+//                                                       annotation:annotation
+//            ];
+//}
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler
 {

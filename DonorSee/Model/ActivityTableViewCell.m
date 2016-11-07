@@ -75,6 +75,7 @@
     [ivAvatar sd_setImageWithURL: [NSURL URLWithString: avatar] placeholderImage: [UIImage imageNamed: DEFAULT_USER_IMAGE]];
     
     lbFollowMessage.text = @"";
+    lbFollowMessage.scrollEnabled = false;
     NSString* message = @"";
     if ([event.type isEqualToString:@"update"] || [event.type isEqualToString:@"comment"]) {
         NSString* filterUsername = [event.creator.name stringByReplacingOccurrencesOfString: @" " withString: @"@"];
@@ -234,13 +235,14 @@
         
         CGFloat imageWidth = [self getImageWidth];
         
-        float fy = 51;
-        float fOffset = 10.0;
+        float fy = 70;
+        float fOffset = 15.0;
+        
+        fy += fOffset;
         
         if (a.message != nil) {
             CGSize textSize = [self getActivityTextSize:a.message];
-            
-            fy += textSize.height + 10;
+            fy += textSize.height + fOffset;
         }
         
         if(a.getMedia.count > 0)

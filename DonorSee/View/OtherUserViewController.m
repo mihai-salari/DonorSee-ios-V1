@@ -117,7 +117,12 @@
                                               if ([receivedAmount isKindOfClass: [NSNumber class]]){
                                                   centsReceived = [receivedAmount intValue];
                                               }
-                                              lbBioInfo.text = [userInfo valueForKey:@"bio"];
+                                              
+                                              if([self strigNotNull:[userInfo valueForKey:@"bio"]]){
+                                                  lbBioInfo.text = [userInfo valueForKey:@"bio"];
+                                              }else{
+                                                  lbBioInfo.text = @"";
+                                              }
                                               
                                               self.receivedAmountLabel.text = [NSString stringWithFormat: @"$%@", [NSString StringWithAmountCents:centsReceived]];
                                               
@@ -130,6 +135,10 @@
                                       }];
     
 
+}
+
+- (BOOL) strigNotNull:(NSString*) string{
+    return ![string isEqual: [NSNull null]] && string!=nil;
 }
 
 - (void) refreshFeeds

@@ -32,8 +32,29 @@
 //#define     kAPIBaseURLString                   @"https://donorsee-api-staging.herokuapp.com/"
 
 
+//=========================================================================================================
+//SERVER URL
 //#define     kAPIBaseURLString                   @"https://api.donorsee.com/"
 #define     kAPIBaseURLString                   @"https://api-staging.donorsee.com"
+
+//STRIPE
+
+// TESTING
+#define     STRIPE_PUBLISHABLE_KEY              @"pk_test_ALLXQ4toDK0RVyF6c3hTtSha"
+#define     STRIPE_API_KEY                      @"sk_test_cKtHGMWGhJRSkaEZSmQ3DVfm"
+
+// LIVE
+//#define     STRIPE_PUBLISHABLE_KEY              @"pk_live_2bBCB03bBfosymy4YKkyxbtG"
+//#define     STRIPE_API_KEY                      @"sk_live_iRxXaivs67BfgaMwdZwt5YwE"
+
+//=========================================================================================================
+
+#define     STRIPE_CONNECT_CHARGES_URL          @"https://api.stripe.com/v1/charges"
+#define     STRIPE_CONNECT_CUSTOMER_URL         @"https://api.stripe.com/v1/customers"
+#define     STRIPE_CONNECT_TOKENS_URL           @"https://api.stripe.com/v1/tokens"
+
+
+#define     DONORSEE_STRIPE_ID                  @"acct_18MJ8MDAyu7GKAGH"
 
 
 #define     APP_STORE_URL                       @"https://itunes.apple.com/us/app/donorsee/id1093861994?ls=1&mt=8"
@@ -60,20 +81,6 @@
 #define     FONT_LIGHT                          @"HelveticaNeue-Light"
 #define     DEFAULT_USER_IMAGE                  @"default-profile-pic.png"
 
-// TESTING
-#define     STRIPE_PUBLISHABLE_KEY              @"pk_test_ALLXQ4toDK0RVyF6c3hTtSha"
-#define     STRIPE_API_KEY                      @"sk_test_cKtHGMWGhJRSkaEZSmQ3DVfm"
-
-// LIVE
-//#define     STRIPE_PUBLISHABLE_KEY              @"pk_live_2bBCB03bBfosymy4YKkyxbtG"
-//#define     STRIPE_API_KEY                      @"sk_live_iRxXaivs67BfgaMwdZwt5YwE"
-
-#define     STRIPE_CONNECT_CHARGES_URL          @"https://api.stripe.com/v1/charges"
-#define     STRIPE_CONNECT_CUSTOMER_URL         @"https://api.stripe.com/v1/customers"
-#define     STRIPE_CONNECT_TOKENS_URL           @"https://api.stripe.com/v1/tokens"
-
-
-#define     DONORSEE_STRIPE_ID                  @"acct_18MJ8MDAyu7GKAGH"
 
 typedef enum
 {
