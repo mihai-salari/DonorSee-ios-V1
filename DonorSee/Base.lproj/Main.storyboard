@@ -174,13 +174,13 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="sCz-pw-AjG"/>
-                                <exclude reference="2Ih-Vn-lWr"/>
-                                <exclude reference="euN-ZE-wec"/>
-                                <exclude reference="jCq-4s-bMp"/>
                                 <exclude reference="9m3-sV-Z1c"/>
                                 <exclude reference="iHg-ZY-VOf"/>
                                 <exclude reference="mVR-gt-kHY"/>
+                                <exclude reference="2Ih-Vn-lWr"/>
+                                <exclude reference="euN-ZE-wec"/>
+                                <exclude reference="jCq-4s-bMp"/>
+                                <exclude reference="sCz-pw-AjG"/>
                                 <exclude reference="LYG-tG-DaU"/>
                             </mask>
                         </variation>
@@ -1018,11 +1018,11 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
+                                                <exclude reference="Gfi-au-VMY"/>
+                                                <exclude reference="lEe-4p-9Dx"/>
                                                 <exclude reference="Sez-Zm-PLL"/>
                                                 <exclude reference="gXj-Ee-Uns"/>
                                                 <exclude reference="tyN-DH-6Wt"/>
-                                                <exclude reference="lEe-4p-9Dx"/>
-                                                <exclude reference="Gfi-au-VMY"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -1515,7 +1515,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bio info" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ge-CC-2H0">
                                 <rect key="frame" x="93" y="212" width="188" height="51"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.76070064306259155" green="0.76083260774612427" blue="0.760692298412323" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -1558,13 +1558,13 @@ In order to ensure DonorSee provides the best experience possible for everyone
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="pPf-ip-YDI"/>
+                                <exclude reference="AxS-oK-yuy"/>
+                                <exclude reference="tHe-41-AiO"/>
                                 <exclude reference="Llt-aa-krj"/>
                                 <exclude reference="iFB-D4-LEP"/>
                                 <exclude reference="mvh-Rn-Azl"/>
-                                <exclude reference="AxS-oK-yuy"/>
-                                <exclude reference="tHe-41-AiO"/>
                                 <exclude reference="kD5-fe-7Ea"/>
-                                <exclude reference="pPf-ip-YDI"/>
                             </mask>
                         </variation>
                     </view>
@@ -1943,7 +1943,7 @@ In order to ensure DonorSee provides the best experience possible for everyone
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bio info" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mLY-ZS-TVj">
                                         <rect key="frame" x="31" y="136" width="313" height="64"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
-                                        <color key="textColor" red="0.76070064309999996" green="0.76083260770000005" blue="0.76069229839999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>

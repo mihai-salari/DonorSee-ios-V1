@@ -12,9 +12,10 @@
 #import "OtherUserViewController.h"
 #import "AppDelegate.h"
 #import "SignInViewController.h"
+#import "SSARefreshControl.h"
 #import "AuthView.h"
 
-@interface NotificationViewController () <UITableViewDataSource, UITableViewDelegate, NotificationTableViewCellDelegate>
+@interface NotificationViewController () <UITableViewDataSource, UITableViewDelegate, SSARefreshControlDelegate, NotificationTableViewCellDelegate>
 {
     NSMutableArray          *arrNotifications;
     int                         offsetGlobal;
@@ -25,6 +26,8 @@
 
 @property (nonatomic, weak) IBOutlet UITableView        *tbMain;
 @property (nonatomic, weak) IBOutlet UILabel            *lbEmpty;
+
+@property (nonatomic, strong) UIRefreshControl            *refreshControl;
 @end
 
 @implementation NotificationViewController
@@ -32,12 +35,20 @@
 
 @synthesize tbMain;
 @synthesize lbEmpty;
+@synthesize refreshControl;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tbMain addSubview:refreshControl];
+}
 
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    offsetGlobal = 0;
+    [self loadActivities];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,7 +75,7 @@
 
 - (void) checkAuthView{
     if([AppEngine sharedInstance].currentUser){
-        [self loadActivities:YES];
+        [self loadActivities];
         viSignInFB.hidden = YES;
     }
     else{
@@ -73,7 +84,7 @@
     
 }
 
-- (void) loadActivities : (BOOL) isFirstLoading
+- (void) loadActivities
 {
     self.tbMain.tableHeaderView = nil;
     
@@ -85,7 +96,7 @@
                                            offset:offsetGlobal
                                           success:^(NSArray *respArray) {
                                                    [SVProgressHUD dismiss];
-                                              
+                                              [refreshControl endRefreshing];
                                               
                                               if(offsetGlobal == 0)
                                               {
@@ -107,6 +118,7 @@
                 [self checkUnReadItems];
                                                } failure:^(NSString *errorMessage) {
                                                    [SVProgressHUD dismiss];
+                                                   [refreshControl endRefreshing];
                                                    [self presentViewController: [AppEngine showErrorWithText: errorMessage] animated: YES completion: nil];
                                                }];
 }
@@ -191,7 +203,7 @@
     NSInteger lastSectionIndex = [tableView numberOfSections] - 1;
     NSInteger lastRowIndex = [tableView numberOfRowsInSection:lastSectionIndex] - 1;
     if ((indexPath.section == lastSectionIndex) && (indexPath.row == lastRowIndex)) {
-        [self loadActivities:NO];
+        [self loadActivities];
     }
     
     // Remove seperator inset
