@@ -636,7 +636,8 @@
 }
 
 - (void) onFollowUpPostedSuccess{
-    [self loadActivities];
+    offsetGlobal = 0;
+    [self loadActivitiesFromServer:YES];
 }
 
 #pragma mark - Feed Delegate.
